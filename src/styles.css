@@ -46,6 +46,7 @@ h3{font-size:15px;margin:0}
 .muted{color:var(--muted)}
 .small{font-size:13px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+form.row{flex-wrap:nowrap}
 .spread{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;font-weight:500}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
@@ -112,4 +113,15 @@ footer a{color:inherit}
 details summary{cursor:pointer;font-weight:700;font-size:15px}
 .cell{cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-input.text{flex:1;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+input.text{flex:1;min-width:0;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.who{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 30px 6px 12px;max-width:170px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat;text-overflow:ellipsis}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.plist{display:flex;flex-direction:column}
+.prow{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.prow:first-child{border-top:0}
+.prow .pn{flex:1;font-weight:500;overflow-wrap:anywhere}
+.prow .tag{font-size:12px;color:var(--accent);margin-left:6px;font-weight:500}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.err{color:var(--bad);font-size:13px;margin:0}
+.hero{font-family:var(--hand);font-size:56px;line-height:1.1;margin:0;text-align:center}

@@ -9,6 +9,8 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 3. **Planification** : SM-2 simplifié. Un ordre faux plafonne la note à « Bof ». La ligne suivante du tableau s'ouvre quand 80 % de la ligne en cours tient au moins 3 jours.
 4. **Examen strict et calibration** : compare le taux de « Bien » en séance au taux de réussite en examen, pour repérer une auto-évaluation trop généreuse.
 
+**Profils** : n'importe qui peut installer l'appli. Au premier lancement, on crée son profil ; on peut en ajouter, renommer ou supprimer d'autres dans Réglages, et changer de profil depuis le menu en haut. Chaque profil a sa propre progression, qui reste sur l'appareil.
+
 Chaque signe a une fiche : le caractère dans 5 polices (manuscrit, mincho, gothique, arrondi, pinceau), deux mots d'exemple et les particularités de lecture.
 
 ## Développement

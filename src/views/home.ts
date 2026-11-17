@@ -1,7 +1,7 @@
 import { LINES } from "../data/kana";
 import { buildQueue, dayRec, streak, today } from "../core/scheduler";
 import { memoryOnly, profile, state } from "../core/store";
-import { $opt, el, view } from "../ui/dom";
+import { $opt, el, esc, view } from "../ui/dom";
 import { startSession } from "./session";
 
 export function viewHome(): void {
@@ -12,7 +12,7 @@ export function viewHome(): void {
   v.innerHTML = "";
   v.appendChild(
     el(`<section class="card">
-    <h2>Séance du jour, ${state.active}</h2>
+    <h2>Séance du jour, ${esc(state.active)}</h2>
     <div class="stats">
       <div class="stat"><b>${nDue}</b><span>à réviser</span></div>
       <div class="stat"><b>${nNew}</b><span>nouveaux signes</span></div>

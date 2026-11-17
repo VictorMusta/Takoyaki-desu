@@ -35,3 +35,8 @@ export function toast(msg: string): void {
   view().prepend(t);
   setTimeout(() => t.remove(), 3500);
 }
+
+/** Escapes text before putting it in HTML (profile names are typed by users). */
+export function esc(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+}

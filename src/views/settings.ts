@@ -1,14 +1,96 @@
 import { LINES } from "../data/kana";
-import { addProfile, exportState, importState, profile, save, state } from "../core/store";
-import { $, el, view } from "../ui/dom";
+import { addProfile, deleteProfile, exportState, importState, profile, profileNames, renameProfile, save, setActive, state } from "../core/store";
+import { $, el, esc, view } from "../ui/dom";
 import { resetSession } from "./session";
 import { route } from "../router";
 
 export function viewSettings(): void {
   const p = profile(), v = view();
   v.innerHTML = "";
+
+  /* ---- profiles ---- */
+  const names = profileNames();
+  const rows = names
+    .map(
+      (n, i) => `<div class="prow" data-i="${i}">
+        <span class="pn">${esc(n)}${n === state.active ? '<span class="tag">actif</span>' : ""}</span>
+        ${n === state.active ? "" : `<button class="btn sm" data-act="use">Choisir</button>`}
+        <button class="btn sm" data-act="ren">Renommer</button>
+        <button class="btn sm danger" data-act="del">Supprimer</button>
+      </div>`,
+    )
+    .join("");
   v.appendChild(
-    el(`<section class="card"><h2>Réglages de ${state.active}</h2>
+    el(`<section class="card"><h2>Profils sur ce téléphone</h2>
+    <div class="plist">${rows}</div>
+    <form id="addf" class="row" novalidate>
+      <label class="sr-only" for="pn">Prénom du nouveau profil</label>
+      <input id="pn" class="text" placeholder="Prénom du nouveau profil" maxlength="24">
+      <button class="btn" type="submit">Ajouter</button>
+    </form>
+    <p class="err hidden" id="pe" role="alert"></p>
+    <p class="small muted" style="margin:0">Chaque profil a sa propre progression. Rien ne quitte ce téléphone.</p></section>`),
+  );
+  const perr = (msg: string | null) => {
+    const e = $("#pe");
+    e.textContent = msg ?? "";
+    e.classList.toggle("hidden", !msg);
+  };
+  const refresh = () => {
+    resetSession();
+    route();
+  };
+  $("#addf").onsubmit = (ev) => {
+    ev.preventDefault();
+    const err = addProfile($<HTMLInputElement>("#pn").value);
+    if (err) perr(err);
+    else refresh();
+  };
+  v.querySelectorAll<HTMLElement>(".prow").forEach((row) => {
+    const name = names[+row.dataset.i!];
+    row.querySelectorAll<HTMLButtonElement>("[data-act]").forEach((b) => {
+      b.onclick = () => {
+        const act = b.dataset.act;
+        if (act === "use") {
+          setActive(name);
+          refresh();
+        } else if (act === "ren") {
+          row.innerHTML = `<input class="text" maxlength="24" aria-label="Nouveau prénom"><button class="btn sm primary" data-ok>OK</button><button class="btn sm" data-no>Annuler</button>`;
+          const inp = $<HTMLInputElement>("input", row);
+          inp.value = name;
+          inp.focus();
+          inp.select();
+          const ok = () => {
+            const err = renameProfile(name, inp.value);
+            if (err) perr(err);
+            else refresh();
+          };
+          $("[data-ok]", row).onclick = ok;
+          inp.onkeydown = (e) => e.key === "Enter" && ok();
+          $("[data-no]", row).onclick = () => viewSettings();
+        } else if (act === "del") {
+          row.innerHTML = `<span class="pn">Supprimer ${esc(name)} et toute sa progression ?</span><button class="btn sm danger" data-ok>Supprimer</button><button class="btn sm" data-no>Annuler</button>`;
+          $("[data-ok]", row).onclick = () => {
+            deleteProfile(name);
+            refresh();
+          };
+          $("[data-no]", row).onclick = () => viewSettings();
+        }
+      };
+    });
+  });
+  try {
+    if (sessionStorage.getItem("focus-new-profile")) {
+      sessionStorage.removeItem("focus-new-profile");
+      $<HTMLInputElement>("#pn").focus();
+    }
+  } catch {
+    /* ignore */
+  }
+
+  /* ---- learning settings for the active profile ---- */
+  v.appendChild(
+    el(`<section class="card"><h2>Réglages de ${esc(state.active)}</h2>
     <label class="field" for="nn">Nouveaux signes par jour <input type="number" id="nn" min="1" max="20" value="${p.settings.newPerDay}"></label>
     <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <label class="field" for="sn">Afficher les numéros des traits <input type="checkbox" id="sn" ${p.settings.showNums ? "checked" : ""}></label>
@@ -33,9 +115,10 @@ export function viewSettings(): void {
     viewSettings();
   };
 
+  /* ---- backup ---- */
   v.appendChild(
     el(`<section class="card"><h3>Sauvegarde</h3>
-    <p class="small muted" style="margin:0">La progression reste sur ce téléphone. Copiez-la de temps en temps pour ne rien perdre, ou pour la transférer sur un autre appareil.</p>
+    <p class="small muted" style="margin:0">Tous les profils de ce téléphone tiennent dans ce texte. Copiez-le de temps en temps pour ne rien perdre, ou pour tout transférer sur un autre appareil. Importer remplace les données actuelles.</p>
     <textarea id="exp" aria-label="Données de progression"></textarea>
     <div class="row"><button class="btn" id="cp">Copier les données</button><button class="btn" id="im">Importer le texte collé</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,application/json" class="hidden"></div>
     <p class="small muted hidden" id="msg" role="status"></p></section>`),
@@ -57,26 +140,12 @@ export function viewSettings(): void {
     }
   };
   const imp = (txt: string) => {
-    if (importState(txt)) {
-      resetSession();
-      route();
-      msg("Progression importée.");
-    } else msg("Ce texte n'est pas une sauvegarde valide.");
+    if (importState(txt)) refresh();
+    else msg("Ce texte n'est pas une sauvegarde valide.");
   };
   $("#im").onclick = () => imp(exp.value);
   $<HTMLInputElement>("#file").onchange = (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) f.text().then(imp);
-  };
-
-  v.appendChild(
-    el(`<section class="card"><h3>Profils</h3>
-    <div class="row"><input id="pn" placeholder="Nouveau prénom" aria-label="Nouveau prénom" class="text"><button class="btn" id="add">Ajouter</button></div></section>`),
-  );
-  $("#add").onclick = () => {
-    if (addProfile($<HTMLInputElement>("#pn").value.trim())) {
-      resetSession();
-      route();
-    }
   };
 }

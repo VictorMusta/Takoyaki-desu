@@ -1,7 +1,7 @@
 import { byK, KANA, LINES, lineCards } from "../data/kana";
 import { calibration, status, streak, today } from "../core/scheduler";
 import { profile, state } from "../core/store";
-import { $, el, view } from "../ui/dom";
+import { $, el, esc, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
 import { animate, modelSVG } from "../ui/model";
 
@@ -29,7 +29,7 @@ export function viewProgress(): void {
   const fc = el(`<section class="card hidden" id="fc"></section>`);
   v.appendChild(fc);
   v.appendChild(
-    el(`<section class="card"><h2>Progrès de ${state.active}</h2>
+    el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
     <div class="stats"><div class="stat"><b>${done}</b><span>acquis / ${KANA.length}</span></div><div class="stat"><b>${learn}</b><span>en cours</span></div><div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
     <div class="legend"><span style="--sw:var(--line)">Pas encore vu</span><span style="--sw:var(--warn)">En cours</span><span style="--sw:var(--good)">Acquis (7 jours et +)</span></div>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
