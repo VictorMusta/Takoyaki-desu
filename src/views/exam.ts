@@ -30,7 +30,7 @@ export function viewExam(): void {
     v.appendChild(
       el(`<section class="card"><div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">Examen strict · ${run.i + 1} / ${run.items.length}</div></div><button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo">Annuler</button><button class="btn" id="clr">Effacer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
     );
     const pad = makePad($("#st"), modelSVG(k, "blank", false));
     const next = $<HTMLButtonElement>("#next");

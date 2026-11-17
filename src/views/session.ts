@@ -94,7 +94,7 @@ export function viewCard(): void {
       el(`<section class="card">${head}
       <p class="small muted" style="margin:0">${full ? "Tracez dans le pochoir, en suivant les numéros." : "Le pochoir s'efface : seuls restent les points de départ."}</p>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo">Annuler</button><button class="btn" id="clr">Effacer</button><button class="btn primary" id="next" disabled>Suivant</button></div></section>`),
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Suivant</button></div></section>`),
     );
     const pad = makePad($("#st"), modelSVG(it.k, full ? "stencil" : "faded", show));
     const next = $<HTMLButtonElement>("#next");
@@ -111,7 +111,7 @@ export function viewCard(): void {
       el(`<section class="card">${head}
       <p class="small muted" style="margin:0" id="ins">${it.peeked ? "Recopiez le signe en suivant le modèle." : `Écrivez « ${K.r} » de mémoire, sans aide.`}</p>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo">Annuler</button><button class="btn" id="clr">Effacer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
       ${it.peeked ? "" : `<button class="btn" id="peek">Je ne m'en souviens pas : voir le signe</button><p class="small muted" style="margin:-8px 0 0">Le signe reviendra plus tôt : plus tard dans cette séance, puis demain.</p>`}</section>`),
     );
     const pad = makePad($("#st"), modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
