@@ -20,6 +20,8 @@ export interface Settings {
 export interface DayRec {
   nw: number;
   rv: number;
+  /** Extra new signs allowed today (« 5 signes de plus »). */
+  bonus?: number;
 }
 
 export interface LogEntry {
@@ -46,6 +48,7 @@ export interface Profile {
   days: Record<string, DayRec>;
   log: LogEntry[];
   exams: Exam[];
+  session?: SavedSession;
 }
 
 export interface AppState {
@@ -60,4 +63,13 @@ export interface QueueItem {
   step?: number;
   /** Whether this item already counted in today's totals. */
   counted?: boolean;
+  /** Free practice: graded for feedback only, never changes the schedule. */
+  practice?: boolean;
+}
+
+/** A lesson in progress, saved after every step so it survives a closed app. */
+export interface SavedSession {
+  day: number;
+  queue: QueueItem[];
+  i: number;
 }

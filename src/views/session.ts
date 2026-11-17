@@ -1,7 +1,7 @@
 import { byK } from "../data/kana";
-import { buildQueue, dayRec, gradeCard, status, today } from "../core/scheduler";
+import { buildQueue, dayRec, gradeCard, practiceQueue, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
-import type { Grade, QueueItem } from "../core/types";
+import type { Grade, QueueItem, SavedSession } from "../core/types";
 import { $, el, view } from "../ui/dom";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
@@ -10,26 +10,38 @@ import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
 import { viewCompare } from "./compare";
 import { navigate } from "../router";
+import { continueBlock } from "./more";
 
-interface Session {
-  queue: QueueItem[];
-  i: number;
+/**
+ * The lesson in progress lives in the active profile and is saved after every step,
+ * so closing the app (or a crash, or an update) resumes exactly where it stopped.
+ * A lesson from a previous day is dropped: today's queue is rebuilt instead.
+ */
+function cur(): SavedSession | null {
+  const p = profile();
+  if (!p?.session) return null;
+  if (p.session.day !== today() || p.session.i >= p.session.queue.length) {
+    delete p.session;
+    save();
+    return null;
+  }
+  return p.session;
 }
-
-let session: Session | null = null;
 
 export function hasSession(): boolean {
-  return session !== null;
+  return cur() !== null;
 }
 
-export function resetSession(): void {
-  session = null;
-}
+export type SessionKind = "day" | "practice" | "more";
 
-export function startSession(): void {
-  const q = buildQueue(profile(), today());
+/** day: today's queue · practice: free review round · more: five extra new signs today. */
+export function startSession(kind: SessionKind = "day"): void {
+  const p = profile(), t = today();
+  if (kind === "more") dayRec(p, t).bonus = (dayRec(p, t).bonus ?? 0) + 5;
+  const q = kind === "practice" ? practiceQueue(p) : buildQueue(p, t);
   if (!q.length) return;
-  session = { queue: q, i: 0 };
+  p.session = { day: t, queue: q, i: 0 };
+  save();
   viewCard();
 }
 
@@ -40,7 +52,10 @@ function stepper(n: number): string {
 }
 
 export function viewCard(): void {
-  if (!session || session.i >= session.queue.length) return viewEnd();
+  const practice = !!profile().session?.queue[0]?.practice;
+  const session = cur();
+  if (!session) return viewEnd(practice);
+  save(); // keeps the discovery step of a new sign
   const it = session.queue[session.i];
   if (it.isNew && !it.step) it.step = 1;
   const K = byK[it.k];
@@ -48,7 +63,7 @@ export function viewCard(): void {
   const v = view();
   v.innerHTML = "";
   const left = session.queue.length - session.i;
-  const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${it.isNew ? "Nouveau signe · ligne " + K.l : "Révision"} · ${left} restant(s)</div></div>
+  const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision"} · ${left} restant(s)</div></div>
     <div class="row">${it.isNew ? stepper(it.step!) : ""}<button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div></div>`;
 
   if (it.isNew && it.step === 1) {
@@ -109,8 +124,16 @@ export function viewCard(): void {
 }
 
 function onGrade(it: QueueItem, g: Grade): void {
+  const session = cur();
   if (!session) return;
   const p = profile(), t = today(), d = dayRec(p, t);
+  if (it.practice) {
+    // Free practice: feedback only, the schedule stays as it was.
+    if (g === "rate") session.queue.push({ k: it.k, isNew: false, practice: true });
+    session.i++;
+    save();
+    return viewCard();
+  }
   if (!it.counted) {
     if (it.isNew) d.nw++;
     else d.rv++;
@@ -121,22 +144,24 @@ function onGrade(it: QueueItem, g: Grade): void {
   save();
   if (g === "rate") session.queue.push({ k: it.k, isNew: false, counted: true });
   session.i++;
+  save();
   if (before !== "done" && status(p, it.k) === "done") celebrate(it.k, viewCard);
   else viewCard();
 }
 
-function viewEnd(): void {
+function viewEnd(practice = false): void {
   const p = profile(), t = today();
   const nb = { rate: 0, bof: 0, bien: 0 };
   p.log.filter((x) => x.d === t).forEach((x) => nb[x.g]++);
-  session = null;
   const v = view();
   v.innerHTML = "";
-  v.appendChild(
-    el(`<section class="card"><h2>Séance terminée</h2>
-    <div class="stats"><div class="stat"><b>${nb.bien}</b><span>Bien</span></div><div class="stat"><b>${nb.bof}</b><span>Bof</span></div><div class="stat"><b>${nb.rate}</b><span>Raté</span></div></div>
-    <p class="small muted" style="margin:0">Revenez demain pour les prochaines révisions.</p>
-    <button class="btn primary big" id="home">Retour à l'accueil</button></section>`),
-  );
+  const card = el(`<section class="card"><h2>${practice ? "Entraînement terminé" : "Séance terminée"}</h2>
+    <div class="stats"><div class="stat"><b>${nb.bien}</b><span>Bien aujourd'hui</span></div><div class="stat"><b>${nb.bof}</b><span>Bof</span></div><div class="stat"><b>${nb.rate}</b><span>Raté</span></div></div>
+    <div class="sep"><i></i></div>
+    <h3>Continuer ?</h3>
+    <div id="more"></div>
+    <button class="btn" id="home">Retour à l'accueil</button></section>`);
+  v.appendChild(card);
+  continueBlock($("#more"), startSession);
   $("#home").onclick = () => navigate("seance");
 }

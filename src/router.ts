@@ -3,7 +3,7 @@ import { $, el, esc } from "./ui/dom";
 import { viewExam } from "./views/exam";
 import { viewHome } from "./views/home";
 import { viewProgress } from "./views/progress";
-import { hasSession, resetSession, viewCard } from "./views/session";
+import { hasSession, viewCard } from "./views/session";
 import { viewSettings } from "./views/settings";
 import { viewWelcome } from "./views/welcome";
 import { maybeApplyUpdate } from "./pwa";
@@ -39,7 +39,6 @@ function renderProfiles(): void {
       return;
     }
     setActive(sel.value);
-    resetSession();
     route();
   };
   box.appendChild(sel);

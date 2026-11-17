@@ -3,6 +3,7 @@ import { buildQueue, dayRec, streak, today } from "../core/scheduler";
 import { memoryOnly, profile, state } from "../core/store";
 import { $opt, el, esc, view } from "../ui/dom";
 import { startSession } from "./session";
+import { continueBlock } from "./more";
 
 export function viewHome(): void {
   const p = profile(), t = today();
@@ -18,7 +19,7 @@ export function viewHome(): void {
       <div class="stat"><b>${nNew}</b><span>nouveaux signes</span></div>
       <div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div>
     </div>
-    <button class="btn primary big" id="go" ${q.length ? "" : "disabled"}>${q.length ? "Commencer" : "Rien à faire aujourd'hui"}</button>
+    ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
     <p class="muted small" style="margin:0">Aujourd'hui : ${d.nw} nouveau(x), ${d.rv} révision(s). Lignes ouvertes : ${LINES.slice(0, p.unlocked).join(", ")}.</p>
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
@@ -28,5 +29,7 @@ export function viewHome(): void {
     <p class="small muted" style="margin:0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${LINES[p.unlocked - 1]} » tient au moins 3 jours.</p></section>`),
   );
   const go = $opt<HTMLButtonElement>("#go");
-  if (go) go.onclick = startSession;
+  if (go) go.onclick = () => startSession("day");
+  const more = $opt<HTMLElement>("#more");
+  if (more) continueBlock(more, startSession);
 }

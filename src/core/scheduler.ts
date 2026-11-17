@@ -13,7 +13,7 @@ export function newCard(): Card {
 }
 
 export function freshProfile(): Profile {
-  return { cards: {}, unlocked: 1, settings: { newPerDay: 5, revCap: 60, showNums: true }, days: {}, log: [], exams: [] };
+  return { cards: {}, unlocked: 1, settings: { newPerDay: 10, revCap: 60, showNums: true }, days: {}, log: [], exams: [] };
 }
 
 export function cardOf(p: Profile, k: string): Card {
@@ -83,9 +83,35 @@ export function buildQueue(p: Profile, t: number): QueueItem[] {
     .map((k) => ({ k: k.k, isNew: false }));
   const fresh = open
     .filter((k) => !p.cards[k.k]?.seen)
-    .slice(0, Math.max(0, p.settings.newPerDay - d.nw))
+    .slice(0, Math.max(0, p.settings.newPerDay + (d.bonus ?? 0) - d.nw))
     .map((k) => ({ k: k.k, isNew: true }));
   return [...due, ...fresh];
+}
+
+/** Seen signs due on or before day t (open lines only). */
+export function dueCount(p: Profile, t: number): number {
+  return KANA.filter((k) => lineIndex(k) < p.unlocked && p.cards[k.k]?.seen && (p.cards[k.k].due ?? Infinity) <= t).length;
+}
+
+/** Signs of the open lines never studied yet. */
+export function unseenOpen(p: Profile): number {
+  return KANA.filter((k) => lineIndex(k) < p.unlocked && !p.cards[k.k]?.seen).length;
+}
+
+/**
+ * Free practice round: the weakest seen signs first (short interval, low ease), shuffled.
+ * These items never touch the schedule, so extra practice can't distort the spacing.
+ */
+export function practiceQueue(p: Profile, n = 10, rnd: () => number = Math.random): QueueItem[] {
+  const seen = KANA.filter((k) => p.cards[k.k]?.seen)
+    .map((k) => ({ k: k.k, w: p.cards[k.k].interval + p.cards[k.k].ease + rnd() }))
+    .sort((a, b) => a.w - b.w)
+    .slice(0, n);
+  for (let i = seen.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [seen[i], seen[j]] = [seen[j], seen[i]];
+  }
+  return seen.map((x) => ({ k: x.k, isNew: false, practice: true }));
 }
 
 /** Consecutive days with at least one card, ending today (or yesterday if today is empty). */

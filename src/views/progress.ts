@@ -30,8 +30,8 @@ export function viewProgress(): void {
   v.appendChild(fc);
   v.appendChild(
     el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
-    <div class="stats"><div class="stat"><b>${done}</b><span>acquis / ${KANA.length}</span></div><div class="stat"><b>${learn}</b><span>en cours</span></div><div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
-    <div class="legend"><span style="--sw:transparent">Pas encore vu</span><span style="--sw:var(--paper)">En cours</span><span style="--sw:transparent;--bd:var(--kin)">極 Maîtrisé (7 jours et +)</span></div>
+    <div class="stats"><div class="stat"><b>${done}</b><span>maîtrisés / ${KANA.length}</span></div><div class="stat"><b>${learn}</b><span>en cours</span></div><div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
+    <div class="legend"><span><i class="cell" aria-hidden="true">あ</i>Pas encore vu</span><span><i class="cell learn" aria-hidden="true">あ</i>En cours</span><span><i class="cell done" aria-hidden="true">あ</i>Maîtrisé (7 jours et +)</span></div>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );

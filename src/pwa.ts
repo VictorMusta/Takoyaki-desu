@@ -9,12 +9,15 @@ const FLAG = "takoyaki-updated";
 let apply: ((reload?: boolean) => Promise<void>) | null = null;
 let pending = false;
 
-/** A session or an exam in progress would be lost by a reload. */
-const busy = () => hasSession() || examRunning();
+/**
+ * A lesson is saved after every step, so a reload between two screens loses nothing;
+ * only a sign being drawn would. The exam is not saved: it must end first.
+ */
+const busy = (betweenScreens: boolean) => examRunning() || (!betweenScreens && hasSession());
 
 /** Installs the waiting update now if nothing would be lost. Called at launch and on every screen change. */
-export function maybeApplyUpdate(): void {
-  if (!pending || !apply || busy()) return;
+export function maybeApplyUpdate(betweenScreens = true): void {
+  if (!pending || !apply || busy(betweenScreens)) return;
   pending = false;
   try {
     sessionStorage.setItem(FLAG, "1");
@@ -37,8 +40,8 @@ export function setupUpdates(): void {
     immediate: true,
     onNeedRefresh() {
       pending = true;
-      if (busy()) toast("Nouvelle version prête : elle s'installera à la fin de la séance.");
-      maybeApplyUpdate();
+      if (busy(false)) toast("Nouvelle version prête : elle s'installera au prochain changement d'écran.");
+      maybeApplyUpdate(false);
     },
     onRegisteredSW(_url, reg) {
       if (!reg) return;

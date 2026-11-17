@@ -1,7 +1,7 @@
 import { LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
-import { resetSession } from "./session";
+import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
 import { route } from "../router";
 
 export function viewSettings(): void {
@@ -36,10 +36,7 @@ export function viewSettings(): void {
     e.textContent = msg ?? "";
     e.classList.toggle("hidden", !msg);
   };
-  const refresh = () => {
-    resetSession();
-    route();
-  };
+  const refresh = () => route();
   $("#addf").onsubmit = (ev) => {
     ev.preventDefault();
     const err = addProfile($<HTMLInputElement>("#pn").value);
@@ -91,16 +88,26 @@ export function viewSettings(): void {
   /* ---- learning settings for the active profile ---- */
   v.appendChild(
     el(`<section class="card"><h2>Réglages de ${esc(state.active)}</h2>
-    <label class="field" for="nn">Nouveaux signes par jour <input type="number" id="nn" min="1" max="20" value="${p.settings.newPerDay}"></label>
+    <h3>Rythme</h3>
+    ${paceHTML(p.settings.newPerDay, "space")}
+    <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="46" value="${p.settings.newPerDay}"></label>
     <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <label class="field" for="sn">Afficher les numéros des traits <input type="checkbox" id="sn" ${p.settings.showNums ? "checked" : ""}></label>
     <div class="row"><button class="btn" id="unl" ${p.unlocked >= LINES.length ? "disabled" : ""}>Ouvrir la ligne suivante maintenant</button></div>
     <p class="small muted" style="margin:0">Lignes ouvertes : ${p.unlocked} / ${LINES.length}. Utile si vous connaissez déjà certains signes.</p></section>`),
   );
   $<HTMLInputElement>("#nn").onchange = (e) => {
-    p.settings.newPerDay = Math.max(1, +(e.target as HTMLInputElement).value || 5);
+    p.settings.newPerDay = Math.min(46, Math.max(1, +(e.target as HTMLInputElement).value || 10));
     save();
+    viewSettings();
   };
+  v.querySelectorAll<HTMLInputElement>('input[name="space"]').forEach((r) => {
+    r.onchange = () => {
+      p.settings.newPerDay = +r.value;
+      save();
+      $<HTMLInputElement>("#nn").value = r.value;
+    };
+  });
   $<HTMLInputElement>("#rc").onchange = (e) => {
     p.settings.revCap = Math.max(10, +(e.target as HTMLInputElement).value || 60);
     save();
@@ -114,6 +121,21 @@ export function viewSettings(): void {
     save();
     viewSettings();
   };
+
+  /* ---- appearance (this device) ---- */
+  const th = getTheme();
+  const thOpt = (val: Theme, label: string) => `<button class="btn" data-th="${val}" aria-pressed="${th === val}">${label}</button>`;
+  v.appendChild(
+    el(`<section class="card"><h3>Apparence</h3>
+    <div class="seg" role="group" aria-label="Thème">${thOpt("auto", "Automatique")}${thOpt("light", "Papier")}${thOpt("dark", "Nuit")}</div>
+    <p class="small muted" style="margin:0">Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.</p></section>`),
+  );
+  v.querySelectorAll<HTMLButtonElement>("[data-th]").forEach((b) => {
+    b.onclick = () => {
+      setTheme(b.dataset.th as Theme);
+      v.querySelectorAll("[data-th]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    };
+  });
 
   /* ---- backup ---- */
   v.appendChild(

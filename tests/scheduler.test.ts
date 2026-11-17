@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { lineCards } from "../src/data/kana";
 import {
   applyGrade,
+  dueCount,
+  practiceQueue,
+  unseenOpen,
   buildQueue,
   calibration,
   checkUnlock,
@@ -74,6 +77,7 @@ describe("buildQueue", () => {
 
   it("respects what was already done today", () => {
     const p = freshProfile();
+    p.settings.newPerDay = 5;
     p.days[T] = { nw: 4, rv: 0 };
     expect(buildQueue(p, T).filter((x) => x.isNew)).toHaveLength(1);
   });
@@ -113,5 +117,35 @@ describe("status, streak, calibration", () => {
     p.exams.push({ d: T, r: [{ k: "あ", ok: true }, { k: "い", ok: false }] });
     const [row] = calibration(p, T);
     expect(row).toEqual({ line: "a", bien: 75, exam: 50, gap: 25 });
+  });
+});
+
+describe("going further than the daily quota", () => {
+  it("« 5 signes de plus » raises today's new-sign quota", () => {
+    const p = freshProfile();
+    p.unlocked = 2;
+    p.settings.newPerDay = 5;
+    p.days[T] = { nw: 5, rv: 0 };
+    expect(buildQueue(p, T)).toEqual([]);
+    p.days[T].bonus = 5;
+    expect(buildQueue(p, T).filter((x) => x.isNew)).toHaveLength(5);
+  });
+
+  it("free practice picks the weakest seen signs and never new ones", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 1, ease: 1.5, due: T + 1 };
+    p.cards["い"] = { ...newCard(), seen: true, interval: 30, ease: 2.5, due: T + 30 };
+    p.cards["う"] = { ...newCard(), seen: true, interval: 3, ease: 2.5, due: T + 3 };
+    const q = practiceQueue(p, 2, () => 0);
+    expect(q.map((x) => x.k).sort()).toEqual(["あ", "う"]);
+    expect(q.every((x) => x.practice && !x.isNew)).toBe(true);
+  });
+
+  it("counts tomorrow's reviews and the unseen signs left", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 1, due: T + 1 };
+    p.cards["い"] = { ...newCard(), seen: true, interval: 3, due: T + 3 };
+    expect(dueCount(p, T + 1)).toBe(1);
+    expect(unseenOpen(p)).toBe(3);
   });
 });
