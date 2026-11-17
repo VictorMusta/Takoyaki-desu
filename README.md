@@ -9,7 +9,7 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 3. **Planification** : SM-2 simplifié. Un ordre faux plafonne la note à « Bof ». La ligne suivante du tableau s'ouvre quand 80 % de la ligne en cours tient au moins 3 jours.
 4. **Examen strict et calibration** : compare le taux de « Bien » en séance au taux de réussite en examen, pour repérer une auto-évaluation trop généreuse.
 
-**Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
+**Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Pendant un rappel, « Je ne m'en souviens pas : voir le signe » affiche le pochoir : le signe revient plus tard dans la séance puis dès le lendemain. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
 
 **Profils** : n'importe qui peut installer l'appli. Au premier lancement, on crée son profil ; on peut en ajouter, renommer ou supprimer d'autres dans Réglages, et changer de profil depuis le menu en haut. Chaque profil a sa propre progression, qui reste sur l'appareil.
 

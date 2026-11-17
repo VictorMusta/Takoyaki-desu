@@ -65,6 +65,8 @@ export interface QueueItem {
   counted?: boolean;
   /** Free practice: graded for feedback only, never changes the schedule. */
   practice?: boolean;
+  /** The learner looked at the sign during this recall. */
+  peeked?: boolean;
 }
 
 /** A lesson in progress, saved after every step so it survives a closed app. */

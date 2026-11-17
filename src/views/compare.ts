@@ -5,13 +5,14 @@ import { $, el, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
 import { animate, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
 
-type Answer = Grade | "ok" | "ko";
+type Answer = Grade | "ok" | "ko" | "peek";
 
 /**
  * Side-by-side (or overlaid) comparison, the 3-question checklist, then the grade.
  * « Bien » / « Correct » need all three answers yes; a wrong stroke order replays the animation.
  */
-export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void): void {
+/** peeked: the learner looked at the sign while recalling it; no self-grade, it simply comes back sooner. */
+export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false): void {
   const K = byK[k];
   const show = profile().settings.showNums;
   const v = view();
@@ -22,14 +23,16 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div id="cmp"></div>
     <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
-    <div id="checks">
+    <div id="checks"${peeked ? ' class="hidden"' : ""}>
       <div class="q"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
     </div>
-    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">Répondez aux trois questions pour noter.</p>
+    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : "Répondez aux trois questions pour noter."}</p>
     ${
-      exam
+      peeked
+        ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer</button></div>`
+        : exam
         ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
         : `<div class="grades"><button class="btn g-rate" data-g="rate" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
     }
@@ -66,6 +69,7 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   const ans: Partial<Record<"n" | "o" | "p", boolean>> = {};
   const btn = (g: string) => $<HTMLButtonElement>(`[data-g="${g}"]`, v);
   const update = () => {
+    if (peeked) return;
     const all = ans.n !== undefined && ans.o !== undefined && ans.p !== undefined;
     const perfect = all && ans.n && ans.o && ans.p;
     const hint = $("#hint");

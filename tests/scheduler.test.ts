@@ -3,7 +3,9 @@ import { lineCards } from "../src/data/kana";
 import {
   applyGrade,
   dueCount,
+  peekCard,
   practiceQueue,
+  pullForward,
   unseenOpen,
   buildQueue,
   calibration,
@@ -147,5 +149,25 @@ describe("going further than the daily quota", () => {
     p.cards["い"] = { ...newCard(), seen: true, interval: 3, due: T + 3 };
     expect(dueCount(p, T + 1)).toBe(1);
     expect(unseenOpen(p)).toBe(3);
+  });
+});
+
+describe("voir le signe", () => {
+  it("a peek brings the sign back tomorrow, gentler than Raté on ease", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 8, reps: 3, ease: 2.5, due: T };
+    peekCard(p, "あ", T);
+    expect(p.cards["あ"]).toMatchObject({ interval: 1, reps: 0, ease: 2.4, due: T + 1 });
+    expect(p.log.at(-1)).toEqual({ d: T, k: "あ", g: "rate" });
+  });
+
+  it("free practice only ever brings a date closer", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 8, reps: 3, due: T + 8 };
+    pullForward(p, "あ", T);
+    expect(p.cards["あ"].due).toBe(T + 1);
+    p.cards["い"] = { ...newCard(), seen: true, interval: 1, reps: 0, due: T };
+    pullForward(p, "い", T);
+    expect(p.cards["い"].due).toBe(T);
   });
 });

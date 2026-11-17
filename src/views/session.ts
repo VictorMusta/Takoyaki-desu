@@ -1,5 +1,5 @@
 import { byK } from "../data/kana";
-import { buildQueue, dayRec, gradeCard, practiceQueue, status, today } from "../core/scheduler";
+import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Grade, QueueItem, SavedSession } from "../core/types";
 import { $, el, view } from "../ui/dom";
@@ -109,27 +109,55 @@ export function viewCard(): void {
     if (it.isNew) it.step = 4;
     v.appendChild(
       el(`<section class="card">${head}
-      <p class="small muted" style="margin:0">Écrivez « ${K.r} » de mémoire, sans aide.</p>
+      <p class="small muted" style="margin:0" id="ins">${it.peeked ? "Recopiez le signe en suivant le modèle." : `Écrivez « ${K.r} » de mémoire, sans aide.`}</p>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo">Annuler</button><button class="btn" id="clr">Effacer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
+      <div class="tools"><button class="btn" id="undo">Annuler</button><button class="btn" id="clr">Effacer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
+      ${it.peeked ? "" : `<button class="btn" id="peek">Je ne m'en souviens pas : voir le signe</button><p class="small muted" style="margin:-8px 0 0">Le signe reviendra plus tôt : plus tard dans cette séance, puis demain.</p>`}</section>`),
     );
-    const pad = makePad($("#st"), modelSVG(it.k, "blank", show));
+    const pad = makePad($("#st"), modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
     const next = $<HTMLButtonElement>("#next");
     pad.onchange = () => (next.disabled = pad.strokes.length === 0);
     $("#undo").onclick = () => pad.undo();
     $("#clr").onclick = () => pad.clear();
-    next.onclick = () => viewCompare(it.k, pad.strokes.slice(), false, (g) => onGrade(it, g as Grade));
+    const peek = document.querySelector<HTMLButtonElement>("#peek");
+    if (peek)
+      peek.onclick = () => {
+        it.peeked = true;
+        save();
+        viewCard();
+      };
+    next.onclick = () => viewCompare(it.k, pad.strokes.slice(), false, (g) => onGrade(it, g as Grade | "peek"), !!it.peeked);
+
   }
   $("#say").onclick = () => speak(K.k);
 }
 
-function onGrade(it: QueueItem, g: Grade): void {
+/** Puts a sign back a few cards later in this lesson (or at the end if the lesson is short). */
+function requeue(session: SavedSession, item: QueueItem): void {
+  session.queue.splice(Math.min(session.queue.length, session.i + 4), 0, item);
+}
+
+function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const session = cur();
   if (!session) return;
   const p = profile(), t = today(), d = dayRec(p, t);
   if (it.practice) {
-    // Free practice: feedback only, the schedule stays as it was.
-    if (g === "rate") session.queue.push({ k: it.k, isNew: false, practice: true });
+    // Free practice never pushes a date away; a miss or a peek brings the sign back tomorrow.
+    if (g === "rate" || g === "peek") {
+      pullForward(p, it.k, t);
+      requeue(session, { k: it.k, isNew: false, practice: true });
+    }
+    session.i++;
+    save();
+    return viewCard();
+  }
+  if (g === "peek") {
+    if (!it.counted) {
+      if (it.isNew) d.nw++;
+      else d.rv++;
+    }
+    peekCard(p, it.k, t);
+    requeue(session, { k: it.k, isNew: false, counted: true });
     session.i++;
     save();
     return viewCard();

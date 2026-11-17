@@ -54,6 +54,29 @@ export function gradeCard(p: Profile, k: string, g: Grade, t: number): void {
   checkUnlock(p);
 }
 
+/**
+ * « Voir le signe » during recall: looking proves the sign isn't known yet.
+ * Gentler than Raté on ease (−0.1), but back to a 1-day interval; logged as Raté.
+ */
+export function peekCard(p: Profile, k: string, t: number): void {
+  const c = cardOf(p, k);
+  c.ease = Math.max(1.3, c.ease - 0.1);
+  c.reps = 0;
+  c.interval = 1;
+  c.due = t + 1;
+  c.seen = true;
+  p.log.push({ d: t, k, g: "rate" });
+}
+
+/** Free practice can only bring a sign back sooner (tomorrow at the latest), never push it away. */
+export function pullForward(p: Profile, k: string, t: number): void {
+  const c = p.cards[k];
+  if (!c?.seen) return;
+  c.reps = 0;
+  c.interval = Math.min(c.interval, 1);
+  c.due = Math.min(c.due ?? t + 1, t + 1);
+}
+
 /** Opens the next line when 80 % of the last open line holds for 3 days or more. */
 export function checkUnlock(p: Profile): void {
   while (p.unlocked < LINES.length) {
