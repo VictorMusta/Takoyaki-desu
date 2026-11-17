@@ -30,8 +30,8 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">Répondez aux trois questions pour noter.</p>
     ${
       exam
-        ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled>Faux</button><button class="btn g-bien" data-g="ok" disabled>Correct</button></div>`
-        : `<div class="grades"><button class="btn g-rate" data-g="rate" disabled>Raté</button><button class="btn g-bof" data-g="bof" disabled>Bof</button><button class="btn g-bien" data-g="bien" disabled>Bien</button></div>`
+        ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
+        : `<div class="grades"><button class="btn g-rate" data-g="rate" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
     }
     </div>
   </section>`),

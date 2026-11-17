@@ -31,7 +31,7 @@ export function viewProgress(): void {
   v.appendChild(
     el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
     <div class="stats"><div class="stat"><b>${done}</b><span>acquis / ${KANA.length}</span></div><div class="stat"><b>${learn}</b><span>en cours</span></div><div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
-    <div class="legend"><span style="--sw:var(--line)">Pas encore vu</span><span style="--sw:var(--warn)">En cours</span><span style="--sw:var(--good)">Acquis (7 jours et +)</span></div>
+    <div class="legend"><span style="--sw:transparent">Pas encore vu</span><span style="--sw:var(--paper)">En cours</span><span style="--sw:transparent;--bd:var(--kin)">極 Maîtrisé (7 jours et +)</span></div>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );
@@ -55,7 +55,7 @@ export function viewProgress(): void {
       ${cal
         .map(
           (r) =>
-            `<tr><td>${r.line}</td><td>${r.bien} %</td><td>${r.exam === null ? "pas d'examen" : r.exam + " %"}</td><td style="color:${r.gap !== null && r.gap > 15 ? "var(--bad)" : "inherit"}">${r.gap === null ? "–" : (r.gap > 0 ? "+" : "") + r.gap + " pts"}</td></tr>`,
+            `<tr><td>${r.line}</td><td>${r.bien} %</td><td>${r.exam === null ? "pas d'examen" : r.exam + " %"}</td><td style="color:${r.gap !== null && r.gap > 15 ? "var(--beni)" : "inherit"}">${r.gap === null ? "–" : (r.gap > 0 ? "+" : "") + r.gap + " pts"}</td></tr>`,
         )
         .join("")}</tbody></table>
       <p class="small muted" style="margin:0">Au-delà de 15 points d'écart, vous vous notez trop généreusement sur cette ligne.</p>`

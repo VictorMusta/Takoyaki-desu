@@ -33,7 +33,7 @@ export function numLabel(x: number, y: number, i: number, show: boolean): string
   const dx = x - C, dy = y - C, L = Math.hypot(dx, dy) || 1;
   const nx = Math.min(103, Math.max(6, x + (7 * dx) / L));
   const ny = Math.min(103, Math.max(6, y + (7 * dy) / L));
-  return `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4.4" fill="${strokeColor(i)}" stroke="${cssVar("--card")}" stroke-width="0.8"/><text x="${nx.toFixed(1)}" y="${(ny + 1.9).toFixed(1)}" text-anchor="middle" font-size="5.4" font-weight="700" fill="#fff" font-family="system-ui">${i + 1}</text>`;
+  return `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4.4" fill="${strokeColor(i)}" stroke="${cssVar("--paper")}" stroke-width="0.8"/><text x="${nx.toFixed(1)}" y="${(ny + 1.9).toFixed(1)}" text-anchor="middle" font-size="5.4" font-weight="700" fill="#fff" font-family="system-ui">${i + 1}</text>`;
 }
 
 const round = `stroke-linecap="round" stroke-linejoin="round"`;
@@ -100,10 +100,10 @@ export function animate(svg: Element): void {
     p.style.strokeDashoffset = `${L}`;
     p.setAttribute("marker-end", "");
     const a = p.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], {
-      duration: 650,
-      delay: i * 800 + 200,
+      duration: 800,
+      delay: i * 1040 + 200,
       fill: "forwards",
-      easing: "ease-in-out",
+      easing: "cubic-bezier(.3,0,.25,1)", // pinceau : ralentit en fin de trait (tome)
     });
     a.onfinish = () => p.setAttribute("marker-end", `url(#ar${i})`);
   });

@@ -54,12 +54,21 @@ function sessionStorageSafe(flag: string): void {
   }
 }
 
+/** Screen transition: fade + 8 px rise (400 ms), replayed on each navigation only. */
+function enter(): void {
+  const v = $("#view");
+  v.classList.remove("enter");
+  void v.offsetWidth;
+  v.classList.add("enter");
+}
+
 export function route(): void {
   maybeApplyUpdate();
   const r = current();
   const nav = $("nav");
   renderProfiles();
   window.scrollTo(0, 0);
+  enter();
   if (!hasProfile()) {
     nav.classList.add("hidden");
     return viewWelcome();

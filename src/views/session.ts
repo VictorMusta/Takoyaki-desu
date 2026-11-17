@@ -1,8 +1,9 @@
 import { byK } from "../data/kana";
-import { buildQueue, dayRec, gradeCard, today } from "../core/scheduler";
+import { buildQueue, dayRec, gradeCard, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Grade, QueueItem } from "../core/types";
 import { $, el, view } from "../ui/dom";
+import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
 import { learnSeq, modelSVG } from "../ui/model";
 import { makePad } from "../ui/pad";
@@ -48,7 +49,7 @@ export function viewCard(): void {
   v.innerHTML = "";
   const left = session.queue.length - session.i;
   const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${it.isNew ? "Nouveau signe · ligne " + K.l : "Révision"} · ${left} restant(s)</div></div>
-    <div class="row">${it.isNew ? stepper(it.step!) : ""}<button class="btn" id="say" aria-label="Écouter">🔊</button></div></div>`;
+    <div class="row">${it.isNew ? stepper(it.step!) : ""}<button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div></div>`;
 
   if (it.isNew && it.step === 1) {
     v.appendChild(
@@ -115,11 +116,13 @@ function onGrade(it: QueueItem, g: Grade): void {
     else d.rv++;
     it.counted = true;
   }
+  const before = status(p, it.k);
   gradeCard(p, it.k, g, t);
   save();
   if (g === "rate") session.queue.push({ k: it.k, isNew: false, counted: true });
   session.i++;
-  viewCard();
+  if (before !== "done" && status(p, it.k) === "done") celebrate(it.k, viewCard);
+  else viewCard();
 }
 
 function viewEnd(): void {
