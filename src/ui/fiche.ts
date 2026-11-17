@@ -1,5 +1,6 @@
 import { EXAMPLES, NOTES } from "../data/examples";
 import { byK } from "../data/kana";
+import { TRAPS } from "../data/tips";
 
 const FONTS: [cls: string, name: string, use: string][] = [
   ["f-kyo", "Manuscrit", "kyōkasho"],
@@ -19,5 +20,5 @@ export function ficheHTML(k: string): string {
   const n = K.s.length;
   return `<div class="fiche"><div class="fonts">${tiles}</div>
     <p class="small muted" style="margin:0">${n} trait${n > 1 ? "s" : ""} · le modèle d'écriture est la forme « manuscrit » (manuels scolaires).</p>
-    <dl class="ex">${ex}</dl>${NOTES[k] ? `<p class="note" style="margin:0">${NOTES[k]}</p>` : ""}</div>`;
+    <dl class="ex">${ex}</dl>${NOTES[k] ? `<p class="note" style="margin:0">${NOTES[k]}</p>` : ""}${TRAPS[k] ? `<p class="note" style="margin:0"><b>Piège</b> · ${TRAPS[k].text}</p>` : ""}</div>`;
 }

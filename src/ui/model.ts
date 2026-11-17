@@ -154,3 +154,27 @@ export function userSVG(strokes: Stroke[], showNums: boolean, under = ""): strin
 export function innerOf(svg: string): string {
   return svg.replace(/^<svg[^>]*>|<\/svg>$/g, "");
 }
+
+/**
+ * A « faux Bien » drawn from sign k, crossed out: too small in a corner, strokes reversed,
+ * or stroke order swapped. Empty when it can't be shown (order needs two strokes).
+ */
+export function badSVG(k: string, kind: "small" | "reverse" | "order"): string {
+  const K = byK[k], n = K.s.length;
+  if (kind === "order" && n < 2) return "";
+  let body = guides();
+  if (kind === "small") {
+    body += `<g transform="translate(8 8) scale(.42)">${K.s.map((d) => `<path d="${d}" fill="none" stroke="${cssVar("--ink")}" stroke-width="9" ${round}/>`).join("")}</g>`;
+  } else if (kind === "reverse") {
+    let m = "";
+    K.s.forEach((_, i) => {
+      m += `<marker id="br${i}" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="2.4" markerHeight="2.4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${strokeColor(i)}"/></marker>`;
+    });
+    body += `<defs>${m}</defs>` + K.s.map((d, i) => `<path d="${d}" fill="none" stroke="${strokeColor(i)}" stroke-width="4.2" ${round} marker-start="url(#br${i})"/>`).join("");
+  } else {
+    body += markers(n) + K.s.map((d, i) => `<path d="${d}" fill="none" stroke="${strokeColor(i)}" stroke-width="4.2" ${round} marker-end="url(#ar${i})"/>`).join("");
+    body += K.s.map((d, i) => numLabel(...startOf(d), n - 1 - i, true)).join("");
+  }
+  body += `<path d="M86 8L101 23M101 8L86 23" stroke="${cssVar("--beni")}" stroke-width="2.6" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 109 109" aria-hidden="true">${body}</svg>`;
+}

@@ -3,7 +3,10 @@ import type { Grade } from "../core/types";
 import { profile } from "../core/store";
 import { $, el, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
-import { animate, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
+import { animate, badSVG, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
+import { markSeen, pickTip, setHidden } from "../core/tips";
+import { today } from "../core/scheduler";
+import { save } from "../core/store";
 
 type Answer = Grade | "ok" | "ko" | "peek";
 
@@ -22,6 +25,7 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div class="spread"><h2>${K.k} · ${K.r}</h2><button class="btn" id="ov" aria-pressed="false">Superposer</button></div>
     <div id="cmp"></div>
     <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button></div>
+    <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
     <details id="checks" class="checks${peeked ? " hidden" : ""}" ${exam ? "open" : ""}><summary>${exam ? "Vérification" : "Vérifier en 3 questions (facultatif)"}</summary>
       <div class="q"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
@@ -39,6 +43,21 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     </div>
   </section>`),
   );
+
+  // A tip, rarely (lessons only): the sign's trap first, else now and then a generic one.
+  const p = profile(), day = today();
+  const tip = exam ? null : pickTip(p, k, day);
+  if (tip) {
+    markSeen(p, tip.id, day);
+    save();
+    const ill = tip.illus ? badSVG(k, tip.illus) : "";
+    $("#tip").outerHTML = `<aside class="tip">${ill ? `<div class="stage tip-ill">${ill}</div>` : ""}<div class="tip-body"><p class="tip-h">${tip.id.startsWith("t-") ? "Piège" : "Astuce"}</p><p class="tip-t">${tip.text}</p>
+      <label class="tip-off"><input type="checkbox" id="tipoff"> Ne plus afficher cette astuce</label></div></aside>`;
+    $<HTMLInputElement>("#tipoff").onchange = (e) => {
+      setHidden(p, tip.id, (e.target as HTMLInputElement).checked);
+      save();
+    };
+  }
 
   let overlay = false;
   const cmp = $("#cmp");

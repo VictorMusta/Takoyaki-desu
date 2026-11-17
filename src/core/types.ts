@@ -62,6 +62,8 @@ export interface Profile {
   exams: Exam[];
   session?: SavedSession;
   examRun?: ExamRun;
+  /** Tips: last day seen per tip, tips turned off, last day a tip was shown. */
+  tips?: { seen: Record<string, number>; hidden: string[]; last: number };
 }
 
 export interface AppState {
