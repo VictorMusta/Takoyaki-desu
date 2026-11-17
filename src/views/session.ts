@@ -67,7 +67,7 @@ export function viewCard(): void {
   const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision";
   const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
   const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
-    <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}${recall && !it.peeked ? `<button class="btn sm" id="peek" title="Le signe reviendra plus tôt">Voir le signe</button>` : ""}<button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div></div>`;
+    <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}${recall && !it.peeked ? `<button class="btn sm" id="peek" title="Le signe reviendra plus tôt">Voir le signe</button>` : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
 
   if (it.isNew && it.step === 1) {
     v.appendChild(
