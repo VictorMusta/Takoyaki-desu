@@ -9,7 +9,7 @@ type Answer = Grade | "ok" | "ko" | "peek";
 
 /**
  * Side-by-side (or overlaid) comparison, the 3-question checklist, then the grade.
- * « Bien » / « Correct » need all three answers yes; a wrong stroke order replays the animation.
+ * Exam: « Correct » needs three yes. Lesson: the questions are optional; a « Non » blocks « Bien ».
  */
 /** peeked: the learner looked at the sign while recalling it; no self-grade, it simply comes back sooner. */
 export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false): void {
@@ -28,13 +28,13 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       <div class="q"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
     </div>
-    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : "Répondez aux trois questions pour noter."}</p>
+    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
     ${
       peeked
         ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer</button></div>`
         : exam
         ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
-        : `<div class="grades"><button class="btn g-rate" data-g="rate" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
+        : `<div class="grades"><button class="btn g-rate" data-g="rate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
     }
     </div>
   </section>`),
@@ -79,13 +79,13 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       hint.textContent = all ? (perfect ? "" : "« Correct » demande trois « Oui ».") : "Répondez aux trois questions pour noter.";
       return;
     }
-    btn("rate").disabled = !all;
-    btn("bof").disabled = !all;
-    btn("bien").disabled = !perfect;
-    if (!all) hint.textContent = "Répondez aux trois questions pour noter.";
-    else if (!ans.n || !ans.p) hint.textContent = "Nombre de traits ou forme incorrecte : « Bien » est bloqué.";
-    else if (!ans.o) hint.textContent = "Ordre ou sens faux : animation rejouée, note plafonnée à « Bof ».";
-    else hint.textContent = "";
+    // Outside the exam the questions are optional: grade straight away,
+    // but a « Non » given to one of them still blocks « Bien ».
+    const no = ans.n === false || ans.o === false || ans.p === false;
+    btn("bien").disabled = no;
+    if (ans.n === false || ans.p === false) hint.textContent = "Nombre de traits ou forme incorrecte : « Bien » est bloqué.";
+    else if (ans.o === false) hint.textContent = "Ordre ou sens faux : animation rejouée, note plafonnée à « Bof ».";
+    else hint.textContent = "Notez directement, ou vérifiez d'abord avec les questions.";
   };
   v.querySelectorAll<HTMLElement>(".yn").forEach((g) => {
     const q = g.dataset.q as "n" | "o" | "p";
