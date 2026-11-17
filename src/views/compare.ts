@@ -23,11 +23,11 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div id="cmp"></div>
     <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
-    <div id="checks"${peeked ? ' class="hidden"' : ""}>
+    <details id="checks" class="checks${peeked ? " hidden" : ""}" ${exam ? "open" : ""}><summary>${exam ? "Vérification" : "Vérifier en 3 questions (facultatif)"}</summary>
       <div class="q"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
-    </div>
+    </details>
     <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
     ${
       peeked

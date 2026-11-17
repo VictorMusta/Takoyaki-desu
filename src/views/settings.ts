@@ -137,6 +137,16 @@ export function viewSettings(): void {
     };
   });
 
+  /* ---- credits ---- */
+  v.appendChild(
+    el(`<section class="card"><details><summary>Crédits</summary>
+    <div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <p style="margin:0">Tracés et ordre des traits : <a href="http://kanjivg.tagaini.net">KanjiVG</a>, d'Ulrich Apel, sous licence CC BY-SA 3.0.</p>
+      <p style="margin:0">Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Zen Maru Gothic et Yuji Syuku, via Google Fonts (SIL Open Font License).</p>
+      <p style="margin:0">Code de l'appli : <a href="https://github.com/VictorMusta/Takoyaki-desu">github.com/VictorMusta/Takoyaki-desu</a>, licence MIT.</p>
+    </div></details></section>`),
+  );
+
   /* ---- backup ---- */
   v.appendChild(
     el(`<section class="card"><h3>Sauvegarde</h3>

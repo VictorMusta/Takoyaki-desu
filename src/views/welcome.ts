@@ -1,5 +1,5 @@
 import { addProfile, importState } from "../core/store";
-import { $, el, view } from "../ui/dom";
+import { $, el, showWave, view } from "../ui/dom";
 import { paceHTML } from "../ui/prefs";
 import { profile, save } from "../core/store";
 import { route } from "../router";
@@ -51,5 +51,6 @@ export function viewWelcome(): void {
     if (importState($<HTMLTextAreaElement>("#bk").value)) route();
     else show("#ie", "Ce texte n'est pas une sauvegarde valide.");
   };
+  showWave();
   $<HTMLInputElement>("#name").focus();
 }

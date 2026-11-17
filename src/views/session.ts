@@ -63,8 +63,11 @@ export function viewCard(): void {
   const v = view();
   v.innerHTML = "";
   const left = session.queue.length - session.i;
-  const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision"} · ${left} restant(s)</div></div>
-    <div class="row">${it.isNew ? stepper(it.step!) : ""}<button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div></div>`;
+  const recall = !it.isNew || (it.step ?? 1) >= 4;
+  const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision";
+  const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
+  const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
+    <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}${recall && !it.peeked ? `<button class="btn sm" id="peek" title="Le signe reviendra plus tôt">Voir le signe</button>` : ""}<button class="btn" id="say" aria-label="Écouter"><span class="kj" aria-hidden="true">音</span></button></div></div>`;
 
   if (it.isNew && it.step === 1) {
     v.appendChild(
@@ -109,10 +112,8 @@ export function viewCard(): void {
     if (it.isNew) it.step = 4;
     v.appendChild(
       el(`<section class="card">${head}
-      <p class="small muted" style="margin:0" id="ins">${it.peeked ? "Recopiez le signe en suivant le modèle." : `Écrivez « ${K.r} » de mémoire, sans aide.`}</p>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
-      ${it.peeked ? "" : `<button class="btn" id="peek">Je ne m'en souviens pas : voir le signe</button><p class="small muted" style="margin:-8px 0 0">Le signe reviendra plus tôt : plus tard dans cette séance, puis demain.</p>`}</section>`),
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
     );
     const pad = makePad($("#st"), modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
     const next = $<HTMLButtonElement>("#next");

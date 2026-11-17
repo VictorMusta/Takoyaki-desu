@@ -39,7 +39,7 @@ html,body{margin:0;min-height:100%}
 body{background:var(--paper) var(--grain);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--beni);outline-offset:2px}
-.app{max-width:540px;margin:0 auto;padding:24px 24px 0;display:flex;flex-direction:column;gap:32px}
+.app{max-width:540px;margin:0 auto;padding:24px 24px 24px;display:flex;flex-direction:column;gap:32px}
 h2{font-family:var(--display);font-weight:500;font-size:28px;line-height:1.25;margin:0;text-wrap:balance}
 h3{font-weight:500;font-size:21px;line-height:1.4;margin:0}
 .muted{color:var(--wood)}
@@ -209,3 +209,13 @@ label.opt:has(input:checked){border-color:var(--beni);background:var(--paper)}
 .seg .btn{flex:1;margin-left:-.5px}
 .seg .btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .legend span{display:inline-flex;align-items:center}
+
+/* ---------- moins de défilement ---------- */
+.wave{display:none}
+body.with-wave .wave{display:block}
+.tools .btn{padding:8px 4px;letter-spacing:0;white-space:nowrap}
+.tools{grid-template-columns:1fr 1.25fr 1.15fr}
+.checks summary{font-weight:500;padding:4px 0}
+.checks[open] summary{margin-bottom:4px}
+.card a{color:inherit}
+.prompt .row{flex-wrap:nowrap;flex:none}

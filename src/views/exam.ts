@@ -43,9 +43,15 @@ export function viewExam(): void {
       <button class="btn sm" id="stop" style="align-self:flex-start">Arrêter l'examen</button></section>`),
     );
     $("#stop").onclick = () => {
-      $("#stop").outerHTML = `<div class="row"><span class="small">Arrêter et perdre cet examen ?</span><button class="btn sm danger" id="stopok">Arrêter</button><button class="btn sm" id="stopno">Continuer</button></div>`;
+      const n = run.res.length;
+      const msg = n ? `Arrêter ici ? Vos ${n} réponse${n > 1 ? "s" : ""} ${n > 1 ? "sont gardées" : "est gardée"} pour la calibration.` : "Arrêter ici ? Aucune réponse n'a encore été donnée.";
+      $("#stop").outerHTML = `<div class="row"><span class="small">${msg}</span><button class="btn sm" id="stopok">Arrêter</button><button class="btn sm" id="stopno">Continuer</button></div>`;
       $("#stopok").onclick = () => {
-        delete profile().examRun;
+        // Keep what was answered: the exam simply ends early and is scored on those signs.
+        if (n) {
+          run.items = run.items.slice(0, run.i);
+          delete run.pending;
+        } else delete profile().examRun;
         save();
         viewExam();
       };

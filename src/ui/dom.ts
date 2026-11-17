@@ -27,7 +27,13 @@ export function strokeColor(i: number): string {
 }
 
 export function view(): HTMLElement {
+  document.body.classList.remove("with-wave");
   return $("#view");
+}
+
+/** The seigaiha frieze: home and welcome only (one motif, rarely). */
+export function showWave(): void {
+  document.body.classList.add("with-wave");
 }
 
 export function toast(msg: string): void {

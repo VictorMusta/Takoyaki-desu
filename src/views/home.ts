@@ -1,7 +1,7 @@
 import { LINES } from "../data/kana";
 import { buildQueue, dayRec, streak, today } from "../core/scheduler";
 import { memoryOnly, profile, state } from "../core/store";
-import { $opt, el, esc, view } from "../ui/dom";
+import { $opt, el, esc, showWave, view } from "../ui/dom";
 import { startSession } from "./session";
 import { continueBlock } from "./more";
 
@@ -25,9 +25,10 @@ export function viewHome(): void {
   </section>`),
   );
   v.appendChild(
-    el(`<section class="card"><h3>Comment ça marche</h3>
-    <p class="small muted" style="margin:0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${LINES[p.unlocked - 1]} » tient au moins 3 jours.</p></section>`),
+    el(`<section class="card"><details><summary>Comment ça marche</summary>
+    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${LINES[p.unlocked - 1]} » tient au moins 3 jours.</p></details></section>`),
   );
+  showWave();
   const go = $opt<HTMLButtonElement>("#go");
   if (go) go.onclick = () => startSession("day");
   const more = $opt<HTMLElement>("#more");
