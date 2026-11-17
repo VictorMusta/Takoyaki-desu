@@ -1,6 +1,6 @@
 # たこ焼きです · Takoyaki desu
 
-Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au modèle, avec répétition espacée. Appli web installable sur le téléphone, qui marche hors ligne.
+Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au modèle, avec répétition espacée. Appli web installable sur le téléphone, qui marche hors ligne et se met à jour toute seule : la nouvelle version est cherchée au lancement et au retour dans l'appli, puis installée aussitôt, ou à la fin de la séance en cours pour ne rien perdre.
 
 ## Principe
 

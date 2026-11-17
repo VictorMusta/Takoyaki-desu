@@ -1,12 +1,13 @@
 import "./styles.css";
-import { registerSW } from "virtual:pwa-register";
 import { checkUnlock } from "./core/scheduler";
 import { state } from "./core/store";
+import { announceUpdate, setupUpdates } from "./pwa";
 import { route } from "./router";
 
 Object.values(state.profiles).forEach(checkUnlock);
 window.addEventListener("hashchange", route);
 route();
+announceUpdate();
 
-// Offline support: caches the app; updates install themselves on the next launch.
-registerSW({ immediate: true });
+// Offline support + automatic updates (checked at launch, applied between sessions).
+setupUpdates();

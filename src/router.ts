@@ -6,6 +6,7 @@ import { viewProgress } from "./views/progress";
 import { hasSession, resetSession, viewCard } from "./views/session";
 import { viewSettings } from "./views/settings";
 import { viewWelcome } from "./views/welcome";
+import { maybeApplyUpdate } from "./pwa";
 
 export type Route = "seance" | "progres" | "examen" | "reglages";
 const ROUTES: Route[] = ["seance", "progres", "examen", "reglages"];
@@ -54,6 +55,7 @@ function sessionStorageSafe(flag: string): void {
 }
 
 export function route(): void {
+  maybeApplyUpdate();
   const r = current();
   const nav = $("nav");
   renderProfiles();

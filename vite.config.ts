@@ -6,7 +6,7 @@ export default defineConfig({
   base: "./",
   plugins: [
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt", // src/pwa.ts decides when to apply an update (never mid-session)
       includeAssets: ["icons/*.png"],
       manifest: {
         name: "Takoyaki desu",

@@ -17,6 +17,10 @@ interface ExamRun {
 
 let run: ExamRun | null = null;
 
+export function examRunning(): boolean {
+  return !!run && run.i < run.items.length;
+}
+
 /** Strict exam: up to 20 seen signs, no help. Does not change review dates; feeds calibration. */
 export function viewExam(): void {
   const v = view();
