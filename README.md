@@ -11,6 +11,8 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 
 **Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Pendant un rappel, « Je ne m'en souviens pas : voir le signe » affiche le pochoir : le signe revient plus tard dans la séance puis dès le lendemain. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
 
+**S'entraîner autrement** (accueil) : choisir le signe, écouter, lire, relier, sosies, lire des mots, textes à trous, dictée au clavier (clavier hiragana intégré, seulement les signes appris) ou dessinée, phrases et proverbes, et textes vus au Japon en 3 écritures (panneaux, menus, stèles, noren) à deviner puis corriger. Quelques exercices sont aussi glissés dans la séance du jour. Ils ne repoussent jamais une révision ; un raté la rapproche.
+
 **Je parle déjà japonais** (Réglages → Niveau) : ouvre tout, considère les 46 signes comme connus et propose un examen général sur les 46 ; un signe raté à l'examen revient le lendemain. Réversible : « J'ai menti » rétablit la progression d'avant.
 
 **Astuces** : rares (une par jour au plus, puis 60 jours d'attente pour la même), sur l'écran de comparaison : pièges propres à certains signes, conseils généraux et « faux Bien » dessinés. Chacune peut être masquée.

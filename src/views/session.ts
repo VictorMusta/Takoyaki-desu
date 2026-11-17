@@ -11,6 +11,8 @@ import { speak } from "../ui/speech";
 import { viewCompare } from "./compare";
 import { navigate } from "../router";
 import { continueBlock } from "./more";
+import { available, LESSON_MIX, makeDrill, type DrillType } from "../core/drills";
+import { viewDrill } from "./drill";
 
 /**
  * The lesson in progress lives in the active profile and is saved after every step,
@@ -34,11 +36,39 @@ export function hasSession(): boolean {
 
 export type SessionKind = "day" | "practice" | "more";
 
+/** Every few drawings, a short exercise of another kind on signs already seen (variety). */
+function mixDrills(q: QueueItem[]): QueueItem[] {
+  const p = profile(), types = LESSON_MIX.filter((t) => available(p, t));
+  if (!types.length) return q;
+  const out: QueueItem[] = [];
+  q.forEach((it, i) => {
+    out.push(it);
+    if (i % 3 === 2) {
+      const d = makeDrill(p, types[Math.floor(Math.random() * types.length)], it.isNew ? undefined : it.k);
+      if (d) out.push({ k: d.ks[0] ?? it.k, isNew: false, practice: true, drill: d });
+    }
+  });
+  return out;
+}
+
+/** « S'entraîner »: ten exercises of one kind, free practice. */
+export function startDrills(type: DrillType): void {
+  const p = profile(), q: QueueItem[] = [];
+  for (let i = 0; i < 10; i++) {
+    const d = makeDrill(p, type);
+    if (d) q.push({ k: d.ks[0] ?? "", isNew: false, practice: true, drill: d });
+  }
+  if (!q.length) return;
+  p.session = { day: today(), queue: q, i: 0 };
+  save();
+  viewCard();
+}
+
 /** day: today's queue · practice: free review round · more: five extra new signs today. */
 export function startSession(kind: SessionKind = "day"): void {
   const p = profile(), t = today();
   if (kind === "more") dayRec(p, t).bonus = (dayRec(p, t).bonus ?? 0) + 5;
-  const q = kind === "practice" ? practiceQueue(p) : buildQueue(p, t);
+  const q = kind === "practice" ? practiceQueue(p) : kind === "day" ? mixDrills(buildQueue(p, t)) : buildQueue(p, t);
   if (!q.length) return;
   p.session = { day: t, queue: q, i: 0 };
   save();
@@ -57,6 +87,18 @@ export function viewCard(): void {
   if (!session) return viewEnd(practice);
   save(); // keeps the discovery step of a new sign
   const it = session.queue[session.i];
+  if (it.drill) {
+    const left0 = session.queue.length - session.i;
+    return viewDrill(it.drill, `${it.drill.type === "text" ? "Entraînement" : "Exercice"} · ${left0} restant(s)`, (ok, missed) => {
+      const s = cur();
+      if (!s) return;
+      // Like free practice: a miss brings the signs back sooner, a success changes nothing.
+      if (!ok) missed.forEach((k) => pullForward(profile(), k, today()));
+      s.i++;
+      save();
+      viewCard();
+    });
+  }
   if (it.isNew && !it.step) it.step = 1;
   const K = byK[it.k];
   const show = profile().settings.showNums;

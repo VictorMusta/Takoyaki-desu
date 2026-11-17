@@ -88,6 +88,8 @@ export interface QueueItem {
   peeked?: boolean;
   /** Strokes waiting for correction: closing the app on the comparison resumes there. */
   strokes?: Drawing;
+  /** Not a drawing: another kind of exercise (choose, listen, words…). */
+  drill?: import("./drills").Drill;
 }
 
 /** A lesson in progress, saved after every step so it survives a closed app. */
