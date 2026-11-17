@@ -5,6 +5,8 @@ import { modelSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
 
 const REPO_ISSUE = "https://github.com/VictorMusta/Takoyaki-desu/issues/new";
+/** Where feedback goes by mail: set at build time (GitHub repository variable FEEDBACK_MAIL). */
+const AUTHOR_MAIL: string = import.meta.env.VITE_FEEDBACK_MAIL ?? "";
 
 /** The learner's drawing as a PNG: dashed cross, strokes in order colours, stroke numbers. */
 async function drawingPNG(strokes: Stroke[]): Promise<Blob | null> {
@@ -61,13 +63,18 @@ export function viewFeedback(k: string, back: () => void): void {
     <label class="sr-only" for="fbc">Commentaire</label>
     <textarea id="fbc" class="fb" placeholder="Ce qui change, pourquoi c'est mieux, d'où vient cette façon de l'écrire…"></textarea>
     <label class="tip-off"><input type="checkbox" id="acc" checked> Accepter ma façon dans mes séances (nombre et ordre des traits non vérifiés)</label>
-    <button class="btn primary big" id="send" disabled>Envoyer mon retour</button>
+    ${AUTHOR_MAIL ? `<button class="btn primary big" id="mail" disabled>Envoyer par mail</button>` : ""}
+    <button class="btn${AUTHOR_MAIL ? "" : " primary big"}" id="send" disabled>${AUTHOR_MAIL ? "Partager autrement, avec l'image" : "Envoyer mon retour"}</button>
     <button class="btn" id="gh">Ou ouvrir un ticket sur GitHub</button>
     <p class="small muted hidden" id="msg" role="status" style="margin:0"></p></section>`),
   );
   const pad = makePad($("#st"), modelSVG(k, "blank", false));
   const send = $<HTMLButtonElement>("#send");
-  pad.onchange = () => (send.disabled = pad.strokes.length === 0);
+  const mail = document.querySelector<HTMLButtonElement>("#mail");
+  pad.onchange = () => {
+    send.disabled = pad.strokes.length === 0;
+    if (mail) mail.disabled = send.disabled;
+  };
   $("#undo").onclick = () => pad.undo();
   $("#clr").onclick = () => pad.clear();
   $("#back").onclick = back;
@@ -105,6 +112,12 @@ export function viewFeedback(k: string, back: () => void): void {
       }
     }
   };
+  if (mail)
+    mail.onclick = () => {
+      accept();
+      location.href = `mailto:${AUTHOR_MAIL}?subject=${encodeURIComponent(`Takoyaki desu : tracé de ${k} (${K.r})`)}&body=${encodeURIComponent(text())}`;
+      msg("Votre appli de mail s'ouvre avec le message prêt : il n'y a plus qu'à l'envoyer.");
+    };
   $("#gh").onclick = () => {
     accept();
     const url = `${REPO_ISSUE}?title=${encodeURIComponent(`Tracé de ${k} (${K.r})`)}&body=${encodeURIComponent(text())}`;

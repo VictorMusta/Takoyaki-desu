@@ -26,6 +26,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          VITE_FEEDBACK_MAIL: ${{ vars.FEEDBACK_MAIL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
