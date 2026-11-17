@@ -32,6 +32,8 @@ export interface Drill {
   full?: string;
   gap?: number;
   meaning?: string;
+  /** Japanese reading in romaji, shown first: the French meaning is only a help. */
+  reading?: string;
   /** Speech for listen / dictation (the text to say). */
   say?: string;
   /** match: pairs [sign, romaji]. */
@@ -135,13 +137,13 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       return { type, ks: signsOf(w), prompt: w, options: shuffle([`${r} · ${fr}`, ...wrong], rnd), answer: `${r} · ${fr}`, say: w };
     }
     case "cloze": {
-      const pool = [...knownWords(p).map(([w, , fr]) => ({ w, fr })), ...knownSentences(p).map((s) => ({ w: s.w, fr: s.fr }))];
+      const pool = [...knownWords(p).map(([w, r, fr]) => ({ w, r, fr })), ...knownSentences(p).map((s) => ({ w: s.w, r: s.r, fr: s.fr }))];
       const withK = pool.filter((x) => x.w.includes(sign));
       const it = pick(withK.length ? withK : pool, rnd);
       const idxs = [...it.w].map((c, i) => (c === " " ? -1 : i)).filter((i) => i >= 0);
       const at = [...it.w].indexOf(sign);
       const gap = at >= 0 ? at : pick(idxs, rnd);
-      return { type, ks: [[...it.w][gap]], prompt: it.w, full: it.w, gap, meaning: it.fr, say: it.w.replace(/\s/g, "") };
+      return { type, ks: [[...it.w][gap]], prompt: it.w, full: it.w, gap, meaning: it.fr, reading: it.r, say: it.w.replace(/\s/g, "") };
     }
     case "dictation":
     case "drawword": {
@@ -149,7 +151,7 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       if (!ws.length) return null;
       const withK = ws.filter(([w]) => w.includes(sign));
       const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
-      return { type, ks: signsOf(w), prompt: r, full: w, meaning: fr, say: w };
+      return { type, ks: signsOf(w), prompt: r, full: w, meaning: fr, reading: r, say: w };
     }
     case "sentence": {
       const ss = knownSentences(p);

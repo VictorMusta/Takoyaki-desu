@@ -293,3 +293,4 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .look-papier{background:var(--paper);color:var(--ink);font-size:30px;border-top:var(--hair);border-bottom:var(--hair)}
 .look-panneau.hl b,.look-quai.hl b{border-bottom-color:var(--beni)}
 .quit{white-space:nowrap}
+.reading{margin:0 0 4px;text-align:center;font-family:var(--display);font-size:24px;letter-spacing:.04em}

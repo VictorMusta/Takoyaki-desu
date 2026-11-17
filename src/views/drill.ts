@@ -110,7 +110,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
     case "cloze": {
       const chars = [...d.full!];
       const shown = chars.map((c, i) => (i === d.gap ? `<span class="gap" id="gap">？</span>` : c === " " ? " " : c)).join("");
-      body.appendChild(el(`<div><p class="drill-big kana-l" style="white-space:pre-wrap">${shown}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
+      body.appendChild(el(`<div><p class="drill-big kana-l" style="white-space:pre-wrap">${shown}</p><p class="reading">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
       const kb = kanaKeyboard(new Set(knownSigns(profile())), (k) => {
         if (kb.dataset.done) return;
         kb.dataset.done = "1";
@@ -126,7 +126,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
     case "dictation": {
       const want = [...d.full!];
       let typed: string[] = [];
-      body.appendChild(el(`<div><p class="drill-big" style="font-family:var(--display)">${esc(d.meaning!)}</p><p class="small muted" style="margin:0;text-align:center">${d.prompt}</p></div>`));
+      body.appendChild(el(`<div><p class="drill-big romaji" style="font-size:44px">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
       const boxes = el(`<div class="boxes">${want.map(() => `<span class="box"></span>`).join("")}</div>`);
       body.appendChild(boxes);
       const paint = () => boxes.querySelectorAll(".box").forEach((b, i) => (b.textContent = typed[i] ?? ""));
@@ -157,7 +157,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
         body.innerHTML = "";
         const i = drawn.length;
         if (i === want.length) return review();
-        body.appendChild(el(`<div><p class="drill-big" style="font-family:var(--display)">${esc(d.meaning!)}</p><p class="small muted" style="margin:0;text-align:center">${d.prompt} · signe ${i + 1} sur ${want.length} : « ${byK[want[i]].r} »</p></div>`));
+        body.appendChild(el(`<div><p class="drill-big romaji" style="font-size:44px">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)} · signe ${i + 1} sur ${want.length} : « ${byK[want[i]].r} »</p></div>`));
         const st = el(`<div class="stage"></div>`);
         body.appendChild(st);
         const tools = el(`<div class="tools"><button class="btn">Arrière</button><button class="btn">Recommencer</button><button class="btn primary" disabled>${i + 1 < want.length ? "Signe suivant" : "Comparer"}</button></div>`);
