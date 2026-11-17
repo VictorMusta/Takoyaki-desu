@@ -64,6 +64,8 @@ export interface Profile {
   examRun?: ExamRun;
   /** Tips: last day seen per tip, tips turned off, last day a tip was shown. */
   tips?: { seen: Record<string, number>; hidden: string[]; last: number };
+  /** « Je parle déjà japonais »: day it was turned on, and the profile as it was before. */
+  fluent?: { since: number; backup: Omit<Profile, "fluent"> };
 }
 
 export interface AppState {

@@ -1,5 +1,5 @@
 import { byK, KANA } from "../data/kana";
-import { today } from "../core/scheduler";
+import { pullForward, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, ExamRun } from "../core/types";
 import { $, $opt, el, view } from "../ui/dom";
@@ -27,6 +27,8 @@ export function viewExam(): void {
     save();
     viewCompare(k, strokes, true, (a) => {
       run!.res.push({ k, ok: a === "ok" });
+      // « Je parle déjà japonais »: a sign missed at the exam comes back in the lessons tomorrow.
+      if (a !== "ok" && profile().fluent) pullForward(profile(), k, today());
       run!.i++;
       delete run!.pending;
       save();
@@ -85,16 +87,23 @@ export function viewExam(): void {
   v.appendChild(
     el(`<section class="card"><h2>Examen strict</h2>
     <p class="small muted" style="margin:0">Jusqu'à 20 signes déjà vus, tirés au hasard. Aucune aide, aucun pochoir. « Correct » demande trois « Oui » à la checklist. L'examen ne change pas vos dates de révision : il sert à vérifier vos notes.</p>
-    <button class="btn primary big" id="start" ${seen.length ? "" : "disabled"}>${seen.length ? `Commencer (${Math.min(20, seen.length)} signes)` : "Apprenez d'abord quelques signes"}</button></section>`),
+    ${
+      p.fluent
+        ? `<p class="small muted" style="margin:0">Niveau « je parle déjà japonais » : un signe raté à l'examen revient dans vos séances dès demain.</p>
+    <button class="btn primary big" id="all">Examen général : les ${seen.length} signes</button>
+    <button class="btn" id="start">20 signes au hasard</button>`
+        : `<button class="btn primary big" id="start" ${seen.length ? "" : "disabled"}>${seen.length ? `Commencer (${Math.min(20, seen.length)} signes)` : "Apprenez d'abord quelques signes"}</button>`
+    }</section>`),
   );
+  const begin = (items: string[]) => {
+    profile().examRun = { items, i: 0, res: [] };
+    save();
+    viewExam();
+  };
   const start = $opt<HTMLButtonElement>("#start");
-  if (start)
-    start.onclick = () => {
-      const items = shuffle(seen).slice(0, 20);
-      profile().examRun = { items, i: 0, res: [] };
-      save();
-      viewExam();
-    };
+  if (start) start.onclick = () => begin(shuffle(seen).slice(0, 20));
+  const all = $opt<HTMLButtonElement>("#all");
+  if (all) all.onclick = () => begin(shuffle(seen));
 }
 
 function shuffle<T>(a: T[]): T[] {

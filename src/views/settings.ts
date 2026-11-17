@@ -2,6 +2,9 @@ import { LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
+import { confirmModal } from "../ui/modal";
+import { enableFluent, revertFluent } from "../core/fluent";
+import { today } from "../core/scheduler";
 import { route } from "../router";
 
 export function viewSettings(): void {
@@ -120,6 +123,37 @@ export function viewSettings(): void {
     p.unlocked = Math.min(LINES.length, p.unlocked + 1);
     save();
     viewSettings();
+  };
+
+  /* ---- level: « je parle déjà japonais » (reversible) ---- */
+  const fl = p.fluent;
+  const since = fl ? new Date(Date.now() - (today() - fl.since) * 86400000).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
+  v.appendChild(
+    el(`<section class="card"><h3>Niveau</h3>
+    <p class="small muted" style="margin:0">${
+      fl
+        ? `Depuis le ${since}, ${esc(state.active)} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose les 46 signes.`
+        : "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur les 46 signes."
+    }</p>
+    <div class="row"><button class="btn" id="fluent">${fl ? "J'ai menti" : "Je parle déjà japonais"}</button></div></section>`),
+  );
+  $("#fluent").onclick = async () => {
+    const yes = fl
+      ? await confirmModal({
+          title: "Revenir en arrière ?",
+          body: `<p style="margin:0">La progression de ${esc(state.active)} redevient exactement celle du ${since}, juste avant d'avoir choisi « Je parle déjà japonais ».</p><p class="small muted" style="margin:0">Ce qui a été fait depuis (séances, examens) sera effacé.</p>`,
+          ok: "Revenir à ma progression",
+        })
+      : await confirmModal({
+          title: "Je parle déjà japonais",
+          body: `<p style="margin:0">Toutes les lignes s'ouvrent et les 46 signes sont considérés comme connus. Ils reviendront peu à peu en révision, et l'Examen proposera les 46 signes : un signe raté y revient dès le lendemain.</p><p style="margin:0"><b>C'est réversible.</b> Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.</p>`,
+          ok: "Tout débloquer",
+        });
+    if (!yes) return;
+    if (fl) revertFluent(p);
+    else enableFluent(p, today());
+    save();
+    route();
   };
 
   /* ---- appearance (this device) ---- */

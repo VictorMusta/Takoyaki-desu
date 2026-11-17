@@ -11,6 +11,10 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 
 **Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Pendant un rappel, « Je ne m'en souviens pas : voir le signe » affiche le pochoir : le signe revient plus tard dans la séance puis dès le lendemain. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
 
+**Je parle déjà japonais** (Réglages → Niveau) : ouvre tout, considère les 46 signes comme connus et propose un examen général sur les 46 ; un signe raté à l'examen revient le lendemain. Réversible : « J'ai menti » rétablit la progression d'avant.
+
+**Astuces** : rares (une par jour au plus, puis 60 jours d'attente pour la même), sur l'écran de comparaison : pièges propres à certains signes, conseils généraux et « faux Bien » dessinés. Chacune peut être masquée.
+
 **Profils** : n'importe qui peut installer l'appli. Au premier lancement, on crée son profil ; on peut en ajouter, renommer ou supprimer d'autres dans Réglages, et changer de profil depuis le menu en haut. Chaque profil a sa propre progression, qui reste sur l'appareil.
 
 Chaque signe a une fiche : le caractère dans 5 polices (manuscrit, mincho, gothique, arrondi, pinceau), deux mots d'exemple et les particularités de lecture.
