@@ -1,8 +1,8 @@
 import { byK } from "../data/kana";
 import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
-import type { Drawing, Grade, QueueItem, SavedSession } from "../core/types";
-import { $, el, view } from "../ui/dom";
+import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
+import { $, el, setQuit, view } from "../ui/dom";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
 import { learnSeq, modelSVG } from "../ui/model";
@@ -28,6 +28,18 @@ function cur(): SavedSession | null {
     return null;
   }
   return p.session;
+}
+
+function tally(s: SavedSession, key: keyof SessionStats): void {
+  s.stats ??= { bien: 0, bof: 0, rate: 0, vu: 0, ok: 0, ko: 0 };
+  s.stats[key]++;
+}
+
+/** « Abandonner »: everything graded is already saved; the rest of the lesson is dropped. */
+function quit(): void {
+  delete profile().session;
+  save();
+  navigate("seance");
 }
 
 export function hasSession(): boolean {
@@ -82,18 +94,23 @@ function stepper(n: number): string {
 }
 
 export function viewCard(): void {
+  // Read before cur(): it drops a finished lesson, results included.
   const practice = !!profile().session?.queue[0]?.practice;
+  const stats = profile().session?.stats;
   const session = cur();
-  if (!session) return viewEnd(practice);
+  if (!session) return viewEnd(practice, stats);
+  setQuit(quit);
   save(); // keeps the discovery step of a new sign
   const it = session.queue[session.i];
   if (it.drill) {
     const left0 = session.queue.length - session.i;
+    setQuit(quit);
     return viewDrill(it.drill, `${it.drill.type === "text" ? "Entraînement" : "Exercice"} · ${left0} restant(s)`, (ok, missed) => {
       const s = cur();
       if (!s) return;
       // Like free practice: a miss brings the signs back sooner, a success changes nothing.
       if (!ok) missed.forEach((k) => pullForward(profile(), k, today()));
+      tally(s, ok ? "ok" : "ko");
       s.i++;
       save();
       viewCard();
@@ -190,6 +207,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const session = cur();
   if (!session) return;
   delete it.strokes;
+  tally(session, g === "peek" ? "vu" : g);
   const p = profile(), t = today(), d = dayRec(p, t);
   if (it.practice) {
     // Free practice never pushes a date away; a miss or a peek brings the sign back tomorrow.
@@ -227,14 +245,20 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
   else viewCard();
 }
 
-function viewEnd(practice = false): void {
+function viewEnd(practice = false, st?: SessionStats): void {
+  setQuit(null);
   const p = profile(), t = today();
-  const nb = { rate: 0, bof: 0, bien: 0 };
-  p.log.filter((x) => x.d === t).forEach((x) => nb[x.g]++);
+  const s = st ?? { bien: 0, bof: 0, rate: 0, vu: 0, ok: 0, ko: 0 };
+  const drawn = s.bien + s.bof + s.rate + s.vu, ex = s.ok + s.ko;
+  const day = p.log.filter((x) => x.d === t).length;
+  const stat = (n: number, label: string) => `<div class="stat"><b>${n}</b><span>${label}</span></div>`;
   const v = view();
   v.innerHTML = "";
   const card = el(`<section class="card"><h2>${practice ? "Entraînement terminé" : "Séance terminée"}</h2>
-    <div class="stats"><div class="stat"><b>${nb.bien}</b><span>Bien aujourd'hui</span></div><div class="stat"><b>${nb.bof}</b><span>Bof</span></div><div class="stat"><b>${nb.rate}</b><span>Raté</span></div></div>
+    ${drawn ? `<div class="stats">${stat(s.bien, "Bien")}${stat(s.bof, "Bof")}${stat(s.rate + s.vu, s.vu ? `Raté (dont ${s.vu} « vu »)` : "Raté")}</div>` : ""}
+    ${ex ? `<div class="stats">${stat(s.ok, "exercice" + (s.ok > 1 ? "s" : "") + " juste" + (s.ok > 1 ? "s" : ""))}${stat(s.ko, "à revoir")}${stat(Math.round((s.ok / ex) * 100), "% de réussite")}</div>` : ""}
+    ${!drawn && !ex ? `<p class="small muted" style="margin:0">Rien de noté cette fois.</p>` : ""}
+    ${!practice && day ? `<p class="small muted" style="margin:0">Aujourd'hui en tout : ${day} signe${day > 1 ? "s" : ""} noté${day > 1 ? "s" : ""}.</p>` : ""}
     <div class="sep"><i></i></div>
     <h3>Continuer ?</h3>
     <div id="more"></div>

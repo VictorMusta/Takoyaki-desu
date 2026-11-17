@@ -31,6 +31,25 @@ export function view(): HTMLElement {
   return $("#view");
 }
 
+/**
+ * « Abandonner », shown in the header in place of the profile picker during a lesson,
+ * a training round or an exam. It stays across the screens of that lesson (cards, comparison,
+ * exercises); navigation rebuilds the header, and the end screens clear it.
+ */
+export function setQuit(onQuit: (() => void) | null): void {
+  const box = document.getElementById("prof");
+  if (!box) return;
+  box.querySelector(".quit")?.remove();
+  box.querySelector<HTMLElement>("#who")?.classList.toggle("hidden", !!onQuit);
+  if (!onQuit) return;
+  const b = document.createElement("button");
+  b.className = "btn sm quit";
+  b.textContent = "Abandonner";
+  b.title = "Retour à l'accueil : ce qui a été fait est gardé";
+  b.onclick = onQuit;
+  box.appendChild(b);
+}
+
 /** The seigaiha frieze: home and welcome only (one motif, rarely). */
 export function showWave(): void {
   document.body.classList.add("with-wave");

@@ -292,3 +292,4 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .look-ema{background:#D9B98A;color:#2E2420;font-size:30px;clip-path:polygon(50% 0,100% 22%,100% 100%,0 100%,0 22%);padding:56px 24px 24px;min-width:220px}
 .look-papier{background:var(--paper);color:var(--ink);font-size:30px;border-top:var(--hair);border-bottom:var(--hair)}
 .look-panneau.hl b,.look-quai.hl b{border-bottom-color:var(--beni)}
+.quit{white-space:nowrap}

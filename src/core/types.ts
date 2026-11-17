@@ -97,4 +97,17 @@ export interface SavedSession {
   day: number;
   queue: QueueItem[];
   i: number;
+  /** This lesson's own results (the end screen shows these, not the whole day). */
+  stats?: SessionStats;
+}
+
+export interface SessionStats {
+  bien: number;
+  bof: number;
+  rate: number;
+  /** « Voir le signe » used. */
+  vu: number;
+  /** Other exercises: right / wrong. */
+  ok: number;
+  ko: number;
 }

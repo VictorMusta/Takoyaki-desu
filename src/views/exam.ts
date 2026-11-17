@@ -2,7 +2,7 @@ import { byK, KANA } from "../data/kana";
 import { pullForward, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, ExamRun } from "../core/types";
-import { $, $opt, el, view } from "../ui/dom";
+import { $, $opt, el, setQuit, view } from "../ui/dom";
 import { modelSVG } from "../ui/model";
 import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
@@ -35,30 +35,25 @@ export function viewExam(): void {
       viewExam();
     });
   };
+  // « Abandonner »: the answers already given are kept and scored; none given, nothing is kept.
+  const quit = () => {
+    const r = getRun();
+    if (r && r.res.length) {
+      r.items = r.items.slice(0, r.i);
+      delete r.pending;
+    } else delete profile().examRun;
+    save();
+    viewExam();
+  };
+  setQuit(run && run.i < run.items.length ? quit : null);
   if (run && run.i < run.items.length) {
     const k = run.items[run.i], K = byK[k];
     if (run.pending) return correct(k, run.pending);
     v.appendChild(
       el(`<section class="card"><div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">Examen strict · ${run.i + 1} / ${run.items.length}</div></div><button class="btn sm" id="say">Écouter</button></div>
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
-      <button class="btn sm" id="stop" style="align-self:flex-start">Arrêter l'examen</button></section>`),
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
     );
-    $("#stop").onclick = () => {
-      const n = run.res.length;
-      const msg = n ? `Arrêter ici ? Vos ${n} réponse${n > 1 ? "s" : ""} ${n > 1 ? "sont gardées" : "est gardée"} pour la calibration.` : "Arrêter ici ? Aucune réponse n'a encore été donnée.";
-      $("#stop").outerHTML = `<div class="row"><span class="small">${msg}</span><button class="btn sm" id="stopok">Arrêter</button><button class="btn sm" id="stopno">Continuer</button></div>`;
-      $("#stopok").onclick = () => {
-        // Keep what was answered: the exam simply ends early and is scored on those signs.
-        if (n) {
-          run.items = run.items.slice(0, run.i);
-          delete run.pending;
-        } else delete profile().examRun;
-        save();
-        viewExam();
-      };
-      $("#stopno").onclick = () => viewExam();
-    };
     const pad = makePad($("#st"), modelSVG(k, "blank", false));
     const next = $<HTMLButtonElement>("#next");
     pad.onchange = () => (next.disabled = pad.strokes.length === 0);
