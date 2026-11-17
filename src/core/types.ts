@@ -35,6 +35,18 @@ export interface ExamResult {
   ok: boolean;
 }
 
+/** A drawing: strokes of [x, y] points in the 109 × 109 box. */
+export type Drawing = [number, number][][];
+
+/** An exam in progress, saved after every answer (and while correcting). */
+export interface ExamRun {
+  items: string[];
+  i: number;
+  res: ExamResult[];
+  /** Strokes of the current sign once « Comparer » was pressed: resumes the correction. */
+  pending?: Drawing;
+}
+
 export interface Exam {
   d: number;
   r: ExamResult[];
@@ -49,6 +61,7 @@ export interface Profile {
   log: LogEntry[];
   exams: Exam[];
   session?: SavedSession;
+  examRun?: ExamRun;
 }
 
 export interface AppState {
@@ -67,6 +80,8 @@ export interface QueueItem {
   practice?: boolean;
   /** The learner looked at the sign during this recall. */
   peeked?: boolean;
+  /** Strokes waiting for correction: closing the app on the comparison resumes there. */
+  strokes?: Drawing;
 }
 
 /** A lesson in progress, saved after every step so it survives a closed app. */

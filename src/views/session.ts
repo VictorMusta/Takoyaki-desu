@@ -1,7 +1,7 @@
 import { byK } from "../data/kana";
 import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
-import type { Grade, QueueItem, SavedSession } from "../core/types";
+import type { Drawing, Grade, QueueItem, SavedSession } from "../core/types";
 import { $, el, view } from "../ui/dom";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
@@ -126,7 +126,13 @@ export function viewCard(): void {
         save();
         viewCard();
       };
-    next.onclick = () => viewCompare(it.k, pad.strokes.slice(), false, (g) => onGrade(it, g as Grade | "peek"), !!it.peeked);
+    const correct = (strokes: Drawing) => {
+      it.strokes = strokes;
+      save();
+      viewCompare(it.k, strokes, false, (g) => onGrade(it, g as Grade | "peek"), !!it.peeked);
+    };
+    if (it.strokes) return correct(it.strokes);
+    next.onclick = () => correct(pad.strokes.slice() as Drawing);
 
   }
   $("#say").onclick = () => speak(K.k);
@@ -140,6 +146,7 @@ function requeue(session: SavedSession, item: QueueItem): void {
 function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const session = cur();
   if (!session) return;
+  delete it.strokes;
   const p = profile(), t = today(), d = dayRec(p, t);
   if (it.practice) {
     // Free practice never pushes a date away; a miss or a peek brings the sign back tomorrow.

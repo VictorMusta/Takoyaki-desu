@@ -10,10 +10,10 @@ let apply: ((reload?: boolean) => Promise<void>) | null = null;
 let pending = false;
 
 /**
- * A lesson is saved after every step, so a reload between two screens loses nothing;
- * only a sign being drawn would. The exam is not saved: it must end first.
+ * Lessons and exams are saved after every step (drawings too, once « Comparer » is pressed),
+ * so a reload between two screens loses nothing; only a sign being drawn would.
  */
-const busy = (betweenScreens: boolean) => examRunning() || (!betweenScreens && hasSession());
+const busy = (betweenScreens: boolean) => !betweenScreens && (hasSession() || examRunning());
 
 /** Installs the waiting update now if nothing would be lost. Called at launch and on every screen change. */
 export function maybeApplyUpdate(betweenScreens = true): void {
