@@ -66,6 +66,8 @@ export interface Profile {
   tips?: { seen: Record<string, number>; hidden: string[]; last: number };
   /** « Je parle déjà japonais »: day it was turned on, and the profile as it was before. */
   fluent?: { since: number; backup: Omit<Profile, "fluent"> };
+  /** Signs written the learner's own way (fluent mode): stroke count and order are not checked. */
+  variants?: Record<string, true>;
 }
 
 export interface AppState {

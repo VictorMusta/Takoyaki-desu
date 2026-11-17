@@ -6,6 +6,7 @@ import { ficheHTML } from "../ui/fiche";
 import { animate, badSVG, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
 import { markSeen, pickTip, setHidden } from "../core/tips";
 import { today } from "../core/scheduler";
+import { viewFeedback } from "./feedback";
 import { save } from "../core/store";
 
 type Answer = Grade | "ok" | "ko" | "peek";
@@ -18,18 +19,23 @@ type Answer = Grade | "ok" | "ko" | "peek";
 export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false): void {
   const K = byK[k];
   const show = profile().settings.showNums;
+  const prof = profile();
+  const own = !!prof.variants?.[k];
   const v = view();
   v.innerHTML = "";
   v.appendChild(
     el(`<section class="card">
     <div class="spread"><h2>${K.k} · ${K.r}</h2><button class="btn" id="ov" aria-pressed="false">Superposer</button></div>
     <div id="cmp"></div>
-    <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button></div>
+    <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button>${
+      prof.fluent && !peeked ? `<button class="btn sm" id="mine">${own ? "Revenir au modèle" : "Moi je le fais pas comme ça"}</button>` : ""
+    }</div>
     <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
     <details id="checks" class="checks${peeked ? " hidden" : ""}" ${exam ? "open" : ""}><summary>${exam ? "Vérification" : "Vérifier en 3 questions (facultatif)"}</summary>
-      <div class="q"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
-      <div class="q"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
+      ${own ? `<p class="small muted" style="margin:0">Vous l'écrivez à votre façon : nombre et ordre des traits ne sont pas vérifiés.</p>` : ""}
+      <div class="q${own ? " hidden" : ""}"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
+      <div class="q${own ? " hidden" : ""}"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
     </details>
     <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
@@ -85,7 +91,20 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   };
   $("#anim").onclick = replay;
 
-  const ans: Partial<Record<"n" | "o" | "p", boolean>> = {};
+  // Own variant: count and order are taken as right; only the shape is judged.
+  const ans: Partial<Record<"n" | "o" | "p", boolean>> = own ? { n: true, o: true } : {};
+  const mine = v.querySelector<HTMLButtonElement>("#mine");
+  if (mine)
+    mine.onclick = () => {
+      prof.variants ??= {};
+      if (own) {
+        delete prof.variants[k];
+        save();
+        return viewCompare(k, strokes, exam, onAnswer, peeked);
+      }
+      // « Moi je le fais pas comme ça »: draw it your way and send it to the author.
+      viewFeedback(k, () => viewCompare(k, strokes, exam, onAnswer, peeked));
+    };
   const btn = (g: string) => $<HTMLButtonElement>(`[data-g="${g}"]`, v);
   const update = () => {
     if (peeked) return;

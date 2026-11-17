@@ -235,3 +235,4 @@ body.with-wave .wave{display:block}
 .modal-card{width:100%;max-width:460px;box-shadow:var(--shadow-float)}
 .modal-card p{line-height:1.7}
 .modal-card b{font-weight:500}
+.fb{min-height:80px;font-family:var(--body);font-size:13px}
