@@ -5,6 +5,7 @@ import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
 import { confirmModal } from "../ui/modal";
 import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
+import { mailTo } from "../config";
 import { route } from "../router";
 
 export function viewSettings(): void {
@@ -170,6 +171,18 @@ export function viewSettings(): void {
       v.querySelectorAll("[data-th]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     };
   });
+
+  /* ---- feedback ---- */
+  const fb = mailTo(
+    "Takoyaki desu : mon retour",
+    `Bonjour,\n\n(Ce qui vous plaît, ce qui gêne, une idée, un bug…)\n\n\n---\nAppareil : ${navigator.userAgent}`,
+  );
+  if (fb)
+    v.appendChild(
+      el(`<section class="card"><h3>Un avis ?</h3>
+      <p class="small muted" style="margin:0">L'appli est en bêta : un bug, une gêne, une idée, tout aide. Votre appli de mail s'ouvre avec le message prêt.</p>
+      <div class="row"><a class="btn" href="${fb}">Faire un retour</a></div></section>`),
+    );
 
   /* ---- credits ---- */
   v.appendChild(

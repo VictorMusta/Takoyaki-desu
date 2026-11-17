@@ -236,3 +236,4 @@ body.with-wave .wave{display:block}
 .modal-card p{line-height:1.7}
 .modal-card b{font-weight:500}
 .fb{min-height:80px;font-family:var(--body);font-size:13px}
+a.btn{text-decoration:none;display:inline-block;color:var(--ink)}

@@ -5,8 +5,7 @@ import { modelSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
 
 const REPO_ISSUE = "https://github.com/VictorMusta/Takoyaki-desu/issues/new";
-/** Where feedback goes by mail: set at build time (GitHub repository variable FEEDBACK_MAIL). */
-const AUTHOR_MAIL: string = import.meta.env.VITE_FEEDBACK_MAIL ?? "";
+import { AUTHOR_MAIL, mailTo } from "../config";
 
 /** The learner's drawing as a PNG: dashed cross, strokes in order colours, stroke numbers. */
 async function drawingPNG(strokes: Stroke[]): Promise<Blob | null> {
@@ -115,7 +114,7 @@ export function viewFeedback(k: string, back: () => void): void {
   if (mail)
     mail.onclick = () => {
       accept();
-      location.href = `mailto:${AUTHOR_MAIL}?subject=${encodeURIComponent(`Takoyaki desu : tracé de ${k} (${K.r})`)}&body=${encodeURIComponent(text())}`;
+      location.href = mailTo(`Takoyaki desu : tracé de ${k} (${K.r})`, text());
       msg("Votre appli de mail s'ouvre avec le message prêt : il n'y a plus qu'à l'envoyer.");
     };
   $("#gh").onclick = () => {
