@@ -1,64 +1,102 @@
 # たこ焼きです · Takoyaki desu
 
-Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au modèle, avec répétition espacée. Appli web installable sur le téléphone, qui marche hors ligne et se met à jour toute seule : la nouvelle version est cherchée au lancement et au retour dans l'appli, puis installée aussitôt, ou à la fin de la séance en cours pour ne rien perdre.
+**Apprendre à lire et écrire les kana japonais en les écrivant de mémoire.**
+Une appli web à installer sur son téléphone : hors ligne, sans compte, sans publicité, et rien ne quitte l'appareil.
 
-## Principe
+[![Déploiement](https://github.com/VictorMusta/Takoyaki-desu/actions/workflows/deploy.yml/badge.svg)](https://github.com/VictorMusta/Takoyaki-desu/actions/workflows/deploy.yml)
+[![Qualité](https://github.com/VictorMusta/Takoyaki-desu/actions/workflows/quality.yml/badge.svg)](https://github.com/VictorMusta/Takoyaki-desu/actions/workflows/quality.yml)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-informational)](LICENSE)
 
-1. **Découverte** d'un nouveau signe : le signe seul, puis l'ordre des traits animé (une couleur et un numéro par trait), puis un pochoir, un pochoir estompé et enfin la page blanche.
-2. **Révision** : on écrit le signe de mémoire, on compare son tracé (recoloré dans l'ordre où on l'a fait) au modèle, on répond à une checklist (nombre de traits, ordre, proportions), puis on se note Raté / Bof / Bien.
-3. **Planification** : SM-2 simplifié. Un ordre faux plafonne la note à « Bof ». La ligne suivante du tableau s'ouvre quand 80 % de la ligne en cours tient au moins 3 jours.
-4. **Examen strict et calibration** : compare le taux de « Bien » en séance au taux de réussite en examen, pour repérer une auto-évaluation trop généreuse.
+**[→ Essayer l'appli](https://victormusta.github.io/Takoyaki-desu/)**
 
-**Hiragana complets** : les 46 signes de base, puis les signes sonores (ten-ten ゛ : が, ざ, だ, ば ; maru ゜ : ぱ), puis les petits signes ゃ ゅ ょ っ (combinaisons きゃ, しゅ… et consonnes doublées). 75 signes, chacun avec ses traits, son astuce et des mots d'exemple.
+<p>
+  <img src="docs/screenshots/home.png" width="200" alt="Accueil : séance du jour et résumé de l'activité">
+  <img src="docs/screenshots/comparaison.png" width="200" alt="Comparaison du tracé avec le modèle, vérification automatique">
+  <img src="docs/screenshots/progres.png" width="200" alt="Progrès : maîtrise, courbe et calendrier d'activité">
+  <img src="docs/screenshots/fiche.png" width="200" alt="Fiche d'un signe : ordre des traits animé et astuce">
+</p>
 
-**Katakana** : une fois les hiragana ouverts, les katakana suivent le même chemin (signes de base, ten-ten et maru, petits signes et barre d'allongement ー), avec leurs astuces, des mots d'emprunt en exemple (コーヒー, ホテル…), leur jumeau hiragana sur chaque fiche et une maîtrise suivie à part. 151 signes en tout.
+## La méthode
 
-**Vocabulaire utile** : 262 mots, ouverts dès que leurs signes sont appris. D'abord des mots en hiragana de base, puis des mots du quotidien et du voyage avec ten-ten et petits signes (でんしゃ, きっぷ, だいじょうぶ…), puis les mots d'emprunt en katakana (コンビニ, レシート, エレベーター…). Les romaji s'effacent au fil des progrès : dès qu'un signe tient 3 jours, sa lecture n'est plus affichée à côté des mots, et un mot dont tous les signes tiennent se lit sans aide (lecture derrière « Voir la lecture »).
+Reconnaître un signe ne suffit pas pour savoir l'écrire. Ici, on **écrit chaque signe de mémoire**, on le compare au modèle, et la répétition espacée le fait revenir juste avant qu'on l'oublie.
 
-**Vérification automatique des traits** : après chaque tracé, l'appli compare votre dessin au modèle sans tenir compte de la taille ni de la position. Elle vérifie le nombre de traits, leur ordre, leur sens et grossièrement leur forme, accepte les variantes courantes (き en 3 traits, さ en 2, り en 1) et entoure le trait fautif. Elle ne note jamais à votre place : elle bloque seulement « Bien » quand elle trouve une vraie erreur. Bouton « Je pense que c'est juste » pour passer outre et envoyer le tracé à l'auteur.
+1. **Découvrir** : le signe, son ordre des traits animé, puis un pochoir, un pochoir estompé et la page blanche.
+2. **Rappeler** : écrire de mémoire. L'appli **vérifie elle-même** le nombre, l'ordre et le sens des traits, sans tenir compte de la taille ni de la position. Elle accepte les variantes manuscrites courantes (き en 3 traits, さ en 2) et entoure le trait fautif.
+3. **Se noter** : Raté, Bof ou Bien. La vérification ne note jamais à votre place : elle bloque seulement « Bien » sur une vraie erreur, et « Je pense que c'est juste » permet de la contredire.
+4. **Revoir** au bon moment : SM-2 simplifié. Une ligne du tableau s'ouvre quand 80 % de la précédente tient trois jours.
 
-**Sauvegarde** : l'appli demande au navigateur de protéger son stockage, et propose « M'envoyer ma sauvegarde » : le menu de partage s'ouvre avec le fichier en pièce jointe, on choisit son appli de mail et on se l'envoie. Un rappel discret apparaît sur l'accueil quand la dernière sauvegarde a plus d'une semaine. Pour restaurer : Réglages › Sauvegarde › Importer un fichier.
+## Ce qu'on y trouve
 
-**Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Pendant un rappel, « Je ne m'en souviens pas : voir le signe » affiche le pochoir : le signe revient plus tard dans la séance puis dès le lendemain. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
+- **151 signes** : hiragana complets (base, ten-ten, maru, petits signes), puis katakana avec la barre ー. Chaque signe a son astuce mnémotechnique, des mots d'exemple et une fiche (5 polices, son jumeau dans l'autre écriture).
+- **262 mots utiles**, du quotidien et du voyage (でんしゃ, きっぷ, コンビニ…). Un mot s'ouvre dès que ses signes sont appris. Les romaji s'effacent quand un signe est bien acquis.
+- **Exercices** : reconnaître les signes, lire des mots, écrire des mots (clavier ou main), phrases, proverbes, et vrais textes vus au Japon (panneaux, menus, stèles).
+- **Progrès** : maîtrise par écriture, courbe sur 30 jours, calendrier d'activité, fiche de chaque signe avec traçage libre.
+- **Examen strict**, pour vérifier que ses propres notes sont honnêtes.
+- **Profils** : plusieurs personnes sur un même téléphone.
+- **Sauvegarde** : « M'envoyer ma sauvegarde » ouvre le partage avec le fichier en pièce jointe, et un rappel hebdomadaire s'affiche. La restauration montre la date et le contenu avant de remplacer quoi que ce soit.
+- **Confort** :
+  - trait pinceau ou simple ;
+  - vibrations discrètes ;
+  - thème clair et sombre ;
+  - « Quoi de neuf ? » après chaque mise à jour ;
+  - mises à jour automatiques, jamais au milieu d'une séance.
 
-**Vocabulaire** : un mot s'ouvre quand tous ses signes sont vus (3 nouveaux mots par jour, réglable). Découverte (son, lecture, sens, signes), puis révisions espacées : lire le mot et l'épeler en lettres latines puis choisir son sens, ou retrouver le mot à partir de son sens avec des signes à sélectionner. Progrès compte les mots sus (sens retrouvé et tenu au moins un jour).
+## Confidentialité
 
-**S'entraîner autrement** (accueil) : choisir le signe, écouter, lire, relier, sosies, lire des mots, textes à trous, dictée au clavier (clavier hiragana intégré, seulement les signes appris) ou dessinée, phrases et proverbes, et textes vus au Japon en 3 écritures (panneaux, menus, stèles, noren) à deviner puis corriger. Quelques exercices sont aussi glissés dans la séance du jour. Ils ne repoussent jamais une révision ; un raté la rapproche.
+L'appli n'a ni compte, ni serveur, ni mesure d'audience, ni cookie, ni outil tiers. Les polices sont livrées avec l'appli. La progression vit uniquement dans le navigateur. Des données ne partent que si l'utilisateur le décide : une sauvegarde qu'il s'envoie, un retour par mail ou un ticket GitHub. Le détail est dans l'appli, sous Réglages › Confidentialité.
 
-**Je parle déjà japonais** (Réglages → Niveau) : ouvre tout, considère les 46 signes comme connus et propose un examen général sur les 46 ; un signe raté à l'examen revient le lendemain. Réversible : « J'ai menti » rétablit la progression d'avant.
+## Installer sur son téléphone
 
-**Astuces** : rares (une par jour au plus, puis 60 jours d'attente pour la même), sur l'écran de comparaison : pièges propres à certains signes, conseils généraux et « faux Bien » dessinés. Chacune peut être masquée.
+Ouvrir [le lien](https://victormusta.github.io/Takoyaki-desu/) puis :
 
-**Profils** : n'importe qui peut installer l'appli. Au premier lancement, on crée son profil ; on peut en ajouter, renommer ou supprimer d'autres dans Réglages, et changer de profil depuis le menu en haut. Chaque profil a sa propre progression, qui reste sur l'appareil.
-
-Chaque signe a une fiche : le caractère dans 5 polices (manuscrit, mincho, gothique, arrondi, pinceau), deux mots d'exemple et les particularités de lecture.
+- **Android (Chrome)** : menu ⋮ › « Ajouter à l'écran d'accueil » ;
+- **iPhone (Safari)** : bouton Partager › « Sur l'écran d'accueil ».
 
 ## Développement
 
+Le projet est en TypeScript strict, avec Vite et vite-plugin-pwa. Il n'utilise aucun framework d'interface : les écrans sont des modules qui construisent le DOM.
+
 ```bash
 npm install
-npm run dev        # serveur local
-npm test           # tests du planificateur
-npm run build      # vérification des types + build dans dist/
+npm run dev     # serveur local
+npm test        # tests unitaires (Vitest)
+npm run build   # vérification des types + build dans dist/
+npm run e2e     # parcours d'écrans (Playwright + axe), sur le build
 ```
-
-Organisation :
 
 | Dossier | Contenu |
 | --- | --- |
-| `src/data` | Tracés des kana (`kana.json`, généré depuis KanjiVG) et mots d'exemple |
-| `src/core` | Planificateur (pur, testé), types, stockage local |
-| `src/ui` | Canevas d'écriture, rendu des modèles SVG, fiche, synthèse vocale |
-| `src/views` | Écrans : séance, comparaison, progrès, examen, réglages |
-| `scripts` | `extract_kana.py` régénère `kana.json` à partir des SVG KanjiVG |
+| `src/core` | Logique pure et testée : planification, vérification des traits, exercices, vocabulaire, migrations des données, sauvegarde |
+| `src/data` | Tracés des kana (KanjiVG), astuces, mots, textes, journal des nouveautés |
+| `src/ui` | Canevas d'écriture, rendu pinceau, modèles SVG, calendrier, vibrations, fenêtres |
+| `src/views` | Écrans : séance, comparaison, exercices, progrès, examen, réglages |
+| `scripts` | `extract_kana.py` (tracés depuis KanjiVG), `subset_fonts.py` (polices réduites aux caractères utilisés) |
+| `e2e` | Parcours d'écrans à 320 et 393 px, en thème clair et sombre |
+| `deploy` | Hébergement sur un VPS derrière Caddy (optionnel) |
 
-La progression est enregistrée dans le navigateur (`localStorage`). Réglages → Sauvegarde permet de la copier et de la réimporter.
+**Qualité.**
+
+- Plus de 60 tests unitaires couvrent notamment :
+  - la planification et la vérification des traits sur les 151 signes ;
+  - un test aléatoire qui génère des centaines d'exercices à 5 stades d'apprentissage ;
+  - les migrations de données sur de vraies sauvegardes ;
+  - la couverture des polices.
+- Les parcours d'écrans font échouer le contrôle sur une erreur de script, un défilement horizontal ou un problème d'accessibilité sérieux (contraste compris).
+
+**Données.** Le format enregistré porte un numéro de version. `src/core/migrations.ts` fait monter les anciennes données étape par étape, au lancement comme à l'import. Les données d'une version plus récente ne sont jamais modifiées, et celles qui sont illisibles sont mises de côté au lieu d'être écrasées.
+
+**Publier une version.**
+
+1. Monter `version` dans `package.json`.
+2. Ajouter l'entrée correspondante, en mots simples, dans `src/data/changelog.ts` (un test vérifie la concordance).
+3. Pousser sur `main`.
 
 ## Déploiement
 
-Chaque push sur `main` lance les tests, construit l'appli et la publie sur GitHub Pages (`.github/workflows/deploy.yml`). Il faut une seule fois : *Settings → Pages → Source : GitHub Actions*.
+Chaque push sur `main` lance les tests et le build, puis publie sur GitHub Pages. Le workflow « Qualité » tourne à côté sans retarder la mise en ligne. Pour héberger aussi sur un VPS, voir [`deploy/README.md`](deploy/README.md).
 
-## Licences
+## Crédits et licences
 
-- Code : MIT (voir `LICENSE`).
-- Tracés et ordre des traits : [KanjiVG](http://kanjivg.tagaini.net), © Ulrich Apel, sous licence [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Le fichier `src/data/kana.json` en est dérivé et reste sous cette licence.
+- Code : MIT, voir [`LICENSE`](LICENSE).
+- Tracés et ordre des traits : [KanjiVG](http://kanjivg.tagaini.net), © Ulrich Apel, sous licence [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). `src/data/kana.json` en est dérivé et reste sous cette licence.
+- Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Yuji Syuku et Zen Maru Gothic, sous licence [SIL Open Font License](https://openfontlicense.org), réduites aux caractères utilisés par l'appli.

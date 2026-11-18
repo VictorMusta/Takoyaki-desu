@@ -1,4 +1,4 @@
-import { byK, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
+import { byK, isKata, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
 import { alphabetMastery, calibration, kataStarted, mastery, recordMastery, status, streak, today } from "../core/scheduler";
 import { profile, save, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
@@ -30,7 +30,7 @@ export function viewProgress(): void {
       grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
     });
   });
-  const done = KANA.filter((k) => status(p, k.k) === "done").length;
+  const hira = KANA.filter((k) => !isKata(k.k)), doneH = hira.filter((k) => status(p, k.k) === "done").length;
   recordMastery(p, t);
   save();
   const kata = kataStarted(p);
@@ -45,7 +45,7 @@ export function viewProgress(): void {
   v.appendChild(fc);
   v.appendChild(
     el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
-    <div class="stats">${stat(false)}${kata ? stat(true) : `<div class="stat"><b>${done}</b><span>maîtrisés / ${KANA.length}</span></div>`}<div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
+    <div class="stats">${stat(false)}${kata ? stat(true) : `<div class="stat"><b>${doneH}</b><span>maîtrisés / ${hira.length}</span></div>`}<div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
     ${curve(p.hist ?? {}, t, "hiragana")}${kata ? curve(p.histK ?? {}, t, "katakana") : ""}
     ${calendarHTML(p, t)}
     <details><summary class="small">Lire le tableau</summary><p class="small muted" style="margin:8px 0 0">Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre. À partir de 67 %, les romaji du signe ne sont plus affichés dans les mots.</p>
