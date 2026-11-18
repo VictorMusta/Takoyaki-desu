@@ -342,3 +342,16 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .scripth:first-child{margin-top:0}
 .today{border-left:2px solid var(--kin);padding:4px 0 4px 16px;display:flex;flex-direction:column;gap:4px}
 .today .up{color:var(--take);font-weight:500}
+
+/* Activity calendar */
+.cal svg{width:100%;height:auto;display:block}
+.cal rect,.cal-scale i{fill:var(--guide);fill-opacity:.35;background:color-mix(in srgb,var(--guide) 35%,transparent)}
+.cal [data-l="1"]{fill:var(--take);fill-opacity:.3;background:color-mix(in srgb,var(--take) 30%,transparent)}
+.cal [data-l="2"]{fill:var(--take);fill-opacity:.55;background:color-mix(in srgb,var(--take) 55%,transparent)}
+.cal [data-l="3"]{fill:var(--take);fill-opacity:.8;background:color-mix(in srgb,var(--take) 80%,transparent)}
+.cal [data-l="4"]{fill:var(--take);fill-opacity:1;background:var(--take)}
+.cal rect.cal-t{stroke:var(--ink);stroke-width:1.2}
+.cal-m{font-size:8px;fill:var(--wood);font-family:var(--body)}
+.cal-legend{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.cal-scale{display:inline-flex;align-items:center;gap:3px}
+.cal-scale i{display:inline-block;width:10px;height:10px}
