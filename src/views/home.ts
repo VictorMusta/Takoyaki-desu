@@ -1,4 +1,4 @@
-import { LINES } from "../data/kana";
+import { LINES, lineLabel } from "../data/kana";
 import { buildQueue, dayRec, today } from "../core/scheduler";
 import { buildWordQueue } from "../core/vocab";
 import { memoryOnly, profile, state } from "../core/store";
@@ -25,7 +25,7 @@ export function viewHome(): void {
       <div class="stat"><b>${nWords}</b><span>mots</span></div>
     </div>
     ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
-    <p class="muted small" style="margin:0">Aujourd'hui : ${d.nw} nouveau(x), ${d.rv} révision(s). Lignes ouvertes : ${LINES.slice(0, p.unlocked).join(", ")}.</p>
+    <p class="muted small" style="margin:0">Aujourd'hui : ${d.nw} nouveau(x), ${d.rv} révision(s). Ligne en cours : ${lineLabel(LINES[p.unlocked - 1])}.</p>
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
   );
@@ -48,7 +48,7 @@ export function viewHome(): void {
   }
   v.appendChild(
     el(`<section class="card"><details><summary>Comment ça marche</summary>
-    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${LINES[p.unlocked - 1]} » tient au moins 3 jours.</p></details></section>`),
+    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
   );
   const modes = MODES.map((m) => {
     const ok = available(p, m.type);

@@ -11,6 +11,8 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 
 **Hiragana complets** : les 46 signes de base, puis les signes sonores (ten-ten ゛ : が, ざ, だ, ば ; maru ゜ : ぱ), puis les petits signes ゃ ゅ ょ っ (combinaisons きゃ, しゅ… et consonnes doublées). 75 signes, chacun avec ses traits, son astuce et des mots d'exemple.
 
+**Katakana** : une fois les hiragana ouverts, les katakana suivent le même chemin (signes de base, ten-ten et maru, petits signes et barre d'allongement ー), avec leurs astuces, des mots d'emprunt en exemple (コーヒー, ホテル…), leur jumeau hiragana sur chaque fiche et une maîtrise suivie à part. 151 signes en tout.
+
 **Vérification automatique des traits** : après chaque tracé, l'appli compare votre dessin au modèle sans tenir compte de la taille ni de la position. Elle vérifie le nombre de traits, leur ordre, leur sens et grossièrement leur forme, accepte les variantes courantes (き en 3 traits, さ en 2, り en 1) et entoure le trait fautif. Elle ne note jamais à votre place : elle bloque seulement « Bien » quand elle trouve une vraie erreur. Bouton « Je pense que c'est juste » pour passer outre et envoyer le tracé à l'auteur.
 
 **Sauvegarde** : l'appli demande au navigateur de protéger son stockage, et propose « M'envoyer ma sauvegarde » : le menu de partage s'ouvre avec le fichier en pièce jointe, on choisit son appli de mail et on se l'envoie. Un rappel discret apparaît sur l'accueil quand la dernière sauvegarde a plus d'une semaine. Pour restaurer : Réglages › Sauvegarde › Importer un fichier.

@@ -1,5 +1,5 @@
 import { EXAMPLES, NOTES } from "../data/examples";
-import { byK } from "../data/kana";
+import { byK, isKata, twin } from "../data/kana";
 import { TRAPS } from "../data/tips";
 
 const FONTS: [cls: string, name: string, use: string][] = [
@@ -17,8 +17,9 @@ export function ficheHTML(k: string): string {
   const ex = (EXAMPLES[k] ?? [])
     .map(([w, r, fr]) => `<dt>${w.split(k).join(`<mark>${k}</mark>`)}</dt><span class="rj">${r}</span><dd>${fr}</dd>`)
     .join("");
-  const n = K.s.length;
+  const n = K.s.length, tw = twin(k);
+  const kin = tw && byK[tw] ? ` · ${isKata(k) ? "en hiragana" : "en katakana"} : ${tw}` : "";
   return `<div class="fiche"><div class="fonts">${tiles}</div>
-    <p class="small muted" style="margin:0">${n} trait${n > 1 ? "s" : ""} · le modèle d'écriture est la forme « manuscrit » (manuels scolaires).</p>
+    <p class="small muted" style="margin:0">${n} trait${n > 1 ? "s" : ""}${kin} · le modèle d'écriture est la forme « manuscrit » (manuels scolaires).</p>
     <dl class="ex">${ex}</dl>${NOTES[k] ? `<p class="note" style="margin:0">${NOTES[k]}</p>` : ""}${TRAPS[k] ? `<p class="note" style="margin:0"><b>Piège</b> · ${TRAPS[k].text}</p>` : ""}</div>`;
 }

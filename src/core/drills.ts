@@ -1,4 +1,4 @@
-import { byK, KANA } from "../data/kana";
+import { byK, isKata, isPlain, KANA } from "../data/kana";
 import { SENTENCES, signsOf, WORDS } from "../data/words";
 import { isHira, TEXTS, textOf } from "../data/texts";
 import type { Profile } from "./types";
@@ -49,6 +49,9 @@ export const LOOKALIKES: string[][] = [
   ["さ", "ち", "き"], ["ぬ", "め"], ["ね", "れ", "わ"], ["は", "ほ", "け"], ["る", "ろ"], ["あ", "お", "め"],
   ["い", "り", "こ"], ["し", "つ", "ん", "そ"], ["う", "ら", "つ"], ["ま", "も", "よ"], ["た", "な", "に"],
   ["く", "へ", "し"], ["す", "む", "お"], ["ふ", "う"], ["ゆ", "わ"],
+  // katakana
+  ["シ", "ツ"], ["ソ", "ン"], ["ク", "ケ", "タ"], ["ウ", "ワ", "フ"], ["コ", "ユ", "ロ"], ["ス", "ヌ", "フ"],
+  ["マ", "ム", "ア"], ["チ", "テ"], ["セ", "ヤ"], ["ヒ", "ビ"], ["ナ", "メ"], ["ル", "レ"], ["ノ", "メ"], ["エ", "ユ"],
 ];
 
 type Rnd = () => number;
@@ -63,8 +66,8 @@ export function shuffle<T>(a: T[], rnd: Rnd): T[] {
 }
 
 export const knownSigns = (p: Profile): string[] => KANA.filter((k) => p.cards[k.k]?.seen).map((k) => k.k);
-/** Known signs that stand alone (small ゃ ゅ ょ っ only make sense attached to another sign). */
-const knownPlain = (p: Profile) => knownSigns(p).filter((k) => !byK[k].small);
+/** Known signs that stand alone (small ゃ ゅ ょ っ and the bar ー only make sense attached to another sign). */
+const knownPlain = (p: Profile) => knownSigns(p).filter(isPlain);
 const knownSet = (p: Profile) => new Set(knownSigns(p));
 const allKnown = (s: string, known: Set<string>) => signsOf(s).every((c) => known.has(c));
 
@@ -86,8 +89,10 @@ export const openTexts = (p: Profile) => {
   });
 };
 
-/** Wrong options: look-alikes first, then other known signs. */
-function distractors(k: string, pool: string[], n: number, rnd: Rnd): string[] {
+/** Wrong options: look-alikes first, then other known signs of the same script when there are enough. */
+function distractors(k: string, all: string[], n: number, rnd: Rnd): string[] {
+  const same = all.filter((x) => isKata(x) === isKata(k));
+  const pool = same.length > n ? same : all;
   const near = (LOOKALIKES.find((g) => g.includes(k)) ?? []).filter((x) => x !== k && pool.includes(x));
   const rest = shuffle(pool.filter((x) => x !== k && !near.includes(x)), rnd);
   return [...shuffle(near, rnd), ...rest].slice(0, n);
@@ -112,7 +117,7 @@ export function available(p: Profile, type: DrillType): boolean {
 export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Math.random): Drill | null {
   if (!available(p, type)) return null;
   const known = knownPlain(p);
-  const sign = k && p.cards[k]?.seen && !byK[k].small ? k : pick(known, rnd);
+  const sign = k && p.cards[k]?.seen && isPlain(k) ? k : pick(known, rnd);
   switch (type) {
     case "choose":
     case "listen": {
@@ -124,7 +129,9 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       return { type, ks: [sign], prompt: sign, options: shuffle([byK[sign].r, ...ws], rnd), answer: byK[sign].r, say: sign };
     }
     case "match": {
-      const five = shuffle(known, rnd).slice(0, 5);
+      // Five signs with five different sounds (か and カ both read « ka »).
+      const five: string[] = [];
+      for (const x of shuffle(known, rnd)) if (five.length < 5 && !five.some((y) => byK[y].r === byK[x].r)) five.push(x);
       return { type, ks: five, prompt: "", pairs: five.map((x) => [x, byK[x].r]) };
     }
     case "combo": {
@@ -179,7 +186,8 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
 /** Combinations of a known « i » sign and a known small ゃ ゅ ょ (きゃ, しゅ, ちょ…). */
 function combos(p: Profile): string[] {
   const seen = (k: string) => !!p.cards[k]?.seen;
-  return [..."きしちにひみりぎじびぴ"].filter(seen).flatMap((b) => [..."ゃゅょ"].filter(seen).map((s) => b + s));
+  const of = (base: string, small: string) => [...base].filter(seen).flatMap((b) => [...small].filter(seen).map((s) => b + s));
+  return [...of("きしちにひみりぎじびぴ", "ゃゅょ"), ...of("キシチニヒミリギジビピ", "ャュョ")];
 }
 
 /** Short exercises slipped into the daily lesson, between the drawings. */

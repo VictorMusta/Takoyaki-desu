@@ -1,5 +1,5 @@
-import { byK, KANA, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
-import { alphabetMastery, calibration, mastery, recordMastery, status, streak, today } from "../core/scheduler";
+import { byK, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
+import { alphabetMastery, calibration, kataStarted, mastery, recordMastery, status, streak, today } from "../core/scheduler";
 import { profile, save, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
@@ -18,7 +18,8 @@ export function viewProgress(): void {
   let grid = "";
   LINES.forEach((ln, i) => {
     const cs = lineCards(i), locked = i >= p.unlocked;
-    grid += `<div class="lineh">Ligne ${lineLabel(ln)}${locked ? " · fermée" : ""}</div>`;
+    if (i === 0 || i === KATA_START) grid += `<h3 class="scripth">${i ? "Katakana" : "Hiragana"}</h3>`;
+    grid += `<div class="lineh">Ligne ${lineLabel(ln).replace(" · katakana", "")}${locked ? " · fermée" : ""}</div>`;
     (SLOTS[ln] ?? [0, 1, 2, 3, 4]).forEach((s) => {
       if (s === null) {
         grid += `<div class="cell empty"></div>`;
@@ -31,15 +32,20 @@ export function viewProgress(): void {
   const done = KANA.filter((k) => status(p, k.k) === "done").length;
   recordMastery(p, t);
   save();
-  const am = Math.round(alphabetMastery(p, t) * 100);
-  const week = p.hist?.[t - 7] ?? Object.entries(p.hist ?? {}).filter(([d]) => +d <= t - 7).pop()?.[1];
-  const delta = week === undefined ? null : Math.round(am - week);
+  const kata = kataStarted(p);
+  const stat = (kat: boolean) => {
+    const h = (kat ? p.histK : p.hist) ?? {};
+    const am = Math.round(alphabetMastery(p, t, kat) * 100);
+    const week = h[t - 7] ?? Object.entries(h).filter(([d]) => +d <= t - 7).pop()?.[1];
+    const delta = week === undefined ? null : Math.round(am - week);
+    return `<div class="stat"><b>${am} %</b><span>${kat ? "katakana" : kata ? "hiragana" : "maîtrise des hiragana"}${delta !== null && delta !== 0 ? ` (${delta > 0 ? "+" : ""}${delta} en 7 j)` : ""}</span></div>`;
+  };
   const fc = el(`<section class="card hidden" id="fc"></section>`);
   v.appendChild(fc);
   v.appendChild(
     el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
-    <div class="stats"><div class="stat"><b>${am} %</b><span>maîtrise de l'alphabet${delta !== null && delta !== 0 ? ` (${delta > 0 ? "+" : ""}${delta} en 7 j)` : ""}</span></div><div class="stat"><b>${done}</b><span>maîtrisés / ${KANA.length}</span></div><div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
-    ${curve(p, t)}
+    <div class="stats">${stat(false)}${kata ? stat(true) : `<div class="stat"><b>${done}</b><span>maîtrisés / ${KANA.length}</span></div>`}<div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
+    ${curve(p.hist ?? {}, t, "hiragana")}${kata ? curve(p.histK ?? {}, t, "katakana") : ""}
     <p class="small muted" style="margin:0">Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre.</p>
     <div class="legend"><span><i class="cell" aria-hidden="true">あ</i>Pas encore vu</span><span><i class="cell learn" style="--m:50%" aria-hidden="true">あ</i>En cours</span><span><i class="cell done" aria-hidden="true">あ</i>Maîtrisé</span></div>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
@@ -171,8 +177,7 @@ function wordsHTML(k: string): string {
 }
 
 /** The alphabet mastery over the last 30 days, as a thin line (days without a value carry the last one). */
-function curve(p: import("../core/types").Profile, t: number): string {
-  const h = p.hist ?? {};
+function curve(h: Record<number, number>, t: number, what: string): string {
   const days = Object.keys(h).map(Number).filter((d) => d > t - 30).sort((a, b) => a - b);
   if (days.length < 2) return "";
   const first = days[0], W = 300, H = 60;
@@ -186,7 +191,7 @@ function curve(p: import("../core/types").Profile, t: number): string {
   const y = (v: number) => H - 6 - (v / 100) * (H - 12);
   const line = pts.map(([d, v], i) => `${i ? "L" : "M"}${x(d).toFixed(1)} ${y(v).toFixed(1)}`).join("");
   const [ld, lv] = pts[pts.length - 1];
-  return `<svg class="curve" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution de la maîtrise de l'alphabet sur ${t - first + 1} jours, de ${Math.round(h[first])} à ${Math.round(lv)} %">
+  return `<svg class="curve" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution de la maîtrise des ${what} sur ${t - first + 1} jours, de ${Math.round(h[first])} à ${Math.round(lv)} %">
     <line x1="4" y1="${y(100)}" x2="${W - 4}" y2="${y(100)}" class="c-g"/><line x1="4" y1="${y(0)}" x2="${W - 4}" y2="${y(0)}" class="c-g"/>
     <path d="${line}" class="c-l"/><circle cx="${x(ld)}" cy="${y(lv)}" r="3.5" class="c-d"/></svg>`;
 }

@@ -338,3 +338,5 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .verdict .v-h{font-weight:500;margin:0 0 4px}
 .verdict ul{margin:0 0 8px;padding-left:20px}
 .verdict li{margin:2px 0}
+.scripth{grid-column:1/-1;margin:16px 0 0;font-family:var(--f-title, inherit)}
+.scripth:first-child{margin-top:0}

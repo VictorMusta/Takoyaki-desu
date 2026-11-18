@@ -1,4 +1,4 @@
-import { LINES } from "../data/kana";
+import { LINES, lineLabel } from "../data/kana";
 import { dueCount, unseenOpen, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import { el } from "../ui/dom";
@@ -24,7 +24,7 @@ export function continueBlock(box: HTMLElement, start: (k: SessionKind) => void)
     const n = Math.min(5, unseen);
     html += opt("m-more", `${n} signe${n > 1 ? "s" : ""} de plus`, `Demain : environ ${dueCount(p, t + 1) + n} révisions.`);
   } else if (p.unlocked < LINES.length) {
-    html += opt("m-line", `Ouvrir la ligne « ${LINES[p.unlocked]} » et continuer`, "D'habitude, elle s'ouvre quand 80 % de la ligne précédente tient 3 jours. Vous pouvez aller plus vite.");
+    html += opt("m-line", `Ouvrir la ligne « ${lineLabel(LINES[p.unlocked])} » et continuer`, "D'habitude, elle s'ouvre quand 80 % de la ligne précédente tient 3 jours. Vous pouvez aller plus vite.");
   } else if (!seen) {
     html += `<p class="small muted" style="margin:0">Rien d'autre pour l'instant.</p>`;
   }

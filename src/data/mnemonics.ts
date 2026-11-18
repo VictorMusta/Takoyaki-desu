@@ -68,3 +68,67 @@ MNEMO["ゃ"] = "Un や en miniature, accroupi en bas du signe d'avant : il se fo
 MNEMO["ゅ"] = "Un ゆ en miniature, accroupi en bas du signe d'avant : き + ゅ = « kyu ».";
 MNEMO["ょ"] = "Un よ en miniature, accroupi en bas du signe d'avant : き + ょ = « kyo ».";
 MNEMO["っ"] = "Un つ en miniature : une petite vague qui retient son souffle avant la consonne suivante. きって = « kit-te ».";
+
+/* ---------- katakana: angular cousins, often a piece of a kanji ---------- */
+Object.assign(MNEMO, {
+  ア: "Une hache (« axe ») : le manche plié en haut, la lame qui descend. « A ».",
+  イ: "Un piquet planté, avec un fanion incliné : comme un i qui se penche. « I ».",
+  ウ: "Comme う, coiffé d'une toiture : le petit trait, puis le toit en U renversé. « Ou ».",
+  エ: "Un établi vu de face, en forme de I couché : « Eh, un établi ! »",
+  オ: "Un oiseau posé sur une croix, qui chante « Oh ! » : la barre, la verticale, puis la patte en diagonale.",
+  カ: "Comme か sans son petit trait : un poing de karatéka plus anguleux. « Ka ».",
+  キ: "Une clé (« key ») encore plus simple que き : deux dents et la tige. « Ki ».",
+  ク: "Un coucou dans son nid : le petit bec, puis le dos qui se courbe. « Ku ».",
+  ケ: "Un kebab : la broche penchée à gauche, puis l'enseigne et le pied qui descend. « Ke ».",
+  コ: "Un coin de mur, deux côtés d'un carré : la koï n'a plus de place. « Ko ».",
+  サ: "Un sabre : la garde (la barre), deux lames qui tombent. Proche de さ. « Sa ».",
+  シ: "Un sourire « she-she » : deux gouttes en haut, puis le trait qui MONTE de bas en haut. Trois traits presque à plat.",
+  ス: "Une silhouette suspendue à un fil : le bras qui ploie, la jambe qui part. « Su ».",
+  セ: "Comme せ, en plus anguleux : la selle, l'étrier replié. « Se ».",
+  ソ: "Une goutte de soda et le jet qui jaillit vers le bas. Deux traits plutôt debout, le long DESCEND de haut en bas. « So ».",
+  タ: "Un tableau (タ = ク + un trait) : le coucou a avalé une barre. « Ta ».",
+  チ: "Un chignon : le petit trait penché, la barre, puis la grande pique qui descend. « Chi ».",
+  ツ: "Un tsunami : deux gouttes d'écume en haut, puis la vague qui DESCEND de haut en bas. Trois traits plutôt debout.",
+  テ: "Une table : le plateau, la barre et le pied qui part à gauche. « Te ».",
+  ト: "Un totem : un poteau, une petite branche à droite. « To ».",
+  ナ: "Un couteau de chef : la lame (la barre) et le manche qui descend. « Na » comme « na-vaja ».",
+  ニ: "Deux traits, comme le kanji 二 (deux) : « ni ».",
+  ヌ: "Une nouille qu'on attrape aux baguettes : le grand trait plié, puis la petite croix. « Nu ».",
+  ネ: "Un nez de profil coiffé d'un chapeau : le petit point, le toit, puis le pied et sa branche. « Ne ».",
+  ノ: "Un seul trait qui balaie : « No ! », non, pas plus.",
+  ハ: "Deux traits qui s'écartent comme un toit vu de loin : « Ha ha », le rire qui s'ouvre.",
+  ヒ: "Un hibou de profil : le bec tourné à gauche, le corps en L. « Hi ».",
+  フ: "Un fouet replié : la barre, puis le coup qui part en bas à gauche. Comme le haut de ふ. « Fu ».",
+  ヘ: "Une colline, exactement comme へ : « He ».",
+  ホ: "Une croix sacrée flanquée de deux flammes : « Ho ! », s'écrient les pèlerins.",
+  マ: "Une mâchoire : la barre, puis le petit trait qui la ferme. « Ma » comme « mâcher ».",
+  ミ: "Trois traits obliques, comme trois mi-mi-mines de crayon : « mi ».",
+  ム: "Un museau de vache qui fait « Meuh » : le grand trait plié, puis la petite corne. « Mu ».",
+  メ: "Une croix penchée, comme une marque sur la carte : « Me ».",
+  モ: "Comme も, en plus raide : deux barres traversées par l'hameçon. « Mo ».",
+  ヤ: "Comme や, raccourci : la barre qui revient en crochet, puis le trait qui la coupe. « Ya ».",
+  ユ: "Un U carré posé sur le sol : « Yu ».",
+  ヨ: "Une fourchette à trois dents tournée vers la gauche : « Yo ».",
+  ラ: "Comme ら, en anguleux : le petit chapeau, puis le crochet. « Ra ».",
+  リ: "Comme り : deux traits, le droit plus long. « Ri ».",
+  ル: "Deux racines qui partent : la gauche tombe, la droite remonte d'un coup sec. « Ru ».",
+  レ: "Un L penché qui remonte : « Re ».",
+  ロ: "Une bouche carrée, comme le kanji 口 : « Ro ».",
+  ワ: "Un « wagon » vu du dessus : le petit pied, puis le toit qui tourne. « Wa ».",
+  ヲ: "Comme ヨ avec une jambe qui s'élance : ne sert presque jamais, se dit « o ».",
+  ン: "Un n qui dort : un point et un trait qui MONTE de bas en haut, plutôt à plat. Ne pas confondre avec ソ.",
+});
+const KVOICED = "ガギグゲゴザジズゼゾダヂヅデドバビブベボ";
+for (const ch of KVOICED + "パピプペポ") {
+  const c = ch.codePointAt(0)!;
+  const base = String.fromCodePoint("パピプペポ".includes(ch) ? c - 2 : c - 1);
+  const hira = String.fromCodePoint(c - 0x60);
+  MNEMO[ch] = "パピプペポ".includes(ch)
+    ? `C'est ${base} avec le petit rond (« maru ») : même règle que ${hira}, h devient p.`
+    : `C'est ${base} avec les deux petits traits (« ten-ten ») : même règle que ${hira}, le son devient sonore.`;
+}
+MNEMO["ャ"] = "Un ヤ en miniature, collé au signe d'avant : キ + ャ = « kya ».";
+MNEMO["ュ"] = "Un ユ en miniature : キ + ュ = « kyu ».";
+MNEMO["ョ"] = "Un ヨ en miniature : キ + ョ = « kyo ».";
+MNEMO["ッ"] = "Un ツ en miniature : une pause qui double la consonne suivante. ベッド = « bed-do ».";
+MNEMO["ー"] = "Une simple barre : elle prolonge la voyelle d'avant, comme un trait d'union qui tire le son. ケーキ = « kēki ».";

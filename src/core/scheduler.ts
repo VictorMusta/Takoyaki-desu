@@ -1,4 +1,4 @@
-import { KANA, LINES, lineCards, lineIndex } from "../data/kana";
+import { isKata, KANA, LINES, lineCards, lineIndex } from "../data/kana";
 import type { Card, DayRec, Grade, Profile, QueueItem } from "./types";
 
 export const DAY_MS = 864e5;
@@ -114,13 +114,18 @@ export function cardMastery(c: Card | undefined, t: number): number {
 }
 
 /** Mastery of the whole alphabet (every sign, unseen ones count as 0), 0–1. */
-export function alphabetMastery(p: Profile, t: number): number {
-  return KANA.reduce((s, k) => s + mastery(p, k.k, t), 0) / KANA.length;
+/** Mastery of one script, 0 to 1: hiragana by default, katakana with kata = true. */
+export function alphabetMastery(p: Profile, t: number, kata = false): number {
+  const ks = KANA.filter((k) => isKata(k.k) === kata);
+  return ks.reduce((s, k) => s + mastery(p, k.k, t), 0) / ks.length;
 }
+/** Katakana started: one katakana sign seen. */
+export const kataStarted = (p: Profile) => KANA.some((k) => isKata(k.k) && p.cards[k.k]?.seen);
 
 /** Keeps one value per day of the alphabet mastery, for the progress curve. */
 export function recordMastery(p: Profile, t: number): void {
   (p.hist ??= {})[t] = Math.round(alphabetMastery(p, t) * 1000) / 10;
+  if (kataStarted(p)) (p.histK ??= {})[t] = Math.round(alphabetMastery(p, t, true) * 1000) / 10;
 }
 
 /** Today's queue: due reviews first (up to the cap), then new signs (up to the quota). */

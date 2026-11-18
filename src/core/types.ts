@@ -74,6 +74,8 @@ export interface Profile {
   variants?: Record<string, true>;
   /** Alphabet mastery in %, one value per day (for the curve in Progrès). */
   hist?: Record<number, number>;
+  /** Same for katakana, once started. */
+  histK?: Record<number, number>;
   /** Vocabulary track: one card per word (meaning known), keyed by the word in kana. */
   words?: Record<string, Card>;
   /** The learner's own memory hooks, by sign (they replace the app's). */

@@ -1,6 +1,6 @@
 import raw from "./kana.json";
 
-/** One hiragana: the glyph, its romaji, its line of the table and its strokes in writing order. */
+/** One kana (hiragana or katakana): the glyph, its romaji, its line of the table and its strokes in writing order. */
 export interface Kana {
   k: string;
   r: string;
@@ -14,22 +14,31 @@ export interface Kana {
 export const KANA = raw as Kana[];
 
 /**
- * Lines of the hiragana table, in teaching order: the 46 base signs, then the voiced ones
+ * Lines of the tables, in teaching order. Hiragana first: the 46 base signs, then the voiced ones
  * (dakuten ゛ and handakuten ゜), then the small signs used for combinations (きゃ) and doubling (っ).
+ * Then katakana, same order (ids in capitals), ending with the small signs and the long-vowel bar ー.
  */
-export const LINES = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "ga", "za", "da", "ba", "pa", "petits"] as const;
+const H_LINES = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "ga", "za", "da", "ba", "pa", "petits"] as const;
+export const LINES = [...H_LINES, ...H_LINES.map((x) => x.toUpperCase())] as readonly string[];
+/** Index of the first katakana line. */
+export const KATA_START = H_LINES.length;
 
-/** How a line is named on screen. */
-export const LINE_LABEL: Record<string, string> = {
-  ga: "ga (ten-ten)", za: "za (ten-ten)", da: "da (ten-ten)", ba: "ba (ten-ten)", pa: "pa (maru)", petits: "petits signes",
-};
-export const lineLabel = (ln: string) => LINE_LABEL[ln] ?? ln;
+const VOICE: Record<string, string> = { ga: " (ten-ten)", za: " (ten-ten)", da: " (ten-ten)", ba: " (ten-ten)", pa: " (maru)" };
+/** How a line is named on screen: « ga (ten-ten) », « petits signes », « ka · katakana ». */
+export function lineLabel(ln: string): string {
+  const low = ln.toLowerCase(), kata = ln !== low;
+  const base = low === "petits" ? (kata ? "petits signes et ー" : "petits signes") : low + (VOICE[low] ?? "");
+  return kata ? `${base} · katakana` : base;
+}
 
 /** Slots per line in the classic 5-column table (gaps where the table has none). */
 export const SLOTS: Record<string, (number | null)[]> = {
   ya: [0, null, 1, null, 2],
   wa: [0, null, null, 1, 2],
   petits: [0, 1, 2, 3, null],
+  YA: [0, null, 1, null, 2],
+  WA: [0, null, null, 1, 2],
+  PETITS: [0, 1, 2, 3, 4],
 };
 
 export const byK: Record<string, Kana> = Object.fromEntries(KANA.map((k) => [k.k, k]));
@@ -39,11 +48,23 @@ export function lineCards(i: number): Kana[] {
 }
 
 export function lineIndex(k: Kana): number {
-  return LINES.indexOf(k.l as (typeof LINES)[number]);
+  return LINES.indexOf(k.l);
 }
 
+/** Katakana block of Unicode (ァ to ー). */
+export const isKata = (k: string) => {
+  const c = k.codePointAt(0) ?? 0;
+  return c >= 0x30a0 && c <= 0x30ff;
+};
+/** The other script's twin: か ↔ カ (ー has none). */
+export const twin = (k: string) => {
+  const c = k.codePointAt(0) ?? 0;
+  if (k === "ー") return "";
+  return String.fromCodePoint(isKata(k) ? c - 0x60 : c + 0x60);
+};
+
 /** How a sign's sound is shown: « petit ya » for the small ones. */
-export const sound = (k: string) => (byK[k]?.small ? `petit ${byK[k].r}` : byK[k]?.r ?? "");
+export const sound = (k: string) => (k === "ー" ? "allongement" : byK[k]?.small ? `petit ${byK[k].r}` : byK[k]?.r ?? "");
 
 /** Signs that can stand alone (for « choose / listen / read » exercises): not the small ones. */
-export const isPlain = (k: string) => !byK[k]?.small;
+export const isPlain = (k: string) => !byK[k]?.small && k !== "ー";

@@ -11,7 +11,17 @@ H = [  # hiragana lines: (line id, [(sign, romaji)])
     ("ba", "ばba びbi ぶbu べbe ぼbo"), ("pa", "ぱpa ぴpi ぷpu ぺpe ぽpo"),
     ("petits", "ゃya ゅyu ょyo っtsu"),
 ]
-SMALL = set("ゃゅょっ")
+KATA = [  # katakana lines, same order; ids in capitals
+    ("A", "アa イi ウu エe オo"), ("KA", "カka キki クku ケke コko"), ("SA", "サsa シshi スsu セse ソso"),
+    ("TA", "タta チchi ツtsu テte トto"), ("NA", "ナna ニni ヌnu ネne ノno"), ("HA", "ハha ヒhi フfu ヘhe ホho"),
+    ("MA", "マma ミmi ムmu メme モmo"), ("YA", "ヤya ユyu ヨyo"), ("RA", "ラra リri ルru レre ロro"),
+    ("WA", "ワwa ヲwo ンn"),
+    ("GA", "ガga ギgi グgu ゲge ゴgo"), ("ZA", "ザza ジji ズzu ゼze ゾzo"), ("DA", "ダda ヂdi ヅdu デde ドdo"),
+    ("BA", "バba ビbi ブbu ベbe ボbo"), ("PA", "パpa ピpi プpu ペpe ポpo"),
+    ("PETITS", "ャya ュyu ョyo ッtsu ー-"),
+]
+H = H + KATA
+SMALL = set("ゃゅょっャュョッ")
 
 def strokes(folder, ch):
     cp = f"{ord(ch):05x}"

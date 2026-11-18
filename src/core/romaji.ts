@@ -3,15 +3,23 @@ import { byK } from "../data/kana";
 const SMALL_Y: Record<string, string> = { "ゃ": "a", "ゅ": "u", "ょ": "o" };
 
 /**
- * Hiragana → romaji (Hepburn, long vowels written as two letters):
+ * Kana → romaji (Hepburn, long vowels written as two letters):
  * きゃ → kya, しゃ → sha, ちゃ → cha, じゃ → ja, っ doubles the next consonant (っち → tchi),
  * a final or lone っ is dropped. ぢ / づ read as ji / zu.
  */
 export function toRomaji(w: string): string {
-  const cs = [...w];
+  // Katakana read like their hiragana twins; the bar ー repeats the vowel before it.
+  const cs = [...w].map((c) => {
+    const n = c.codePointAt(0)!;
+    return n >= 0x30a1 && n <= 0x30f6 ? String.fromCodePoint(n - 0x60) : c;
+  });
   let out = "", dbl = false;
   for (let i = 0; i < cs.length; i++) {
     const c = cs[i];
+    if (c === "ー") {
+      out += /[aeiou]$/.exec(out)?.[0] ?? "";
+      continue;
+    }
     if (c === "っ") {
       dbl = true;
       continue;
