@@ -1,4 +1,4 @@
-import { byK, KANA } from "../data/kana";
+import { byK, KANA, sound } from "../data/kana";
 import { pullForward, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, ExamRun } from "../core/types";
@@ -50,7 +50,7 @@ export function viewExam(): void {
     const k = run.items[run.i], K = byK[k];
     if (run.pending) return correct(k, run.pending);
     v.appendChild(
-      el(`<section class="card"><div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">Examen strict · ${run.i + 1} / ${run.items.length}</div></div><button class="btn sm" id="say">Écouter</button></div>
+      el(`<section class="card"><div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">Examen strict · ${run.i + 1} / ${run.items.length}</div></div><button class="btn sm" id="say">Écouter</button></div>
       <div class="stage" id="st"></div>
       <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
     );

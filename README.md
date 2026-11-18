@@ -9,6 +9,8 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 3. **Planification** : SM-2 simplifié. Un ordre faux plafonne la note à « Bof ». La ligne suivante du tableau s'ouvre quand 80 % de la ligne en cours tient au moins 3 jours.
 4. **Examen strict et calibration** : compare le taux de « Bien » en séance au taux de réussite en examen, pour repérer une auto-évaluation trop généreuse.
 
+**Hiragana complets** : les 46 signes de base, puis les signes sonores (ten-ten ゛ : が, ざ, だ, ば ; maru ゜ : ぱ), puis les petits signes ゃ ゅ ょ っ (combinaisons きゃ, しゅ… et consonnes doublées). 75 signes, chacun avec ses traits, son astuce et des mots d'exemple.
+
 **Rythme et « Continuer »** : à la création du profil, on choisit 5, 10 ou 15 nouveaux signes par jour (modifiable dans Réglages). Une fois la séance du jour faite, on peut continuer : réviser encore (sans limite, sans toucher aux dates de révision), apprendre 5 signes de plus si les révisions du jour sont faites, ou ouvrir la ligne suivante. Pendant un rappel, « Je ne m'en souviens pas : voir le signe » affiche le pochoir : le signe revient plus tard dans la séance puis dès le lendemain. Une séance coupée ou fermée reprend exactement où elle s'était arrêtée.
 
 **Vocabulaire** : un mot s'ouvre quand tous ses signes sont vus (3 nouveaux mots par jour, réglable). Découverte (son, lecture, sens, signes), puis révisions espacées : lire le mot et l'épeler en lettres latines puis choisir son sens, ou retrouver le mot à partir de son sens avec des signes à sélectionner. Progrès compte les mots sus (sens retrouvé et tenu au moins un jour).

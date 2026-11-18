@@ -1,8 +1,6 @@
-import { LINES, lineCards } from "../data/kana";
+import { LINES, lineCards, SLOTS } from "../data/kana";
 import { el } from "./dom";
 
-/** Gojūon slots per line (ya and wa have gaps), as on the Progrès table. */
-const SLOTS: Record<string, (number | null)[]> = { ya: [0, null, 1, null, 2], wa: [0, null, null, 1, 2] };
 
 /**
  * A kana keyboard laid out as the table of 50 sounds, showing only the signs already seen

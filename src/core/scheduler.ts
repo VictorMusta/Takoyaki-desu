@@ -113,7 +113,7 @@ export function cardMastery(c: Card | undefined, t: number): number {
   return m;
 }
 
-/** Mastery of the whole alphabet (46 signs, unseen ones count as 0), 0–1. */
+/** Mastery of the whole alphabet (every sign, unseen ones count as 0), 0–1. */
 export function alphabetMastery(p: Profile, t: number): number {
   return KANA.reduce((s, k) => s + mastery(p, k.k, t), 0) / KANA.length;
 }

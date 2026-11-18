@@ -17,7 +17,7 @@ function knowing(signs: string): Profile {
 const ALL = KANA.map((k) => k.k).join("");
 
 describe("exercise content", () => {
-  it("words and sentences only use the 46 base signs", () => {
+  it("words and sentences only use signs the app teaches", () => {
     WORDS.forEach(([w]) => expect([...w].every((c) => BASE.has(c)), w).toBe(true));
     SENTENCES.forEach((s) => expect(signsOf(s.w).every((c) => BASE.has(c)), s.w).toBe(true));
   });

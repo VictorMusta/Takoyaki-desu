@@ -1,4 +1,4 @@
-import { byK } from "../data/kana";
+import { byK, sound } from "../data/kana";
 import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
@@ -142,7 +142,7 @@ export function viewCard(): void {
   const recall = !it.isNew || (it.step ?? 1) >= 4;
   const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision";
   const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
-  const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
+  const head = `<div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
     <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
 
   if (it.isNew && it.step === 1) {

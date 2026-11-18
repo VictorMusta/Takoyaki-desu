@@ -6,7 +6,7 @@ type Snapshot = Omit<Profile, "fluent">;
 /**
  * « Je parle déjà japonais »: every line opens, unseen signs count as known
  * (30-day interval, due dates spread so a few come back each day), and the exam
- * offers all 46 signs. The profile as it was is kept aside, for « J'ai menti ».
+ * offers every sign. The profile as it was is kept aside, for « J'ai menti ».
  */
 export function enableFluent(p: Profile, t: number): void {
   if (p.fluent) return;

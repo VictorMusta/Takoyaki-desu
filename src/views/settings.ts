@@ -1,4 +1,4 @@
-import { LINES } from "../data/kana";
+import { KANA, LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
@@ -94,7 +94,7 @@ export function viewSettings(): void {
     el(`<section class="card"><h2>Réglages de ${esc(state.active)}</h2>
     <h3>Rythme</h3>
     ${paceHTML(p.settings.newPerDay, "space")}
-    <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="46" value="${p.settings.newPerDay}"></label>
+    <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="${KANA.length}" value="${p.settings.newPerDay}"></label>
     <label class="field" for="nw">Nouveaux mots par jour <input type="number" id="nw" min="0" max="20" value="${p.settings.wordsPerDay ?? 3}"></label>
     <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <label class="field" for="sn">Afficher les numéros des traits <input type="checkbox" id="sn" ${p.settings.showNums ? "checked" : ""}></label>
@@ -102,7 +102,7 @@ export function viewSettings(): void {
     <p class="small muted" style="margin:0">Lignes ouvertes : ${p.unlocked} / ${LINES.length}. Utile si vous connaissez déjà certains signes.</p></section>`),
   );
   $<HTMLInputElement>("#nn").onchange = (e) => {
-    p.settings.newPerDay = Math.min(46, Math.max(1, +(e.target as HTMLInputElement).value || 10));
+    p.settings.newPerDay = Math.min(KANA.length, Math.max(1, +(e.target as HTMLInputElement).value || 10));
     save();
     viewSettings();
   };
@@ -138,8 +138,8 @@ export function viewSettings(): void {
     el(`<section class="card"><h3>Niveau</h3>
     <p class="small muted" style="margin:0">${
       fl
-        ? `Depuis le ${since}, ${esc(state.active)} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose les 46 signes.`
-        : "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur les 46 signes."
+        ? `Depuis le ${since}, ${esc(state.active)} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose tous les signes.`
+        : "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes."
     }</p>
     <div class="row"><button class="btn" id="fluent">${fl ? "J'ai menti" : "Je parle déjà japonais"}</button></div></section>`),
   );
@@ -152,7 +152,7 @@ export function viewSettings(): void {
         })
       : await confirmModal({
           title: "Je parle déjà japonais",
-          body: `<p style="margin:0">Toutes les lignes s'ouvrent et les 46 signes sont considérés comme connus. Ils reviendront peu à peu en révision, et l'Examen proposera les 46 signes : un signe raté y revient dès le lendemain.</p><p style="margin:0"><b>C'est réversible.</b> Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.</p>`,
+          body: `<p style="margin:0">Toutes les lignes s'ouvrent et tous les signes sont considérés comme connus. Ils reviendront peu à peu en révision, et l'Examen proposera tous les signes : un signe raté y revient dès le lendemain.</p><p style="margin:0"><b>C'est réversible.</b> Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.</p>`,
           ok: "Tout débloquer",
         });
     if (!yes) return;

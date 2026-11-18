@@ -50,3 +50,21 @@ export const MNEMO: Record<string, string> = {
   を: "Un athlète qui s'élance (la barre et la diagonale), puis retombe sur le dos (la courbe). Se dit « o ».",
   ん: "Un n écrit à la main, tout simplement : « n ».",
 };
+
+/* ---------- derived signs: the rule is the hook ---------- */
+const VOICED: Record<string, string> = { k: "g", s: "z", t: "d", h: "b" };
+for (let c = 0x304c; c <= 0x307d; c++) {
+  const ch = String.fromCharCode(c);
+  if (MNEMO[ch]) continue;
+  const b1 = String.fromCharCode(c - 1), b2 = String.fromCharCode(c - 2);
+  if ("ぱぴぷぺぽ".includes(ch)) {
+    MNEMO[ch] = `C'est ${b2} avec un petit rond (« maru ») en haut à droite : comme une bulle qui fait éclater le son, h devient p.`;
+  } else if ("がぎぐげござじずぜぞだぢづでどばびぶべぼ".includes(ch)) {
+    const line = "かきくけこ".includes(b1) ? "k" : "さしすせそ".includes(b1) ? "s" : "たちつてと".includes(b1) ? "t" : "h";
+    MNEMO[ch] = `C'est ${b1} avec deux petits traits (« ten-ten ») en haut à droite : comme deux gouttes qui alourdissent le son, ${line} devient ${VOICED[line]}.`;
+  }
+}
+MNEMO["ゃ"] = "Un や en miniature, accroupi en bas du signe d'avant : il se fond dans son son. き + ゃ = « kya ».";
+MNEMO["ゅ"] = "Un ゆ en miniature, accroupi en bas du signe d'avant : き + ゅ = « kyu ».";
+MNEMO["ょ"] = "Un よ en miniature, accroupi en bas du signe d'avant : き + ょ = « kyo ».";
+MNEMO["っ"] = "Un つ en miniature : une petite vague qui retient son souffle avant la consonne suivante. きって = « kit-te ».";

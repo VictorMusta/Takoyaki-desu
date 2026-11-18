@@ -2,6 +2,7 @@ import { byK, KANA } from "../data/kana";
 import { SENTENCES, signsOf, WORDS } from "../data/words";
 import { isHira, TEXTS, textOf } from "../data/texts";
 import type { Profile } from "./types";
+import { toRomaji } from "./romaji";
 
 /**
  * Exercises other than drawing. A drill is plain data (saved with the lesson so it resumes),
@@ -13,6 +14,7 @@ export type DrillType =
   | "read" // sign → pick the romaji
   | "match" // 5 signs ↔ 5 romaji
   | "duel" // two look-alikes
+  | "combo" // きゃ, しゅ…: read a combination with a small sign
   | "word" // word in kana → pick « romaji · meaning »
   | "cloze" // word or sentence with a gap → type the missing sign
   | "dictation" // meaning + sound → type the word
@@ -61,6 +63,8 @@ export function shuffle<T>(a: T[], rnd: Rnd): T[] {
 }
 
 export const knownSigns = (p: Profile): string[] => KANA.filter((k) => p.cards[k.k]?.seen).map((k) => k.k);
+/** Known signs that stand alone (small ゃ ゅ ょ っ only make sense attached to another sign). */
+const knownPlain = (p: Profile) => knownSigns(p).filter((k) => !byK[k].small);
 const knownSet = (p: Profile) => new Set(knownSigns(p));
 const allKnown = (s: string, known: Set<string>) => signsOf(s).every((c) => known.has(c));
 
@@ -91,10 +95,11 @@ function distractors(k: string, pool: string[], n: number, rnd: Rnd): string[] {
 
 /** What each drill needs before it can run. */
 export function available(p: Profile, type: DrillType): boolean {
-  const n = knownSigns(p).length;
+  const n = knownPlain(p).length;
   switch (type) {
     case "choose": case "listen": case "read": return n >= 4;
     case "match": return n >= 5;
+    case "combo": return combos(p).length >= 4;
     case "duel": return LOOKALIKES.some((g) => g.filter((x) => p.cards[x]?.seen).length >= 2);
     case "word": return knownWords(p).length >= 4;
     case "cloze": case "dictation": case "drawword": return knownWords(p).length >= 1;
@@ -106,8 +111,8 @@ export function available(p: Profile, type: DrillType): boolean {
 /** Builds one drill of this type around sign k (or a random known sign), or null if impossible. */
 export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Math.random): Drill | null {
   if (!available(p, type)) return null;
-  const known = knownSigns(p);
-  const sign = k && p.cards[k]?.seen ? k : pick(known, rnd);
+  const known = knownPlain(p);
+  const sign = k && p.cards[k]?.seen && !byK[k].small ? k : pick(known, rnd);
   switch (type) {
     case "choose":
     case "listen": {
@@ -121,6 +126,11 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
     case "match": {
       const five = shuffle(known, rnd).slice(0, 5);
       return { type, ks: five, prompt: "", pairs: five.map((x) => [x, byK[x].r]) };
+    }
+    case "combo": {
+      const all = combos(p), c = pick(all, rnd);
+      const wrong = shuffle(all.filter((x) => x !== c), rnd).slice(0, 3);
+      return { type, ks: [...c], prompt: c, options: shuffle([c, ...wrong].map(toRomaji), rnd), answer: toRomaji(c), say: c };
     }
     case "duel": {
       const groups = LOOKALIKES.map((g) => g.filter((x) => p.cards[x]?.seen)).filter((g) => g.length >= 2);
@@ -166,8 +176,14 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
   }
 }
 
+/** Combinations of a known « i » sign and a known small ゃ ゅ ょ (きゃ, しゅ, ちょ…). */
+function combos(p: Profile): string[] {
+  const seen = (k: string) => !!p.cards[k]?.seen;
+  return [..."きしちにひみりぎじびぴ"].filter(seen).flatMap((b) => [..."ゃゅょ"].filter(seen).map((s) => b + s));
+}
+
 /** Short exercises slipped into the daily lesson, between the drawings. */
-export const LESSON_MIX: DrillType[] = ["choose", "listen", "read", "word", "cloze", "duel"];
+export const LESSON_MIX: DrillType[] = ["choose", "listen", "read", "word", "cloze", "duel", "combo"];
 
 /** Labels for the « S'entraîner » menu. */
 export const MODES: { type: DrillType; title: string; sub: string }[] = [
@@ -176,6 +192,7 @@ export const MODES: { type: DrillType; title: string; sub: string }[] = [
   { type: "read", title: "Lire", sub: "Un signe, quatre syllabes" },
   { type: "match", title: "Relier", sub: "Cinq signes, cinq syllabes" },
   { type: "duel", title: "Sosies", sub: "さ ou ち ? ね, れ ou わ ?" },
+  { type: "combo", title: "Combinaisons", sub: "きゃ, しゅ, ちょ : lire les petits signes" },
   { type: "word", title: "Lire des mots", sub: "Un mot, quatre sens" },
   { type: "cloze", title: "Textes à trous", sub: "Le signe qui manque" },
   { type: "dictation", title: "Dictée au clavier", sub: "Écrire un mot entier" },

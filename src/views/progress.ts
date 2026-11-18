@@ -1,4 +1,4 @@
-import { byK, KANA, LINES, lineCards } from "../data/kana";
+import { byK, KANA, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
 import { alphabetMastery, calibration, mastery, recordMastery, status, streak, today } from "../core/scheduler";
 import { profile, save, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
@@ -11,8 +11,6 @@ import { WORDS } from "../data/words";
 import { EXAMPLES } from "../data/examples";
 import { knownWordCount, openWords, wordMastery } from "../core/vocab";
 
-/** Slots per line in the classic 5-column table (ya and wa have gaps). */
-const SLOTS: Record<string, (number | null)[]> = { ya: [0, null, 1, null, 2], wa: [0, null, null, 1, 2] };
 
 export function viewProgress(): void {
   const p = profile(), t = today(), v = view();
@@ -20,14 +18,14 @@ export function viewProgress(): void {
   let grid = "";
   LINES.forEach((ln, i) => {
     const cs = lineCards(i), locked = i >= p.unlocked;
-    grid += `<div class="lineh">Ligne ${ln}${locked ? " · fermée" : ""}</div>`;
+    grid += `<div class="lineh">Ligne ${lineLabel(ln)}${locked ? " · fermée" : ""}</div>`;
     (SLOTS[ln] ?? [0, 1, 2, 3, 4]).forEach((s) => {
       if (s === null) {
         grid += `<div class="cell empty"></div>`;
         return;
       }
       const k = cs[s], st = status(p, k.k), m = Math.round(mastery(p, k.k, t) * 100);
-      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}" aria-label="Fiche de ${k.k}, maîtrise ${m} %">${k.k}<small>${st === "new" ? k.r : m + " %"}</small></button>`;
+      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}" aria-label="Fiche de ${k.k}, maîtrise ${m} %">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small></button>`;
     });
   });
   const done = KANA.filter((k) => status(p, k.k) === "done").length;
@@ -52,7 +50,7 @@ export function viewProgress(): void {
       const k = b.dataset.k!;
       const c = p.cards[k], mk = Math.round(mastery(p, k, t) * 100);
       const when = !c?.seen ? "Pas encore vu en séance." : c.due! <= t ? "Révision prévue aujourd'hui." : `Prochaine révision dans ${c.due! - t} jour${c.due! - t > 1 ? "s" : ""}.`;
-      fc.innerHTML = `<div class="spread"><h2>${k} · ${byK[k].r}</h2><div class="row"><button class="btn sm" id="fcs">Écouter</button><button class="btn sm" id="fcx">Fermer</button></div></div>
+      fc.innerHTML = `<div class="spread"><h2>${k} · ${sound(k)}</h2><div class="row"><button class="btn sm" id="fcs">Écouter</button><button class="btn sm" id="fcx">Fermer</button></div></div>
         <div><div class="mbar" role="img" aria-label="Maîtrise ${mk} %"><i style="width:${mk}%"></i></div><p class="small muted" style="margin:4px 0 0">Maîtrise ${mk} % · ${when}</p></div>
         <div class="stage" id="fcm" style="max-width:220px">${modelSVG(k, "anim", p.settings.showNums)}</div>
         <div class="row" style="justify-content:center"><button class="btn" id="fcr">Rejouer le tracé</button></div>

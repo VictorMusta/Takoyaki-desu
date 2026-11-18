@@ -1,4 +1,4 @@
-import { byK } from "../data/kana";
+import { toRomaji } from "./romaji";
 import { signsOf, WORDS, type Word } from "../data/words";
 import { applyGrade, cardMastery, dayRec, newCard } from "./scheduler";
 import type { Card, Grade, Profile, QueueItem } from "./types";
@@ -50,8 +50,8 @@ export const knownWordCount = (p: Profile) => Object.values(p.words ?? {}).filte
 
 /* ---------- romaji answers ---------- */
 
-/** The reading built sign by sign (ひこうき → hikouki), always accepted next to the bank's Hepburn. */
-export const kanaRomaji = (w: string) => [...w].map((c) => byK[c]?.r ?? "").join("");
+/** The reading built sign by sign (ひこうき → hikouki, きって → kitte), accepted next to the bank's Hepburn. */
+export const kanaRomaji = (w: string) => toRomaji(w);
 
 /** Lower case, no spaces, accents or marks (ō → o), common spellings unified (si→shi, tu→tsu…). */
 export function normRomaji(s: string): string {

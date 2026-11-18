@@ -17,6 +17,7 @@ const TITLES: Record<Drill["type"], string> = {
   read: "Comment se lit ce signe ?",
   match: "Reliez chaque signe à sa syllabe",
   duel: "Lequel est-ce ?",
+  combo: "Comment se lit cette combinaison ?",
   word: "Que veut dire ce mot ?",
   cloze: "Quel signe manque ?",
   dictation: "Écrivez ce mot",
@@ -48,6 +49,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
     case "listen":
     case "read":
     case "duel":
+    case "combo":
     case "word":
     case "sentence": {
       const big =
@@ -72,7 +74,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
           if (x.dataset.o === d.answer) x.classList.add("right");
         });
         if (!ok) b.classList.add("wrong");
-        const note = d.type === "sentence" ? `Lecture : ${d.meaning}.` : d.type === "word" || d.type === "read" ? "" : `${d.answer} se lit « ${byK[d.answer!]?.r ?? ""} ».`;
+        const note = d.type === "sentence" ? `Lecture : ${d.meaning}.` : d.type === "word" || d.type === "read" || d.type === "combo" ? "" : `${d.answer} se lit « ${byK[d.answer!]?.r ?? ""} ».`;
         next(ok, ok ? [] : d.ks, note);
       };
       break;

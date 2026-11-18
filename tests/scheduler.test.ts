@@ -1,3 +1,4 @@
+import { KANA } from "../src/data/kana";
 import { describe, expect, it } from "vitest";
 import { lineCards } from "../src/data/kana";
 import {
@@ -198,11 +199,11 @@ describe("mastery", () => {
     expect(mastery(p, "あ", T + 100)).toBeCloseTo(fresh / 2);
   });
 
-  it("alphabet mastery averages the 46 signs and is recorded per day", () => {
+  it("alphabet mastery averages every sign and is recorded per day", () => {
     const p = freshProfile();
     p.cards["あ"] = { ...newCard(), seen: true, interval: 7, due: T + 7 };
-    expect(alphabetMastery(p, T)).toBeCloseTo(1 / 46);
+    expect(alphabetMastery(p, T)).toBeCloseTo(1 / KANA.length);
     recordMastery(p, T);
-    expect(p.hist![T]).toBe(2.2);
+    expect(p.hist![T]).toBe(Math.round(1000 / KANA.length) / 10);
   });
 });
