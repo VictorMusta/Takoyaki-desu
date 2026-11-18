@@ -43,7 +43,7 @@ async function drawingPNG(strokes: Stroke[]): Promise<Blob | null> {
 }
 
 /** Compact path data: integer points, enough to redraw the sign later. */
-const compact = (strokes: Stroke[]) => JSON.stringify(strokes.map((s) => s.map(([x, y]) => [Math.round(x), Math.round(y)])));
+export const compact = (strokes: Stroke[]) => JSON.stringify(strokes.map((s) => s.map(([x, y]) => [Math.round(x), Math.round(y)])));
 
 /**
  * « Moi je le fais pas comme ça » (fluent mode): the learner draws the sign their way and sends it

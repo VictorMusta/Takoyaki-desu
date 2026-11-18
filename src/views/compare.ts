@@ -6,15 +6,18 @@ import { ficheHTML } from "../ui/fiche";
 import { animate, badSVG, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
 import { markSeen, pickTip, setHidden } from "../core/tips";
 import { today } from "../core/scheduler";
-import { viewFeedback } from "./feedback";
+import { compact, viewFeedback } from "./feedback";
+import { checkDrawing, explain } from "../core/strokecheck";
+import { mailTo } from "../config";
 import { mnemoHTML } from "../ui/mnemo";
 import { save } from "../core/store";
 
 type Answer = Grade | "ok" | "ko" | "peek";
 
 /**
- * Side-by-side (or overlaid) comparison, the 3-question checklist, then the grade.
- * Exam: « Correct » needs three yes. Lesson: the questions are optional; a « Non » blocks « Bien ».
+ * Side-by-side (or overlaid) comparison, an automatic check of the drawing, then the grade.
+ * The check never grades by itself: it only blocks « Bien » / « Correct » when it finds a real error
+ * (stroke count, order, direction, clearly wrong shape). The learner can contest it once.
  */
 /** peeked: the learner looked at the sign while recalling it; no self-grade, it simply comes back sooner. */
 /** hinted: the memory hook was read during recall, so « Bien » is out of reach (Bof at best). */
@@ -25,28 +28,39 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   const own = !!prof.variants?.[k];
   const v = view();
   v.innerHTML = "";
+  // Own variant (fluent mode): count and order are the learner's; only the shape is judged.
+  const chk = peeked ? null : checkDrawing(strokes, K.s, k);
+  if (chk && own) Object.assign(chk, { count: true, order: true, swapped: [], issues: chk.issues.filter((x) => x.kind === "shape") });
+  const okAll = !chk || (chk.count && chk.order && chk.shape);
+  const why = chk && !okAll ? explain(chk) : [];
+  const bad = chk ? [...new Set([...chk.swapped, ...chk.issues.map((x) => x.n)])].map((n) => n - 1) : [];
+  let contested = false;
   v.appendChild(
     el(`<section class="card">
     <div class="spread"><h2>${K.k} · ${K.r}</h2><button class="btn" id="ov" aria-pressed="false">Superposer</button></div>
     <div id="cmp"></div>
+    ${
+      peeked
+        ? ""
+        : `<div class="verdict ${okAll ? "ok" : "ko"}" id="verdict" role="status"><p class="v-h">${okAll ? "Traits vérifiés : rien à redire." : "La vérification a trouvé un souci"}</p>${
+            okAll
+              ? `<p class="small muted" style="margin:0">${own ? "Votre façon d'écrire : seule la forme est comparée." : "Nombre, ordre et sens corrects."} À vous de juger la forme fine.</p>`
+              : `<ul>${why.map((t) => `<li>${t}</li>`).join("")}</ul><button class="btn sm" id="contest">Je pense que c'est juste</button>`
+          }</div>`
+    }
     <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button>${
       prof.fluent && !peeked ? `<button class="btn sm" id="mine">${own ? "Revenir au modèle" : "Moi je le fais pas comme ça"}</button>` : ""
     }</div>
     ${exam ? "" : mnemoHTML(k, false)}
     <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
-    <details id="checks" class="checks${peeked ? " hidden" : ""}" ${exam ? "open" : ""}><summary>${exam ? "Vérification" : "Vérifier en 3 questions (facultatif)"}</summary>
-      ${own ? `<p class="small muted" style="margin:0">Vous l'écrivez à votre façon : nombre et ordre des traits ne sont pas vérifiés.</p>` : ""}
-      <div class="q${own ? " hidden" : ""}"><span>Même nombre de traits ? <span class="muted small">(vous ${strokes.length}, modèle ${K.s.length})</span></span><div class="yn" data-q="n"><button class="y">Oui</button><button class="n">Non</button></div></div>
-      <div class="q${own ? " hidden" : ""}"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
-      <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
-    </details>
-    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : hinted ? "Astuce utilisée : au mieux « Bof »." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
+
+    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain." : ""}</p>
     ${
       peeked
         ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer (compte comme Raté)</button></div>`
         : exam
-        ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
+        ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
         : `<div class="grades"><button class="btn g-rate" data-g="rate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien"${hinted ? " disabled" : ""}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
     }
     </div>
@@ -73,8 +87,8 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   const ovBtn = $<HTMLButtonElement>("#ov");
   const render = () => {
     cmp.innerHTML = overlay
-      ? `<div class="stage">${userSVG(strokes, show, innerOf(modelSVG(k, "ghost", show)))}</div><div class="label">Votre tracé sur le modèle</div>`
-      : `<div class="pair"><div><div class="stage">${userSVG(strokes, show)}</div><div class="label">Votre tracé</div></div><div><div class="stage" id="mod">${modelSVG(k, "color", show)}</div><div class="label">Modèle</div></div></div>`;
+      ? `<div class="stage">${userSVG(strokes, show, innerOf(modelSVG(k, "ghost", show)), contested ? [] : bad)}</div><div class="label">Votre tracé sur le modèle</div>`
+      : `<div class="pair"><div><div class="stage">${userSVG(strokes, show, "", contested ? [] : bad)}</div><div class="label">Votre tracé</div></div><div><div class="stage" id="mod">${modelSVG(k, "color", show)}</div><div class="label">Modèle</div></div></div>`;
   };
   render();
   ovBtn.onclick = () => {
@@ -94,8 +108,6 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   };
   $("#anim").onclick = replay;
 
-  // Own variant: count and order are taken as right; only the shape is judged.
-  const ans: Partial<Record<"n" | "o" | "p", boolean>> = own ? { n: true, o: true } : {};
   const mine = v.querySelector<HTMLButtonElement>("#mine");
   if (mine)
     mine.onclick = () => {
@@ -111,35 +123,32 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   const btn = (g: string) => $<HTMLButtonElement>(`[data-g="${g}"]`, v);
   const update = () => {
     if (peeked) return;
-    const all = ans.n !== undefined && ans.o !== undefined && ans.p !== undefined;
-    const perfect = all && ans.n && ans.o && ans.p;
+    const blocked = !okAll && !contested;
     const hint = $("#hint");
     if (exam) {
-      btn("ko").disabled = !all;
-      btn("ok").disabled = !perfect;
-      hint.textContent = all ? (perfect ? "" : "« Correct » demande trois « Oui ».") : "Répondez aux trois questions pour noter.";
+      btn("ok").disabled = blocked;
+      hint.textContent = blocked ? "« Correct » est bloqué par la vérification." : "";
+      hint.classList.toggle("hidden", !blocked);
       return;
     }
-    // Outside the exam the questions are optional: grade straight away,
-    // but a « Non » given to one of them still blocks « Bien ».
-    const no = ans.n === false || ans.o === false || ans.p === false;
-    btn("bien").disabled = no || hinted;
-    if (hinted && !no) hint.textContent = "Astuce utilisée : au mieux « Bof ».";
-    else if (ans.n === false || ans.p === false) hint.textContent = "Nombre de traits ou forme incorrecte : « Bien » est bloqué.";
-    else if (ans.o === false) hint.textContent = "Ordre ou sens faux : animation rejouée, note plafonnée à « Bof ».";
-    else hint.textContent = "Notez directement, ou vérifiez d'abord avec les questions.";
+    btn("bien").disabled = blocked || hinted;
+    hint.textContent = hinted ? "Astuce utilisée : au mieux « Bof »." : blocked ? "« Bien » est bloqué : notez « Bof » ou « Raté »." : "";
+    hint.classList.toggle("hidden", !hint.textContent);
   };
-  v.querySelectorAll<HTMLElement>(".yn").forEach((g) => {
-    const q = g.dataset.q as "n" | "o" | "p";
-    g.querySelectorAll<HTMLButtonElement>("button").forEach((b) => {
-      b.onclick = () => {
-        const yes = b.classList.contains("y");
-        ans[q] = yes;
-        g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-        if (q === "o" && !yes) replay();
-        update();
-      };
-    });
-  });
+  // A wrong order or direction: show the right one straight away.
+  if (chk && !chk.order) setTimeout(replay, 300);
+  const contest = v.querySelector<HTMLButtonElement>("#contest");
+  if (contest)
+    contest.onclick = () => {
+      contested = true;
+      render();
+      const vd = $("#verdict");
+      vd.className = "verdict ok";
+      const body = `Takoyaki desu · contestation sur ${k} (${K.r})\nLa vérification disait : ${why.join(" ")}\nScore ${chk!.score.toFixed(3)} · ${strokes.length} traits (modèle ${K.s.length}).\n\nTracé : ${compact(strokes)}`;
+      const link = mailTo(`Takoyaki desu : vérification contestée sur ${k}`, body);
+      vd.innerHTML = `<p class="v-h">D'accord, vous avez le dernier mot.</p><p class="small muted" style="margin:0">« ${exam ? "Correct" : "Bien"} » est débloqué.${link ? ` <a href="${link}">Envoyer ce tracé à l'auteur</a> pour qu'il corrige la vérification.` : ""}</p>`;
+      update();
+    };
+  update();
   v.querySelectorAll<HTMLButtonElement>("[data-g]").forEach((b) => (b.onclick = () => onAnswer(b.dataset.g as Answer)));
 }

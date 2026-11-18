@@ -131,9 +131,14 @@ export function learnSeq(svg: Element): void {
 }
 
 /** The user's strokes, recoloured in drawing order, light → dark along each stroke, arrow at the end. */
-export function userSVG(strokes: Stroke[], showNums: boolean, under = ""): string {
+export function userSVG(strokes: Stroke[], showNums: boolean, under = "", bad: number[] = []): string {
   let grads = "";
   let body = "";
+  // Strokes the check found wrong: a wide beni halo under them.
+  bad.forEach((i) => {
+    const st = strokes[i];
+    if (st) body += `<polyline class="bad-halo" points="${st.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ")}" fill="none" stroke="var(--beni)" stroke-opacity=".28" stroke-width="13" ${round}/>`;
+  });
   strokes.forEach((st, i) => {
     const c = strokeColor(i), n = st.length, a = st[0], z = st[n - 1];
     const same = Math.hypot(z[0] - a[0], z[1] - a[1]) < 1;
