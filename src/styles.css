@@ -319,3 +319,10 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .wlist{display:flex;flex-direction:column;margin-top:8px}
 .wrow{display:grid;grid-template-columns:auto 1fr 64px;gap:8px;align-items:center;padding:4px 0;border-bottom:var(--hair)}
 .wrow .mbar{height:5px}
+
+/* ---------- astuce mnémotechnique (i entouré) ---------- */
+.mnemo summary{display:flex;align-items:center;gap:8px;list-style:none;cursor:pointer;font-weight:500;font-size:13px;color:var(--wood)}
+.mnemo summary::-webkit-details-marker{display:none}
+.mnemo .ii{display:inline-flex;width:20px;height:20px;flex:none;align-items:center;justify-content:center;border:1px solid var(--wood);border-radius:50%;font-family:var(--display);font-style:italic;font-size:13px;line-height:1}
+.mnemo[open] .ii{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.mnemo p{margin:8px 0 0;font-size:15px;line-height:1.7}

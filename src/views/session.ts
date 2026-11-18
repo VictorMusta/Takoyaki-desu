@@ -5,6 +5,7 @@ import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../c
 import { $, el, setQuit, view } from "../ui/dom";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
+import { mnemoHTML } from "../ui/mnemo";
 import { learnSeq, modelSVG } from "../ui/model";
 import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
@@ -150,6 +151,7 @@ export function viewCard(): void {
       <p class="small muted" style="margin:0" id="ins">Voici le signe ${K.k}. Observez sa forme, puis touchez « Apprendre » pour voir l'ordre des traits.</p>
       <div class="stage" id="st"></div>
       <div class="row" id="acts"><button class="btn primary big" id="learn">Apprendre</button></div>
+      ${mnemoHTML(it.k, true)}
       <h3>Le signe ${K.k} dans les polices courantes</h3>${ficheHTML(it.k)}</section>`),
     );
     const st = $("#st");

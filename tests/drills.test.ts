@@ -54,3 +54,10 @@ describe("drills only use what the learner knows", () => {
     expect(openTexts(knowing(ALL)).length).toBeGreaterThan(10);
   });
 });
+
+import { MNEMO } from "../src/data/mnemonics";
+describe("mnemonics", () => {
+  it("every sign has one", () => {
+    KANA.forEach((k) => expect(MNEMO[k.k], k.k).toBeTruthy());
+  });
+});

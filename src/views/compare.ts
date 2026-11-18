@@ -7,6 +7,7 @@ import { animate, badSVG, innerOf, modelSVG, userSVG, type Stroke } from "../ui/
 import { markSeen, pickTip, setHidden } from "../core/tips";
 import { today } from "../core/scheduler";
 import { viewFeedback } from "./feedback";
+import { mnemoHTML } from "../ui/mnemo";
 import { save } from "../core/store";
 
 type Answer = Grade | "ok" | "ko" | "peek";
@@ -30,6 +31,7 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button>${
       prof.fluent && !peeked ? `<button class="btn sm" id="mine">${own ? "Revenir au modèle" : "Moi je le fais pas comme ça"}</button>` : ""
     }</div>
+    ${exam ? "" : mnemoHTML(k, false)}
     <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
     <details id="checks" class="checks${peeked ? " hidden" : ""}" ${exam ? "open" : ""}><summary>${exam ? "Vérification" : "Vérifier en 3 questions (facultatif)"}</summary>

@@ -5,6 +5,7 @@ import { $, el, esc, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
 import { animate, modelSVG, userSVG, type ModelMode } from "../ui/model";
 import { makePad } from "../ui/pad";
+import { mnemoHTML } from "../ui/mnemo";
 import { speak } from "../ui/speech";
 import { WORDS } from "../data/words";
 import { EXAMPLES } from "../data/examples";
@@ -55,6 +56,7 @@ export function viewProgress(): void {
         <div><div class="mbar" role="img" aria-label="Maîtrise ${mk} %"><i style="width:${mk}%"></i></div><p class="small muted" style="margin:4px 0 0">Maîtrise ${mk} % · ${when}</p></div>
         <div class="stage" id="fcm" style="max-width:220px">${modelSVG(k, "anim", p.settings.showNums)}</div>
         <div class="row" style="justify-content:center"><button class="btn" id="fcr">Rejouer le tracé</button></div>
+        ${mnemoHTML(k, true)}
         <div class="sep"><i></i></div>
         <h3>S'entraîner librement</h3>
         <p class="small muted" style="margin:0">Sans note et sans effet sur vos révisions : tracez autant que vous voulez.</p>
