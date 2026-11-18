@@ -1,5 +1,5 @@
 import { it, expect } from "vitest";
-import { brushPath, brushWidths } from "../src/ui/brush";
+import { brushRuns, brushWidths } from "../src/ui/brush";
 
 const line = (n: number, step: number) => Array.from({ length: n }, (_, i) => [10 + i * step, 50] as [number, number]);
 it("brush stays readable: never thinner than 2.8, thinner at the start and when fast", () => {
@@ -16,10 +16,12 @@ it("ink already laid down never changes as the stroke goes on", () => {
   const full = brushWidths(st);
   for (const n of [5, 21, 33, 47]) expect(brushWidths(st.slice(0, n))).toEqual(full.slice(0, n));
 });
-it("brush outline is one closed shape, even for a dot", () => {
-  for (const st of [line(1, 0), line(2, 3), line(30, 2)]) {
-    const d = brushPath(st);
-    expect(d.startsWith("M") && d.endsWith("Z")).toBe(true);
-    expect(d.match(/M/g)!.length).toBe(1);
-  }
+it("brush runs are smooth: short steps, no sudden change of width", () => {
+  // Jerky samples: far apart, zigzagging, speed jumping.
+  const st: [number, number][] = [[10, 10], [30, 14], [32, 40], [60, 42], [61, 44], [90, 80], [91, 81]];
+  const runs = brushRuns(st);
+  const pts = runs.flatMap((r) => r.pts);
+  for (let i = 1; i < pts.length; i++) expect(Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])).toBeLessThan(1);
+  for (let i = 1; i < runs.length; i++) expect(Math.abs(runs[i].w - runs[i - 1].w)).toBeLessThanOrEqual(0.25);
+  expect(brushRuns([[5, 5]]).length).toBe(1);
 });

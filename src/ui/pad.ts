@@ -1,5 +1,5 @@
 import { cssVar } from "./dom";
-import { brushPath, getStrokeStyle } from "./brush";
+import { drawBrush, getStrokeStyle } from "./brush";
 import { buzz } from "./haptics";
 import type { Point, Stroke } from "./model";
 
@@ -38,7 +38,7 @@ export function makePad(stage: HTMLElement, underSVG: string): Pad {
     const brush = getStrokeStyle() === "brush";
     for (const st of cur ? [...strokes, cur] : strokes) {
       if (brush) {
-        ctx.fill(new Path2D(brushPath(st, s)));
+        drawBrush(ctx, st, s);
         continue;
       }
       ctx.beginPath();

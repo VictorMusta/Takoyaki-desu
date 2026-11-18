@@ -146,7 +146,11 @@ export function userSVG(strokes: Stroke[], showNums: boolean, under = "", bad: n
     const same = Math.hypot(z[0] - a[0], z[1] - a[1]) < 1;
     grads += `<linearGradient id="ug${i}" gradientUnits="userSpaceOnUse" x1="${a[0]}" y1="${a[1]}" x2="${same ? a[0] + 1 : z[0]}" y2="${same ? a[1] : z[1]}"><stop offset="0" stop-color="${c}" stop-opacity=".35"/><stop offset="1" stop-color="${c}" stop-opacity="1"/></linearGradient>`;
     const pts = st.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
-    body += brush ? brushSVG(st, `url(#ug${i})`) : `<polyline points="${pts}" fill="none" stroke="url(#ug${i})" stroke-width="4.2" ${round}/>`;
+    if (brush) {
+      // Solid strokes under a fading mask: the start-to-end fade without darker overlaps.
+      grads += `<linearGradient id="umg${i}" gradientUnits="userSpaceOnUse" x1="${a[0]}" y1="${a[1]}" x2="${same ? a[0] + 1 : z[0]}" y2="${same ? a[1] : z[1]}"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient><mask id="um${i}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="149" height="149"><rect x="-20" y="-20" width="149" height="149" fill="url(#umg${i})"/></mask>`;
+      body += `<g mask="url(#um${i})">${brushSVG(st, c)}</g>`;
+    } else body += `<polyline points="${pts}" fill="none" stroke="url(#ug${i})" stroke-width="4.2" ${round}/>`;
     if (n > 2) {
       const b = st[Math.max(0, n - 4)];
       const sw = brush ? Math.max(3.6, brushWidths(st)[n - 1]).toFixed(2) : "4.2"; // arrows stay big enough to read

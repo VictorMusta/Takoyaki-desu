@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.9.2",
+    date: "2026-11-19",
+    items: ["Pinceau plus organique : le trait suit des courbes douces au lieu de segments droits, sans encoches quand la main accélère."],
+  },
+  {
     v: "0.9.1",
     date: "2026-11-19",
     items: ["Pinceau plus naturel : l'encre déjà posée ne change plus d'épaisseur quand vous accélérez ou ralentissez."],

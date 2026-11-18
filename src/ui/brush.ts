@@ -52,42 +52,75 @@ export function brushWidths(st: Stroke): number[] {
 }
 
 /**
- * The brushed stroke as one closed outline, round ends included (a single shape, so a
- * semi-transparent fill never darkens where parts overlap). Model space, times `scale`.
+ * The stroke as runs of constant width along a smoothed centre line.
+ * - The sampled points are joined by quadratic curves through their midpoints, then cut into
+ *   short steps (about 0.5 unit): no straight edges between distant samples.
+ * - Widths follow the causal brushWidths(), with a cap on how fast they may change per unit
+ *   of length, so a jerky sample never notches the line.
+ * - Each run is drawn as a round-capped line: overlaps never leave holes (an outline polygon
+ *   would, wherever the inner edge folds on a tight turn).
  */
-export function brushPath(st: Stroke, scale = 1): string {
-  const n = st.length;
-  if (n === 0) return "";
-  const w = brushWidths(st);
-  const ring: Point[] = [];
-  const arc = (c: Point, r: number, from: number, to: number) => {
-    const steps = 8;
-    for (let k = 0; k <= steps; k++) {
-      const a = from + ((to - from) * k) / steps;
-      ring.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]);
-    }
-  };
-  if (n === 1) arc(st[0], w[0] / 2, 0, Math.PI * 2);
-  else {
-    const dir = st.map((_, i) => {
-      const a = st[Math.max(0, i - 1)], b = st[Math.min(n - 1, i + 1)];
-      return Math.atan2(b[1] - a[1], b[0] - a[0]);
-    });
-    const side = (i: number, sgn: 1 | -1): Point => {
-      const h = (w[i] / 2) * sgn, t = dir[i];
-      return [st[i][0] - Math.sin(t) * h, st[i][1] + Math.cos(t) * h];
-    };
-    for (let i = 0; i < n; i++) ring.push(side(i, 1));
-    const te = dir[n - 1];
-    arc(st[n - 1], w[n - 1] / 2, te + Math.PI / 2, te - Math.PI / 2); // round tip
-    for (let i = n - 1; i >= 0; i--) ring.push(side(i, -1));
-    const t0 = dir[0];
-    arc(st[0], w[0] / 2, t0 - Math.PI / 2, t0 - (3 * Math.PI) / 2); // round start
-  }
-  return "M" + ring.map((p) => `${(p[0] * scale).toFixed(1)} ${(p[1] * scale).toFixed(1)}`).join("L") + "Z";
+export interface Run {
+  w: number;
+  pts: Point[];
 }
 
-/** SVG markup of a brushed stroke, filled with `fill`. */
-export function brushSVG(st: Stroke, fill: string): string {
-  return `<path d="${brushPath(st)}" fill="${fill}"/>`;
+export function brushRuns(st: Stroke): Run[] {
+  const n = st.length;
+  if (n === 0) return [];
+  const w0 = brushWidths(st);
+  if (n === 1) return [{ w: w0[0], pts: [st[0], st[0]] }];
+  const mid = (a: Point, b: Point): Point => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  // Dense centre line with each point's source width.
+  const dense: Point[] = [st[0]], dw: number[] = [w0[0]];
+  const add = (a: Point, c: Point, b: Point, wa: number, wb: number) => {
+    const len = Math.hypot(c[0] - a[0], c[1] - a[1]) + Math.hypot(b[0] - c[0], b[1] - c[1]);
+    const k = Math.max(1, Math.ceil(len / 0.5));
+    for (let j = 1; j <= k; j++) {
+      const t = j / k, u = 1 - t;
+      dense.push([u * u * a[0] + 2 * u * t * c[0] + t * t * b[0], u * u * a[1] + 2 * u * t * c[1] + t * t * b[1]]);
+      dw.push(wa + (wb - wa) * t);
+    }
+  };
+  let from = st[0];
+  for (let i = 1; i < n - 1; i++) {
+    const to = mid(st[i], st[i + 1]);
+    add(from, st[i], to, w0[i - 1], w0[i]);
+    from = to;
+  }
+  add(from, st[n - 1], st[n - 1], w0[n - 2], w0[n - 1]);
+  // Limit the change of width per unit of length.
+  for (let i = 1; i < dense.length; i++) {
+    const ds = Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]);
+    const lim = 0.12 * ds + 0.02;
+    dw[i] = Math.max(dw[i - 1] - lim, Math.min(dw[i - 1] + lim, dw[i]));
+  }
+  // Group into runs of the same (rounded) width; consecutive runs share their joint point.
+  const runs: Run[] = [];
+  const q = (x: number) => Math.round(x * 8) / 8;
+  for (let i = 0; i < dense.length; i++) {
+    const w = q(dw[i]), last = runs[runs.length - 1];
+    if (last && last.w === w) last.pts.push(dense[i]);
+    else runs.push({ w, pts: last ? [last.pts[last.pts.length - 1], dense[i]] : [dense[i], dense[i]] });
+  }
+  return runs;
+}
+
+/** Draws a brushed stroke on a canvas (model space times `scale`). */
+export function drawBrush(ctx: CanvasRenderingContext2D, st: Stroke, scale: number): void {
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  for (const r of brushRuns(st)) {
+    ctx.lineWidth = r.w * scale;
+    ctx.beginPath();
+    r.pts.forEach((p, i) => (i ? ctx.lineTo(p[0] * scale, p[1] * scale) : ctx.moveTo(p[0] * scale, p[1] * scale)));
+    ctx.stroke();
+  }
+}
+
+/** SVG markup of a brushed stroke in one solid colour (wrap it in a group for opacity or masks). */
+export function brushSVG(st: Stroke, color: string): string {
+  return brushRuns(st)
+    .map((r) => `<polyline points="${r.pts.map((p) => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(" ")}" fill="none" stroke="${color}" stroke-width="${r.w}" stroke-linecap="round" stroke-linejoin="round"/>`)
+    .join("");
 }
