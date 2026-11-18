@@ -37,3 +37,20 @@ describe("vocabulary", () => {
     expect(romajiOk("", "すし", "sushi")).toBe(false);
   });
 });
+
+import { allSolid, solid } from "../src/core/scheduler";
+import { WORDS as ALLW } from "../src/data/words";
+describe("romaji fading", () => {
+  it("a sign is solid after three days, a word when all its signs are", () => {
+    const p = { cards: { か: { seen: true, ease: 2.5, interval: 3, reps: 2, due: 103 }, さ: { seen: true, ease: 2.5, interval: 1, reps: 1, due: 101 } } } as never;
+    expect(solid(p, "か", 100)).toBe(true);
+    expect(solid(p, "さ", 100)).toBe(false);
+    expect(allSolid(p, "かか", 100)).toBe(true);
+    expect(allSolid(p, "かさ", 100)).toBe(false);
+  });
+  it("the bank has no duplicate word and mixes the scripts", () => {
+    expect(new Set(ALLW.map((w) => w[0])).size).toBe(ALLW.length);
+    expect(ALLW.some(([w]) => /[ァ-ー]/.test(w))).toBe(true);
+    expect(ALLW.some(([w]) => /[ゃゅょっ]/.test(w))).toBe(true);
+  });
+});

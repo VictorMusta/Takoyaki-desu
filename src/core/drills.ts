@@ -3,6 +3,7 @@ import { SENTENCES, signsOf, WORDS } from "../data/words";
 import { isHira, TEXTS, textOf } from "../data/texts";
 import type { Profile } from "./types";
 import { toRomaji } from "./romaji";
+import { allSolid, today } from "./scheduler";
 
 /**
  * Exercises other than drawing. A drill is plain data (saved with the lesson so it resumes),
@@ -150,8 +151,11 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       const ws = knownWords(p);
       const withK = ws.filter(([w]) => w.includes(sign));
       const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
-      const wrong = shuffle(ws.filter((x) => x[0] !== w), rnd).slice(0, 3).map(([, r2, f2]) => `${r2} · ${f2}`);
-      return { type, ks: signsOf(w), prompt: w, options: shuffle([`${r} · ${fr}`, ...wrong], rnd), answer: `${r} · ${fr}`, say: w };
+      // Romaji next to the meanings only while the word's signs are still fresh.
+      const bare = allSolid(p, w, today());
+      const opt = (r2: string, f2: string) => (bare ? f2 : `${r2} · ${f2}`);
+      const wrong = shuffle(ws.filter((x) => x[0] !== w && x[2] !== fr), rnd).slice(0, 3).map(([, r2, f2]) => opt(r2, f2));
+      return { type, ks: signsOf(w), prompt: w, options: shuffle([opt(r, fr), ...wrong], rnd), answer: opt(r, fr), say: w };
     }
     case "cloze": {
       const pool = [...knownWords(p).map(([w, r, fr]) => ({ w, r, fr })), ...knownSentences(p).map((s) => ({ w: s.w, r: s.r, fr: s.fr }))];

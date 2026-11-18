@@ -13,6 +13,8 @@ Apprendre les hiragana en les **écrivant de mémoire**, puis en se comparant au
 
 **Katakana** : une fois les hiragana ouverts, les katakana suivent le même chemin (signes de base, ten-ten et maru, petits signes et barre d'allongement ー), avec leurs astuces, des mots d'emprunt en exemple (コーヒー, ホテル…), leur jumeau hiragana sur chaque fiche et une maîtrise suivie à part. 151 signes en tout.
 
+**Vocabulaire utile** : 262 mots, ouverts dès que leurs signes sont appris. D'abord des mots en hiragana de base, puis des mots du quotidien et du voyage avec ten-ten et petits signes (でんしゃ, きっぷ, だいじょうぶ…), puis les mots d'emprunt en katakana (コンビニ, レシート, エレベーター…). Les romaji s'effacent au fil des progrès : dès qu'un signe tient 3 jours, sa lecture n'est plus affichée à côté des mots, et un mot dont tous les signes tiennent se lit sans aide (lecture derrière « Voir la lecture »).
+
 **Vérification automatique des traits** : après chaque tracé, l'appli compare votre dessin au modèle sans tenir compte de la taille ni de la position. Elle vérifie le nombre de traits, leur ordre, leur sens et grossièrement leur forme, accepte les variantes courantes (き en 3 traits, さ en 2, り en 1) et entoure le trait fautif. Elle ne note jamais à votre place : elle bloque seulement « Bien » quand elle trouve une vraie erreur. Bouton « Je pense que c'est juste » pour passer outre et envoyer le tracé à l'auteur.
 
 **Sauvegarde** : l'appli demande au navigateur de protéger son stockage, et propose « M'envoyer ma sauvegarde » : le menu de partage s'ouvre avec le fichier en pièce jointe, on choisit son appli de mail et on se l'envoie. Un rappel discret apparaît sur l'accueil quand la dernière sauvegarde a plus d'une semaine. Pour restaurer : Réglages › Sauvegarde › Importer un fichier.

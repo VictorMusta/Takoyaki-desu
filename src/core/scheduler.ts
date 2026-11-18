@@ -104,6 +104,14 @@ export function mastery(p: Profile, k: string, t: number): number {
   return cardMastery(p.cards[k], t);
 }
 
+/**
+ * A sign is « solid » once it holds three days (mastery about 67 %): from then on its romaji
+ * stops being shown next to words, so reading comes from the kana alone.
+ */
+export const solid = (p: Profile, k: string, t: number) => mastery(p, k, t) >= 0.66;
+/** Every sign of the text is solid (spaces and punctuation ignored). */
+export const allSolid = (p: Profile, s: string, t: number) => [...s].filter((c) => /[\u3040-\u30ff]/.test(c)).every((c) => solid(p, c, t));
+
 /** The same measure for any card (signs or words). */
 export function cardMastery(c: Card | undefined, t: number): number {
   if (!c?.seen) return 0;

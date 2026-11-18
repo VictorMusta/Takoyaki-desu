@@ -3,6 +3,7 @@ import { WORDS } from "../data/words";
 import { LOOKALIKES, shuffle } from "../core/drills";
 import { profile } from "../core/store";
 import { romajiOk, wordOf } from "../core/vocab";
+import { allSolid, solid, today } from "../core/scheduler";
 import type { Grade, QueueItem } from "../core/types";
 import { $, el, esc, view } from "../ui/dom";
 import { speak } from "../ui/speech";
@@ -24,10 +25,18 @@ export function viewWord(it: QueueItem, head: string, onStep: () => void, done: 
 
   if (it.isNew && !it.step) {
     speak(w);
+    // Romaji fade out: only for signs that do not hold 3 days yet; all solid → reading hidden behind a tap.
+    const p = profile(), t = today(), bare = allSolid(p, w, t);
     body.innerHTML = `<p class="drill-big kana-l" style="font-size:64px;margin:0">${w}</p>
-      <p class="reading">${r}</p><p class="drill-big" style="font-family:var(--display);margin:0">${esc(fr)}</p>
-      <div class="chips">${[...w].map((c) => `<span class="chip"><b>${c}</b>${byK[c].r}</span>`).join("")}</div>
+      ${bare ? `<button class="btn sm" id="showr" style="align-self:center">Voir la lecture</button><p class="reading hidden" id="rd">${r}</p>` : `<p class="reading">${r}</p>`}<p class="drill-big" style="font-family:var(--display);margin:0">${esc(fr)}</p>
+      <div class="chips">${[...w].map((c) => `<span class="chip"><b>${c}</b>${solid(p, c, t) ? "" : byK[c]?.r ?? ""}</span>`).join("")}</div>
       <button class="btn primary big" id="ok">Je le retiens, on vérifie</button>`;
+    const sr = body.querySelector<HTMLButtonElement>("#showr");
+    if (sr)
+      sr.onclick = () => {
+        sr.remove();
+        $("#rd", body).classList.remove("hidden");
+      };
     $("#ok", body).onclick = () => {
       it.step = 2;
       onStep();

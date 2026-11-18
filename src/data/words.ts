@@ -1,7 +1,8 @@
 /**
- * Vocabulary for the word exercises. Only the 46 base hiragana (no dakuten, no small kana),
- * so every word becomes available as soon as its signs are learnt.
- * [hiragana, romaji (Hepburn), French]
+ * Vocabulary for the word exercises. A word opens as soon as all its signs are learnt:
+ * first the 46 base hiragana, then words with ten-ten, maru and small signs,
+ * then everyday words in katakana. Chosen to be useful in Japan.
+ * [kana, romaji (Hepburn), French]
  */
 export type Word = [w: string, r: string, fr: string];
 
@@ -49,6 +50,31 @@ export const WORDS: Word[] = [
   ["れきし", "rekishi", "histoire"],
   ["ろく", "roku", "six"],
   ["わたし", "watashi", "je, moi"], ["わに", "wani", "crocodile"],
+  // with ten-ten, maru, small signs: everyday and travel
+  ["ごはん", "gohan", "riz cuit, repas"], ["みず", "mizu", "eau"], ["かぜ", "kaze", "vent, rhume"], ["かぎ", "kagi", "clé"], ["めがね", "megane", "lunettes"],
+  ["ひだり", "hidari", "gauche"], ["みぎ", "migi", "droite"], ["まど", "mado", "fenêtre"], ["でぐち", "deguchi", "sortie"], ["いりぐち", "iriguchi", "entrée"],
+  ["えいご", "eigo", "anglais"], ["にほんご", "nihongo", "japonais (langue)"], ["ゆうびん", "yūbin", "poste, courrier"], ["ばんごはん", "bangohan", "dîner"],
+  ["あさごはん", "asagohan", "petit-déjeuner"], ["ひるごはん", "hirugohan", "déjeuner"], ["たまご", "tamago", "œuf"], ["ぶた", "buta", "cochon"], ["ぎゅうにく", "gyūniku", "bœuf"],
+  ["とりにく", "toriniku", "poulet"], ["ぶたにく", "butaniku", "porc"], ["だいじょうぶ", "daijōbu", "ça va, pas de problème"], ["ありがとう", "arigatō", "merci"],
+  ["どうぞ", "dōzo", "je vous en prie"], ["どこ", "doko", "où"], ["だれ", "dare", "qui"], ["いくら", "ikura", "combien (prix)"], ["おいしい", "oishii", "délicieux"],
+  ["でんしゃ", "densha", "train"], ["しゃしん", "shashin", "photo"], ["じしょ", "jisho", "dictionnaire"], ["きょう", "kyō", "aujourd'hui"], ["きのう", "kinō", "hier"],
+  ["としょかん", "toshokan", "bibliothèque"], ["びょういん", "byōin", "hôpital"], ["りょかん", "ryokan", "auberge japonaise"], ["きっぷ", "kippu", "billet"], ["きって", "kitte", "timbre"],
+  ["がっこう", "gakkō", "école"], ["ざっし", "zasshi", "magazine"], ["いっしょ", "issho", "ensemble"], ["ちょっと", "chotto", "un peu"], ["しゅくだい", "shukudai", "devoirs"],
+  ["おちゃ", "ocha", "thé vert"], ["まっちゃ", "matcha", "matcha"], ["じかん", "jikan", "temps, heure"], ["ぎんこう", "ginkō", "banque"], ["じんじゃ", "jinja", "sanctuaire shintō"],
+  ["おてら", "otera", "temple bouddhiste"], ["ゆっくり", "yukkuri", "lentement"], ["ぜんぶ", "zenbu", "tout"], ["げんき", "genki", "en forme"], ["でんわ", "denwa", "téléphone"],
+  ["えんぴつ", "enpitsu", "crayon"], ["さんぽ", "sanpo", "promenade"], ["かんぱい", "kanpai", "santé !"], ["てんぷら", "tenpura", "tempura"], ["いっぱい", "ippai", "plein"],
+  ["しんぶん", "shinbun", "journal"], ["べんとう", "bentō", "bentō"], ["ばしょ", "basho", "endroit"], ["ちず", "chizu", "carte (plan)"], ["しょうゆ", "shōyu", "sauce soja"],
+  // katakana: loanwords seen everywhere
+  ["パン", "pan", "pain"], ["バス", "basu", "bus"], ["ホテル", "hoteru", "hôtel"], ["トイレ", "toire", "toilettes"], ["タクシー", "takushī", "taxi"],
+  ["コーヒー", "kōhī", "café"], ["ビール", "bīru", "bière"], ["ワイン", "wain", "vin"], ["ミルク", "miruku", "lait"], ["ジュース", "jūsu", "jus"],
+  ["ラーメン", "rāmen", "ramen"], ["カレー", "karē", "curry"], ["ケーキ", "kēki", "gâteau"], ["サラダ", "sarada", "salade"], ["アイス", "aisu", "glace"],
+  ["メニュー", "menyū", "menu"], ["レストラン", "resutoran", "restaurant"], ["コンビニ", "konbini", "supérette"], ["デパート", "depāto", "grand magasin"], ["エレベーター", "erebētā", "ascenseur"],
+  ["カメラ", "kamera", "appareil photo"], ["テレビ", "terebi", "télé"], ["スマホ", "sumaho", "smartphone"], ["パスポート", "pasupōto", "passeport"], ["チケット", "chiketto", "billet, ticket"],
+  ["カード", "kādo", "carte (bancaire)"], ["レシート", "reshīto", "ticket de caisse"], ["ホーム", "hōmu", "quai"], ["ドア", "doa", "porte"], ["ベッド", "beddo", "lit"],
+  ["シャワー", "shawā", "douche"], ["タオル", "taoru", "serviette"], ["フランス", "furansu", "France"], ["パリ", "pari", "Paris"], ["アメリカ", "amerika", "Amérique"],
+  ["ヨーロッパ", "yōroppa", "Europe"], ["ゲーム", "gēmu", "jeu vidéo"], ["マンガ", "manga", "manga"], ["アニメ", "anime", "dessin animé"], ["ピアノ", "piano", "piano"],
+  ["ペン", "pen", "stylo"], ["ノート", "nōto", "cahier"], ["メール", "mēru", "e-mail"], ["ネット", "netto", "internet"], ["バッグ", "baggu", "sac"],
+  ["シャツ", "shatsu", "chemise"], ["セーター", "sētā", "pull"], ["スープ", "sūpu", "soupe"], ["チーズ", "chīzu", "fromage"], ["トマト", "tomato", "tomate"],
 ];
 
 /**
