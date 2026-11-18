@@ -46,8 +46,9 @@ export function viewProgress(): void {
     el(`<section class="card"><h2>Progrès de ${esc(state.active)}</h2>
     <div class="stats">${stat(false)}${kata ? stat(true) : `<div class="stat"><b>${done}</b><span>maîtrisés / ${KANA.length}</span></div>`}<div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div></div>
     ${curve(p.hist ?? {}, t, "hiragana")}${kata ? curve(p.histK ?? {}, t, "katakana") : ""}
-    <p class="small muted" style="margin:0">Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre.</p>
+    <details><summary class="small">Lire le tableau</summary><p class="small muted" style="margin:8px 0 0">Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre. À partir de 67 %, les romaji du signe ne sont plus affichés dans les mots.</p>
     <div class="legend"><span><i class="cell" aria-hidden="true">あ</i>Pas encore vu</span><span><i class="cell learn" style="--m:50%" aria-hidden="true">あ</i>En cours</span><span><i class="cell done" aria-hidden="true">あ</i>Maîtrisé</span></div>
+    </details>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );
@@ -130,9 +131,11 @@ export function viewProgress(): void {
     }</section>`),
   );
 
+  // Calibration only shows up when it has something to say: self-grades far above exam results.
   const cal = calibration(p, t);
+  if (!cal.some((r) => r.gap !== null && r.gap > 15)) return;
   v.appendChild(
-    el(`<section class="card"><h3>Calibration (14 derniers jours)</h3>
+    el(`<section class="card"><h3>Vos notes sont-elles fiables ?</h3>
     ${
       cal.length
         ? `<table><thead><tr><th>Ligne</th><th>« Bien » en séance</th><th>Réussite à l'examen</th><th>Écart</th></tr></thead><tbody>

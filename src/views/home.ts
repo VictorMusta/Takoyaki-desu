@@ -5,7 +5,7 @@ import { memoryOnly, profile, state } from "../core/store";
 import { $, $opt, el, esc, showWave, view } from "../ui/dom";
 import { startSession } from "./session";
 import { continueBlock } from "./more";
-import { available, MODES } from "../core/drills";
+import { FAMILIES, familyTypes } from "../core/drills";
 import { startDrills } from "./session";
 import { backupDue, daysSinceBackup, everBackedUp, sendBackup, snoozeBackup } from "../core/backup";
 
@@ -50,13 +50,13 @@ export function viewHome(): void {
     el(`<section class="card"><details><summary>Comment ça marche</summary>
     <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
   );
-  const modes = MODES.map((m) => {
-    const ok = available(p, m.type);
-    return `<button class="btn opt" data-m="${m.type}" ${ok ? "" : "disabled"}><span>${m.title}</span><small>${ok ? m.sub : "Après quelques signes de plus"}</small></button>`;
+  const modes = FAMILIES.map((f) => {
+    const ok = familyTypes(p, f.id).length > 0;
+    return `<button class="btn opt" data-m="${f.id}" ${ok ? "" : "disabled"}><span>${f.title}</span><small>${ok ? f.sub : "Après quelques signes de plus"}</small></button>`;
   }).join("");
-  const tr = el(`<section class="card"><details><summary>S'entraîner autrement</summary><p class="small muted" style="margin:8px 0">Dix exercices d'un même type, sur les signes déjà vus. Sans limite, et sans repousser vos révisions.</p><div class="modes">${modes}</div></details></section>`);
+  const tr = el(`<section class="card"><details><summary>S'entraîner autrement</summary><p class="small muted" style="margin:8px 0">Dix exercices variés sur ce que vous avez déjà vu, sans limite et sans repousser vos révisions.</p><div class="modes">${modes}</div></details></section>`);
   v.appendChild(tr);
-  tr.querySelectorAll<HTMLButtonElement>("[data-m]").forEach((b) => (b.onclick = () => startDrills(b.dataset.m as never)));
+  tr.querySelectorAll<HTMLButtonElement>("[data-m]").forEach((b) => (b.onclick = () => startDrills(familyTypes(p, b.dataset.m!))));
   showWave();
   const go = $opt<HTMLButtonElement>("#go");
   if (go) go.onclick = () => startSession("day");

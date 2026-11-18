@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { KANA } from "../src/data/kana";
 import { SENTENCES, signsOf, WORDS } from "../src/data/words";
-import { available, knownWords, makeDrill, MODES, openTexts } from "../src/core/drills";
+import { available, FAMILIES, knownWords, makeDrill, openTexts } from "../src/core/drills";
 import { freshProfile, newCard } from "../src/core/scheduler";
 import type { Profile } from "../src/core/types";
 
@@ -22,6 +22,8 @@ describe("exercise content", () => {
     SENTENCES.forEach((s) => expect(signsOf(s.w).every((c) => BASE.has(c)), s.w).toBe(true));
   });
 });
+
+const MODES = FAMILIES.flatMap((f) => f.types.map((type) => ({ type })));
 
 describe("drills only use what the learner knows", () => {
   it("nothing opens before a few signs are known", () => {

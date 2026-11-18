@@ -35,9 +35,9 @@ export function setTheme(t: Theme): void {
 
 /** The three daily paces, with honest landmarks (no invented statistics). */
 export const PACES = [
-  { n: 5, name: "Tranquille", sub: "Tout l'alphabet en 10 jours environ, 10 à 15 min par jour." },
-  { n: 10, name: "Soutenu", sub: "En 5 jours environ, 20 à 25 min par jour. Recommandé." },
-  { n: 15, name: "Intensif", sub: "En 3 à 4 jours, environ 35 min par jour, puis beaucoup de révisions les jours suivants." },
+  { n: 5, name: "Tranquille", sub: "Les 75 hiragana en 3 semaines environ, puis autant pour les katakana. 10 à 15 min par jour." },
+  { n: 10, name: "Soutenu", sub: "Les hiragana en 10 jours environ, 20 à 25 min par jour. Recommandé." },
+  { n: 15, name: "Intensif", sub: "Les hiragana en une semaine environ, 35 min par jour, puis beaucoup de révisions." },
 ];
 
 /** Radio cards for the pace; a custom value from Réglages shows as « Personnalisé ». */

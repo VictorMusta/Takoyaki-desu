@@ -247,4 +247,14 @@ export function viewSettings(): void {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) f.text().then(imp);
   };
+
+  // Most used first: pace and backup; profiles, level and the rest further down.
+  const order = ["Réglages de", "Sauvegarde", "Apparence", "Profils sur", "Niveau", "Un avis", "Crédits"];
+  const secs = [...v.querySelectorAll<HTMLElement>(":scope > section")];
+  const rank = (sec: HTMLElement) => {
+    const h = sec.querySelector("h2, h3, summary")?.textContent ?? "";
+    const r = order.findIndex((o) => h.startsWith(o));
+    return r < 0 ? order.length : r;
+  };
+  secs.sort((a, b) => rank(a) - rank(b)).forEach((sec) => v.appendChild(sec));
 }

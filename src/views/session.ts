@@ -67,10 +67,13 @@ function mixDrills(q: QueueItem[]): QueueItem[] {
 }
 
 /** « S'entraîner »: ten exercises of one kind, free practice. */
-export function startDrills(type: DrillType): void {
+/** A free round of ten exercises, mixing the given types (each one possible). */
+export function startDrills(types: DrillType | DrillType[]): void {
   const p = profile(), q: QueueItem[] = [];
+  const ts = Array.isArray(types) ? types : [types];
+  if (!ts.length) return;
   for (let i = 0; i < 10; i++) {
-    const d = makeDrill(p, type);
+    const d = makeDrill(p, ts[Math.floor(Math.random() * ts.length)]);
     if (d) q.push({ k: d.ks[0] ?? "", isNew: false, practice: true, drill: d });
   }
   if (!q.length) return;

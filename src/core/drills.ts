@@ -198,17 +198,14 @@ function combos(p: Profile): string[] {
 export const LESSON_MIX: DrillType[] = ["choose", "listen", "read", "word", "cloze", "duel", "combo"];
 
 /** Labels for the « S'entraîner » menu. */
-export const MODES: { type: DrillType; title: string; sub: string }[] = [
-  { type: "choose", title: "Choisir", sub: "Une syllabe, quatre signes" },
-  { type: "listen", title: "Écouter", sub: "Un son, quatre signes" },
-  { type: "read", title: "Lire", sub: "Un signe, quatre syllabes" },
-  { type: "match", title: "Relier", sub: "Cinq signes, cinq syllabes" },
-  { type: "duel", title: "Sosies", sub: "さ ou ち ? ね, れ ou わ ?" },
-  { type: "combo", title: "Combinaisons", sub: "きゃ, しゅ, ちょ : lire les petits signes" },
-  { type: "word", title: "Lire des mots", sub: "Un mot, quatre sens" },
-  { type: "cloze", title: "Textes à trous", sub: "Le signe qui manque" },
-  { type: "dictation", title: "Dictée au clavier", sub: "Écrire un mot entier" },
-  { type: "drawword", title: "Dictée dessinée", sub: "Écrire un mot à la main" },
-  { type: "sentence", title: "Phrases et proverbes", sub: "Comprendre une phrase" },
-  { type: "text", title: "Textes à comprendre", sub: "Panneaux, menus, stèles, en 3 écritures" },
+/**
+ * The « S'entraîner » menu: four families instead of twelve buttons. Each round of ten
+ * mixes the exercise types of its family that are already possible.
+ */
+export const FAMILIES: { id: string; title: string; sub: string; types: DrillType[] }[] = [
+  { id: "signs", title: "Reconnaître les signes", sub: "Choisir, écouter, relier, sosies, combinaisons", types: ["choose", "listen", "read", "match", "duel", "combo"] },
+  { id: "words", title: "Lire des mots", sub: "Le sens d'un mot, le signe qui manque", types: ["word", "cloze"] },
+  { id: "spell", title: "Écrire des mots", sub: "Dictée au clavier ou à la main", types: ["dictation", "drawword"] },
+  { id: "texts", title: "Phrases et textes", sub: "Proverbes, panneaux, menus, stèles", types: ["sentence", "text"] },
 ];
+export const familyTypes = (p: Profile, id: string): DrillType[] => (FAMILIES.find((f) => f.id === id)?.types ?? []).filter((t) => available(p, t));
