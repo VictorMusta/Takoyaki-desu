@@ -61,6 +61,7 @@ export function announceUpdate(): void {
   try {
     if (!sessionStorage.getItem(FLAG)) return;
     sessionStorage.removeItem(FLAG);
+    // The « Quoi de neuf ? » window follows (ui/news.ts); the toast only confirms the update.
     toast("Appli mise à jour.");
   } catch {
     /* ignore */

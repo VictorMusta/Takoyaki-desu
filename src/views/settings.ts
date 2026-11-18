@@ -7,6 +7,7 @@ import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
 import { mailTo } from "../config";
 import { route } from "../router";
+import { newsHTML } from "../ui/news";
 import { getStrokeStyle, setStrokeStyle, type StrokeStyle } from "../ui/brush";
 import { buzz, canVibrate, getHaptics, setHaptics } from "../ui/haptics";
 import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup } from "../core/backup";
@@ -213,6 +214,18 @@ export function viewSettings(): void {
 
   /* ---- credits ---- */
   v.appendChild(
+    el(`<section class="card"><details><summary>Nouveautés</summary>${newsHTML()}</details></section>`),
+  );
+  v.appendChild(
+    el(`<section class="card"><details><summary>Confidentialité</summary><div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <p style="margin:0"><b>Rien ne quitte votre téléphone sans vous.</b> Pas de compte, pas de serveur à nous : votre progression vit uniquement dans ce navigateur.</p>
+      <p style="margin:0">Aucune mesure d'audience, aucun cookie, aucune publicité, aucun outil tiers. Les polices sont livrées avec l'appli.</p>
+      <p style="margin:0">Des données ne partent que si vous le décidez : une sauvegarde que vous vous envoyez, un retour par mail, un ticket GitHub.</p>
+      <p style="margin:0">Ce qui reste hors de nos mains : l'hébergeur (GitHub Pages) voit, comme tout site, l'adresse IP qui charge l'appli. Selon le téléphone, la voix de « Écouter » peut être produite en ligne par le système.</p>
+      <p style="margin:0">Tout effacer : supprimez les profils ci-dessus, ou effacez les données du site dans votre navigateur.</p>
+    </div></details></section>`),
+  );
+  v.appendChild(
     el(`<section class="card"><details><summary>Crédits</summary>
     <div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       <p style="margin:0">Tracés et ordre des traits : <a href="http://kanjivg.tagaini.net">KanjiVG</a>, d'Ulrich Apel, sous licence CC BY-SA 3.0.</p>
@@ -280,7 +293,7 @@ export function viewSettings(): void {
   };
 
   // Most used first: pace and backup; profiles, level and the rest further down.
-  const order = ["Réglages de", "Sauvegarde", "Apparence", "Profils sur", "Niveau", "Un avis", "Crédits"];
+  const order = ["Réglages de", "Sauvegarde", "Apparence", "Profils sur", "Niveau", "Un avis", "Nouveautés", "Confidentialité", "Crédits"];
   const secs = [...v.querySelectorAll<HTMLElement>(":scope > section")];
   const rank = (sec: HTMLElement) => {
     const h = sec.querySelector("h2, h3, summary")?.textContent ?? "";

@@ -355,3 +355,6 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .cal-legend{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
 .cal-scale{display:inline-flex;align-items:center;gap:3px}
 .cal-scale i{display:inline-block;width:10px;height:10px}
+.news ul{margin:4px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.modal-card .news + .news{margin-top:12px}
+.modal-card{max-height:85vh;overflow:auto}

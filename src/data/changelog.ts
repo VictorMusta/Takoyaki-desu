@@ -1,0 +1,35 @@
+/**
+ * What changed, in plain words, newest first. Shown once after an update (« Nouveautés »),
+ * and any time from Réglages. Add an entry with each release and bump package.json's version.
+ */
+export interface Release {
+  v: string;
+  date: string;
+  items: string[];
+}
+
+export const CHANGELOG: Release[] = [
+  {
+    v: "0.9.0",
+    date: "2026-11-19",
+    items: [
+      "Votre trait a maintenant l'allure d'un coup de pinceau. Vous préférez un trait simple et régulier ? Réglages › Apparence.",
+      "Le téléphone vibre légèrement quand le pinceau touche la feuille, et pour une bonne ou une mauvaise réponse. Ça se coupe dans les réglages.",
+      "Un calendrier de vos jours d'entraînement dans Progrès, et sur l'accueil ce que vous avez fait aujourd'hui.",
+      "La journée change à 4 h du matin : vos soirées tardives comptent pour le bon jour.",
+      "Les sauvegardes portent leur date, et l'appli vous la montre avant de restaurer.",
+      "Les polices sont livrées avec l'appli : plus rapide, parfaite hors connexion, et plus rien n'est demandé à Google.",
+      "Corrigé : on ne pouvait pas effacer une lettre dans « Comment ça se lit ? ».",
+    ],
+  },
+  {
+    v: "0.8.0",
+    date: "2026-11-18",
+    items: [
+      "Les katakana sont là, après les hiragana : 151 signes en tout.",
+      "262 mots utiles, du quotidien et du voyage. Les lettres latines s'effacent quand vous connaissez bien les signes.",
+      "L'appli vérifie elle-même le nombre, l'ordre et le sens de vos traits. Vous gardez le dernier mot.",
+      "« M'envoyer ma sauvegarde » : votre progression part dans votre boîte mail, en pièce jointe.",
+    ],
+  },
+];
