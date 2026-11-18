@@ -156,11 +156,11 @@ describe("going further than the daily quota", () => {
 });
 
 describe("voir le signe", () => {
-  it("a peek brings the sign back tomorrow, gentler than Raté on ease", () => {
+  it("a peek counts as Raté: back tomorrow, ease −0.2", () => {
     const p = freshProfile();
     p.cards["あ"] = { ...newCard(), seen: true, interval: 8, reps: 3, ease: 2.5, due: T };
     peekCard(p, "あ", T);
-    expect(p.cards["あ"]).toMatchObject({ interval: 1, reps: 0, ease: 2.4, due: T + 1 });
+    expect(p.cards["あ"]).toMatchObject({ interval: 1, reps: 0, ease: 2.3, due: T + 1 });
     expect(p.log.at(-1)).toEqual({ d: T, k: "あ", g: "rate" });
   });
 

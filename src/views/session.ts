@@ -2,10 +2,10 @@ import { byK } from "../data/kana";
 import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
-import { $, el, setQuit, view } from "../ui/dom";
+import { $, el, esc, setQuit, view } from "../ui/dom";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
-import { mnemoHTML } from "../ui/mnemo";
+import { mnemoHTML, mnemoText } from "../ui/mnemo";
 import { learnSeq, modelSVG } from "../ui/model";
 import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
@@ -143,7 +143,7 @@ export function viewCard(): void {
   const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision";
   const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
   const head = `<div class="prompt"><div><div class="romaji">${K.r}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
-    <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}${recall && !it.peeked ? `<button class="btn sm" id="peek" title="Le signe reviendra plus tôt">Voir le signe</button>` : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
+    <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
 
   if (it.isNew && it.step === 1) {
     v.appendChild(
@@ -189,10 +189,26 @@ export function viewCard(): void {
     if (it.isNew) it.step = 4;
     v.appendChild(
       el(`<section class="card">${head}
+      ${it.hinted && !it.peeked ? `<div class="mnemo hint"><p><span class="ii" aria-hidden="true">i</span> ${esc(mnemoText(it.k))}</p></div>` : ""}
       <div class="stage" id="st"></div>
-      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div></section>`),
+      <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
+      ${
+        it.peeked
+          ? ""
+          : `<div class="helps"><span class="small muted">Besoin d'aide ?</span>${
+              it.hinted || !mnemoText(it.k) ? "" : `<button class="btn sm" id="hint1"><span class="ii" aria-hidden="true">i</span> L'astuce</button>`
+            }<button class="btn sm" id="peek">Voir le signe</button></div>
+      <p class="small muted" style="margin:-8px 0 0">${it.hinted ? "Astuce utilisée : la note ira au mieux jusqu'à « Bof »." : "L'astuce limite la note à « Bof » ; voir le signe compte comme « Raté »."}</p>`
+      }</section>`),
     );
     const pad = makePad($("#st"), modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
+    const h1 = document.querySelector<HTMLButtonElement>("#hint1");
+    if (h1)
+      h1.onclick = () => {
+        it.hinted = true;
+        save();
+        viewCard();
+      };
     const next = $<HTMLButtonElement>("#next");
     pad.onchange = () => (next.disabled = pad.strokes.length === 0);
     $("#undo").onclick = () => pad.undo();
@@ -207,7 +223,7 @@ export function viewCard(): void {
     const correct = (strokes: Drawing) => {
       it.strokes = strokes;
       save();
-      viewCompare(it.k, strokes, false, (g) => onGrade(it, g as Grade | "peek"), !!it.peeked);
+      viewCompare(it.k, strokes, false, (g) => onGrade(it, g as Grade | "peek"), !!it.peeked, !!it.hinted);
     };
     if (it.strokes) return correct(it.strokes);
     next.onclick = () => correct(pad.strokes.slice() as Drawing);

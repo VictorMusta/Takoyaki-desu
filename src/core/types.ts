@@ -76,6 +76,8 @@ export interface Profile {
   hist?: Record<number, number>;
   /** Vocabulary track: one card per word (meaning known), keyed by the word in kana. */
   words?: Record<string, Card>;
+  /** The learner's own memory hooks, by sign (they replace the app's). */
+  mnemos?: Record<string, string>;
 }
 
 export interface AppState {
@@ -94,6 +96,8 @@ export interface QueueItem {
   practice?: boolean;
   /** The learner looked at the sign during this recall. */
   peeked?: boolean;
+  /** The learner read the memory hook during this recall (grade capped at Bof). */
+  hinted?: boolean;
   /** Strokes waiting for correction: closing the app on the comparison resumes there. */
   strokes?: Drawing;
   /** Not a drawing: another kind of exercise (choose, listen, words…). */

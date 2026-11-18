@@ -326,3 +326,8 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .mnemo .ii{display:inline-flex;width:20px;height:20px;flex:none;align-items:center;justify-content:center;border:1px solid var(--wood);border-radius:50%;font-family:var(--display);font-style:italic;font-size:13px;line-height:1}
 .mnemo[open] .ii{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .mnemo p{margin:8px 0 0;font-size:15px;line-height:1.7}
+.helps{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.helps .ii,.btn .ii{display:inline-flex;width:16px;height:16px;align-items:center;justify-content:center;border:1px solid currentColor;border-radius:50%;font-family:var(--display);font-style:italic;font-size:11px;line-height:1;vertical-align:-2px}
+.mnemo.hint{border-top:var(--hair);border-bottom:var(--hair);padding:8px 0}
+.mnemo.hint p{margin:0;font-size:15px;line-height:1.6}
+.own summary{cursor:pointer;font-size:13px;color:var(--wood)}

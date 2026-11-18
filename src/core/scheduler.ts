@@ -55,12 +55,12 @@ export function gradeCard(p: Profile, k: string, g: Grade, t: number): void {
 }
 
 /**
- * « Voir le signe » during recall: looking proves the sign isn't known yet.
- * Gentler than Raté on ease (−0.1), but back to a 1-day interval; logged as Raté.
+ * « Voir le signe » during recall: looking proves the sign isn't known yet,
+ * so it counts as Raté (ease −0.2, back to a 1-day interval).
  */
 export function peekCard(p: Profile, k: string, t: number): void {
   const c = cardOf(p, k);
-  c.ease = Math.max(1.3, c.ease - 0.1);
+  c.ease = Math.max(1.3, c.ease - 0.2);
   c.reps = 0;
   c.interval = 1;
   c.due = t + 1;

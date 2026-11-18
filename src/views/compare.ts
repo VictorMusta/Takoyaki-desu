@@ -17,7 +17,8 @@ type Answer = Grade | "ok" | "ko" | "peek";
  * Exam: « Correct » needs three yes. Lesson: the questions are optional; a « Non » blocks « Bien ».
  */
 /** peeked: the learner looked at the sign while recalling it; no self-grade, it simply comes back sooner. */
-export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false): void {
+/** hinted: the memory hook was read during recall, so « Bien » is out of reach (Bof at best). */
+export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false, hinted = false): void {
   const K = byK[k];
   const show = profile().settings.showNums;
   const prof = profile();
@@ -40,13 +41,13 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       <div class="q${own ? " hidden" : ""}"><span>Ordre et sens des traits respectés ?</span><div class="yn" data-q="o"><button class="y">Oui</button><button class="n">Non</button></div></div>
       <div class="q"><span>Forme et proportions correctes ?</span><div class="yn" data-q="p"><button class="y">Oui</button><button class="n">Non</button></div></div>
     </details>
-    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
+    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain." : exam ? "Répondez aux trois questions pour noter." : hinted ? "Astuce utilisée : au mieux « Bof »." : "Notez directement, ou vérifiez d'abord avec les questions."}</p>
     ${
       peeked
-        ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer</button></div>`
+        ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer (compte comme Raté)</button></div>`
         : exam
         ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
-        : `<div class="grades"><button class="btn g-rate" data-g="rate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
+        : `<div class="grades"><button class="btn g-rate" data-g="rate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Raté</button><button class="btn g-bof" data-g="bof"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5L21.5 20H2.5Z"/></svg>Bof</button><button class="btn g-bien" data-g="bien"${hinted ? " disabled" : ""}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Bien</button></div>`
     }
     </div>
   </section>`),
@@ -102,10 +103,10 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       if (own) {
         delete prof.variants[k];
         save();
-        return viewCompare(k, strokes, exam, onAnswer, peeked);
+        return viewCompare(k, strokes, exam, onAnswer, peeked, hinted);
       }
       // « Moi je le fais pas comme ça »: draw it your way and send it to the author.
-      viewFeedback(k, () => viewCompare(k, strokes, exam, onAnswer, peeked));
+      viewFeedback(k, () => viewCompare(k, strokes, exam, onAnswer, peeked, hinted));
     };
   const btn = (g: string) => $<HTMLButtonElement>(`[data-g="${g}"]`, v);
   const update = () => {
@@ -122,8 +123,9 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     // Outside the exam the questions are optional: grade straight away,
     // but a « Non » given to one of them still blocks « Bien ».
     const no = ans.n === false || ans.o === false || ans.p === false;
-    btn("bien").disabled = no;
-    if (ans.n === false || ans.p === false) hint.textContent = "Nombre de traits ou forme incorrecte : « Bien » est bloqué.";
+    btn("bien").disabled = no || hinted;
+    if (hinted && !no) hint.textContent = "Astuce utilisée : au mieux « Bof ».";
+    else if (ans.n === false || ans.p === false) hint.textContent = "Nombre de traits ou forme incorrecte : « Bien » est bloqué.";
     else if (ans.o === false) hint.textContent = "Ordre ou sens faux : animation rejouée, note plafonnée à « Bof ».";
     else hint.textContent = "Notez directement, ou vérifiez d'abord avec les questions.";
   };
