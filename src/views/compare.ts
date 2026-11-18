@@ -9,6 +9,7 @@ import { today } from "../core/scheduler";
 import { compact, viewFeedback } from "./feedback";
 import { checkDrawing, explain } from "../core/strokecheck";
 import { mailTo } from "../config";
+import { buzz } from "../ui/haptics";
 import { mnemoHTML } from "../ui/mnemo";
 import { save } from "../core/store";
 
@@ -150,5 +151,13 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       update();
     };
   update();
-  v.querySelectorAll<HTMLButtonElement>("[data-g]").forEach((b) => (b.onclick = () => onAnswer(b.dataset.g as Answer)));
+  if (chk) buzz(okAll ? "ok" : "ko");
+  const feel: Record<string, "ok" | "soft" | "ko"> = { bien: "ok", ok: "ok", bof: "soft", rate: "ko", ko: "ko", peek: "ko" };
+  v.querySelectorAll<HTMLButtonElement>("[data-g]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        buzz(feel[b.dataset.g!] ?? "ok");
+        onAnswer(b.dataset.g as Answer);
+      }),
+  );
 }

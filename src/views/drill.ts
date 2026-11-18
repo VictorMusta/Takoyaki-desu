@@ -1,3 +1,4 @@
+import { buzz } from "../ui/haptics";
 import { byK } from "../data/kana";
 import { isHira, TEXTS, type Text } from "../data/texts";
 import { knownSigns, type Drill } from "../core/drills";
@@ -38,6 +39,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
   const sayBtn = card.querySelector<HTMLButtonElement>("#say");
   if (sayBtn) sayBtn.onclick = () => speak(d.say!);
   const next = (ok: boolean, missed: string[], note = "") => {
+    buzz(ok ? "ok" : "ko");
     const end = el(`<div class="drill-end"><p class="${ok ? "good" : "bad"}">${ok ? "Juste." : "Pas tout à fait."}${note ? " " + note : ""}</p><button class="btn primary big" id="cont">Continuer</button></div>`);
     body.appendChild(end);
     $<HTMLButtonElement>("#cont", end).onclick = () => done(ok, missed);

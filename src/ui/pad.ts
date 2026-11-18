@@ -1,4 +1,6 @@
 import { cssVar } from "./dom";
+import { brushPath, getStrokeStyle } from "./brush";
+import { buzz } from "./haptics";
 import type { Point, Stroke } from "./model";
 
 export interface Pad {
@@ -32,7 +34,13 @@ export function makePad(stage: HTMLElement, underSVG: string): Pad {
     ctx.lineJoin = "round";
     ctx.lineWidth = 4.2 * s;
     ctx.strokeStyle = cssVar("--ink");
+    ctx.fillStyle = cssVar("--ink");
+    const brush = getStrokeStyle() === "brush";
     for (const st of cur ? [...strokes, cur] : strokes) {
+      if (brush) {
+        ctx.fill(new Path2D(brushPath(st, s)));
+        continue;
+      }
       ctx.beginPath();
       st.forEach((p, i) => (i ? ctx.lineTo(p[0] * s, p[1] * s) : ctx.moveTo(p[0] * s, p[1] * s)));
       if (st.length === 1) ctx.lineTo(st[0][0] * s + 0.1, st[0][1] * s);
@@ -55,6 +63,7 @@ export function makePad(stage: HTMLElement, underSVG: string): Pad {
     pid = e.pointerId;
     cv.setPointerCapture(pid);
     cur = [pt(e)];
+    buzz("tick");
     draw();
     e.preventDefault();
   });

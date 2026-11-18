@@ -1,3 +1,4 @@
+import { buzz } from "../ui/haptics";
 import { byK } from "../data/kana";
 import { WORDS } from "../data/words";
 import { LOOKALIKES, shuffle } from "../core/drills";
@@ -54,6 +55,7 @@ export function viewWord(it: QueueItem, head: string, onStep: () => void, done: 
 const verdict = (g: Grade) => (g === "bien" ? "Juste." : g === "bof" ? "À moitié." : "Pas encore.");
 
 function finish(body: HTMLElement, g: Grade, note: string, done: (g: Grade) => void): void {
+  buzz(g === "bien" ? "ok" : g === "bof" ? "soft" : "ko");
   const end = el(`<div class="drill-end"><p class="${g === "rate" ? "bad" : "good"}">${verdict(g)} ${note}</p><button class="btn primary big">Continuer</button></div>`);
   body.appendChild(end);
   const b = end.querySelector("button")!;

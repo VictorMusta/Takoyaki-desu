@@ -7,6 +7,8 @@ import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
 import { mailTo } from "../config";
 import { route } from "../router";
+import { getStrokeStyle, setStrokeStyle, type StrokeStyle } from "../ui/brush";
+import { buzz, canVibrate, getHaptics, setHaptics } from "../ui/haptics";
 import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup } from "../core/backup";
 
 export function viewSettings(): void {
@@ -168,11 +170,28 @@ export function viewSettings(): void {
   /* ---- appearance (this device) ---- */
   const th = getTheme();
   const thOpt = (val: Theme, label: string) => `<button class="btn" data-th="${val}" aria-pressed="${th === val}">${label}</button>`;
+  const stOpt = (s: StrokeStyle, label: string) => `<button class="btn" data-st="${s}" aria-pressed="${getStrokeStyle() === s}">${label}</button>`;
   v.appendChild(
     el(`<section class="card"><h3>Apparence</h3>
     <div class="seg" role="group" aria-label="Thème">${thOpt("auto", "Automatique")}${thOpt("light", "Papier")}${thOpt("dark", "Nuit")}</div>
-    <p class="small muted" style="margin:0">Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.</p></section>`),
+    <p class="small muted" style="margin:0">Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.</p>
+    <h3 style="margin-top:8px">Trait</h3>
+    <div class="seg" role="group" aria-label="Rendu du trait">${stOpt("brush", "Pinceau")}${stOpt("plain", "Simple")}</div>
+    <p class="small muted" style="margin:0">Pinceau : le trait s'affine au départ, à l'arrivée et quand la main va vite. Simple : un trait régulier, le plus lisible.</p>
+    ${canVibrate() ? `<label class="field" for="hap">Vibrations <input type="checkbox" id="hap" ${getHaptics() ? "checked" : ""}></label><p class="small muted" style="margin:0">Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.</p>` : ""}</section>`),
   );
+  v.querySelectorAll<HTMLButtonElement>("[data-st]").forEach((b) => {
+    b.onclick = () => {
+      setStrokeStyle(b.dataset.st as StrokeStyle);
+      v.querySelectorAll("[data-st]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    };
+  });
+  const hap = v.querySelector<HTMLInputElement>("#hap");
+  if (hap)
+    hap.onchange = () => {
+      setHaptics(hap.checked);
+      if (hap.checked) buzz("ok");
+    };
   v.querySelectorAll<HTMLButtonElement>("[data-th]").forEach((b) => {
     b.onclick = () => {
       setTheme(b.dataset.th as Theme);
