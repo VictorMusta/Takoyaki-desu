@@ -340,3 +340,5 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .verdict li{margin:2px 0}
 .scripth{grid-column:1/-1;margin:16px 0 0;font-family:var(--f-title, inherit)}
 .scripth:first-child{margin-top:0}
+.today{border-left:2px solid var(--kin);padding:4px 0 4px 16px;display:flex;flex-direction:column;gap:4px}
+.today .up{color:var(--take);font-weight:500}

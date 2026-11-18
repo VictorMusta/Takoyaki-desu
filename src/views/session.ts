@@ -33,6 +33,12 @@ function cur(): SavedSession | null {
   return p.session;
 }
 
+/** One more exercise for today's activity (drills, free practice, words). */
+function countEx(): void {
+  const d = dayRec(profile(), today());
+  d.ex = (d.ex ?? 0) + 1;
+}
+
 function tally(s: SavedSession, key: keyof SessionStats): void {
   s.stats ??= { bien: 0, bof: 0, rate: 0, vu: 0, ok: 0, ko: 0 };
   s.stats[key]++;
@@ -114,6 +120,7 @@ export function viewCard(): void {
       const s = cur();
       if (!s) return;
       tally(s, g);
+      countEx();
       gradeWord(profile(), it.k, g, today(), it.isNew && !it.counted);
       it.counted = true;
       if (g === "rate") requeue(s, { k: it.k, isNew: false, word: true, counted: true, step: 2 });
@@ -131,6 +138,7 @@ export function viewCard(): void {
       // Like free practice: a miss brings the signs back sooner, a success changes nothing.
       if (!ok) missed.forEach((k) => pullForward(profile(), k, today()));
       tally(s, ok ? "ok" : "ko");
+      countEx();
       s.i++;
       save();
       viewCard();
@@ -247,6 +255,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
   tally(session, g === "peek" ? "vu" : g);
   const p = profile(), t = today(), d = dayRec(p, t);
   if (it.practice) {
+    countEx();
     // Free practice never pushes a date away; a miss or a peek brings the sign back tomorrow.
     if (g === "rate" || g === "peek") {
       pullForward(p, it.k, t);

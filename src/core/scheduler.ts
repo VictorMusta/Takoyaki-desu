@@ -3,9 +3,12 @@ import type { Card, DayRec, Grade, Profile, QueueItem } from "./types";
 
 export const DAY_MS = 864e5;
 
-/** Local day number (days since the epoch, in the device's time zone). */
+/** The learning day changes at 4 a.m., not at midnight: a late evening still counts for the evening's day. */
+export const DAY_START_H = 4;
+
+/** Local day number (days since the epoch, in the device's time zone, starting at 4 a.m.). */
 export function today(now: number = Date.now(), tzOffsetMin: number = new Date(now).getTimezoneOffset()): number {
-  return Math.floor((now - tzOffsetMin * 6e4) / DAY_MS);
+  return Math.floor((now - tzOffsetMin * 6e4 - DAY_START_H * 36e5) / DAY_MS);
 }
 
 export function newCard(): Card {
@@ -182,7 +185,7 @@ export function practiceQueue(p: Profile, n = 10, rnd: () => number = Math.rando
 export function streak(p: Profile, t: number): number {
   const active = (d: number) => {
     const r = p.days[d];
-    return !!r && r.rv + r.nw > 0;
+    return !!r && r.rv + r.nw + (r.ex ?? 0) > 0;
   };
   let s = 0;
   let d = active(t) ? t : t - 1;

@@ -26,6 +26,8 @@ export interface DayRec {
   bonus?: number;
   /** New words started today. */
   nwW?: number;
+  /** Exercises answered and words practised today (any kind, lesson or free). */
+  ex?: number;
 }
 
 export interface LogEntry {

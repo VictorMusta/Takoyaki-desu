@@ -31,6 +31,13 @@ describe("today", () => {
     const utc = Date.UTC(2026, 10, 17, 23, 30);
     expect(today(utc, -540)).toBe(today(Date.UTC(2026, 10, 18, 12), 0));
   });
+  it("changes day at 4 a.m.: 00:10 still belongs to the evening before", () => {
+    // 00:10 and 03:59 in Tokyo on the 19th = 15:10 and 18:59 UTC on the 18th.
+    const evening = today(Date.UTC(2026, 10, 18, 12), -540); // 21:00 on the 18th
+    expect(today(Date.UTC(2026, 10, 18, 15, 10), -540)).toBe(evening);
+    expect(today(Date.UTC(2026, 10, 18, 18, 59), -540)).toBe(evening);
+    expect(today(Date.UTC(2026, 10, 18, 19, 1), -540)).toBe(evening + 1);
+  });
 });
 
 describe("applyGrade (SM-2 simplifié)", () => {

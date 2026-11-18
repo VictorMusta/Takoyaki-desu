@@ -1,5 +1,7 @@
-import { LINES, lineLabel } from "../data/kana";
-import { buildQueue, dayRec, today } from "../core/scheduler";
+import { isKata, KANA, LINES, lineLabel } from "../data/kana";
+import { alphabetMastery, buildQueue, dayRec, kataStarted, recordMastery, streak, today } from "../core/scheduler";
+import { save } from "../core/store";
+import type { DayRec, Profile } from "../core/types";
 import { buildWordQueue } from "../core/vocab";
 import { memoryOnly, profile, state } from "../core/store";
 import { $, $opt, el, esc, showWave, view } from "../ui/dom";
@@ -25,7 +27,8 @@ export function viewHome(): void {
       <div class="stat"><b>${nWords}</b><span>mots</span></div>
     </div>
     ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
-    <p class="muted small" style="margin:0">Aujourd'hui : ${d.nw} nouveau(x), ${d.rv} révision(s). Ligne en cours : ${lineLabel(LINES[p.unlocked - 1])}.</p>
+    ${progressLine(p, t, d)}
+    <p class="muted small" style="margin:0">Ligne en cours : ${lineLabel(LINES[p.unlocked - 1])}.</p>
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
   );
@@ -62,4 +65,29 @@ export function viewHome(): void {
   if (go) go.onclick = () => startSession("day");
   const more = $opt<HTMLElement>("#more");
   if (more) continueBlock(more, startSession);
+}
+
+const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`;
+const activity = (r?: DayRec) => {
+  if (!r) return "";
+  const parts = [r.nw && plural(r.nw, "nouveau signe", "nouveaux signes"), r.nwW && plural(r.nwW, "nouveau mot", "nouveaux mots"), r.rv && plural(r.rv, "révision", "révisions"), r.ex && plural(r.ex, "exercice", "exercices")].filter(Boolean);
+  return parts.join(", ");
+};
+
+/** What was done today (or yesterday), the streak, and how much the alphabet moved. */
+function progressLine(p: Profile, t: number, d: DayRec): string {
+  recordMastery(p, t);
+  save();
+  const kata = kataStarted(p);
+  const m = Math.round(alphabetMastery(p, t, kata) * 100);
+  const h = (kata ? p.histK : p.hist) ?? {};
+  const prev = Object.entries(h).filter(([k]) => +k < t).sort((a, b) => +a[0] - +b[0]).pop()?.[1];
+  const gain = prev === undefined ? 0 : Math.round(m - prev);
+  const s = streak(p, t);
+  const pool = KANA.filter((k) => isKata(k.k) === kata), total = pool.length, seen = pool.filter((k) => p.cards[k.k]?.seen).length;
+  const now = activity(d), before = activity(p.days[t - 1]);
+  return `<div class="today">
+    <p style="margin:0">${now ? `Aujourd'hui : ${now}.` : before ? `Hier : ${before}.` : "Pas encore d'activité aujourd'hui."}</p>
+    <p class="small" style="margin:0">${seen} ${kata ? "katakana" : "hiragana"} découverts sur ${total} · maîtrise ${m} %${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
+  </div>`;
 }
