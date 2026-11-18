@@ -294,3 +294,6 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .look-panneau.hl b,.look-quai.hl b{border-bottom-color:var(--beni)}
 .quit{white-space:nowrap}
 .reading{margin:0 0 4px;text-align:center;font-family:var(--display);font-size:24px;letter-spacing:.04em}
+.wbtn{all:unset;cursor:pointer;font-family:var(--hand);font-weight:600;font-size:22px}
+.wbtn mark{background:none;color:inherit;border-bottom:1.5px solid var(--beni)}
+.wbtn:focus-visible{outline:2px solid var(--beni)}
