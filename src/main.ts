@@ -1,3 +1,4 @@
+import "./fonts.css";
 import "./styles.css";
 import { checkUnlock } from "./core/scheduler";
 import { state } from "./core/store";
