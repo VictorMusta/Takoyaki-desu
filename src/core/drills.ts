@@ -137,7 +137,9 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
     }
     case "combo": {
       const all = combos(p), c = pick(all, rnd);
-      const wrong = shuffle(all.filter((x) => x !== c), rnd).slice(0, 3);
+      // Wrong readings: other sounds only (きゃ and キャ both read « kya »).
+      const wrong: string[] = [];
+      for (const x of shuffle(all, rnd)) if (wrong.length < 3 && ![c, ...wrong].some((y) => toRomaji(y) === toRomaji(x))) wrong.push(x);
       return { type, ks: [...c], prompt: c, options: shuffle([c, ...wrong].map(toRomaji), rnd), answer: toRomaji(c), say: c };
     }
     case "duel": {

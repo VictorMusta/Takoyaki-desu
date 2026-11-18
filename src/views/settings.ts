@@ -30,7 +30,7 @@ export function viewSettings(): void {
     <div class="plist">${rows}</div>
     <form id="addf" class="row" novalidate>
       <label class="sr-only" for="pn">Prénom du nouveau profil</label>
-      <input id="pn" class="text" placeholder="Prénom du nouveau profil" maxlength="24">
+      <input id="pn" class="text" aria-label="Prénom du nouveau profil" placeholder="Prénom du nouveau profil" maxlength="24">
       <button class="btn" type="submit">Ajouter</button>
     </form>
     <p class="err hidden" id="pe" role="alert"></p>

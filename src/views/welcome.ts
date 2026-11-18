@@ -15,7 +15,7 @@ export function viewWelcome(): void {
     <p class="small muted" style="margin:0">Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Quelques minutes par jour suffisent. Chaque personne a son propre profil, et vous pouvez en créer plusieurs sur ce téléphone.</p>
     <form id="f" novalidate style="display:flex;flex-direction:column;gap:16px">
       <label class="sr-only" for="name">Votre prénom</label>
-      <input id="name" class="text" placeholder="Votre prénom" autocomplete="given-name" maxlength="24" required>
+      <input id="name" class="text" aria-label="Votre prénom" placeholder="Votre prénom" autocomplete="given-name" maxlength="24" required>
       <h3>Votre rythme</h3>
       ${paceHTML(10)}
       <p class="small muted" style="margin:0">Vous pourrez le changer dans Réglages, et toujours continuer après la séance du jour.</p>

@@ -56,7 +56,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .seal{display:inline-flex;width:28px;height:28px;flex:none;align-items:center;justify-content:center;background:var(--beni-fill);color:#F2EADB;font-family:var(--display);font-weight:500;font-size:19px;line-height:1;border-radius:2px}
 .brand .name{font-family:var(--display);font-weight:500;font-size:24px;line-height:1.2}
 .prof{display:flex;min-width:0}
-.who{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:transparent;border:0;border-bottom:var(--hair);border-radius:0;padding:4px 20px 4px 0;max-width:150px;appearance:none;text-overflow:ellipsis;
+.who{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:transparent;border:0;border-bottom:var(--hair);border-radius:0;padding:4px 20px 4px 0;max-width:min(150px,36vw);min-width:0;appearance:none;text-overflow:ellipsis;
   background-image:linear-gradient(45deg,transparent 50%,var(--wood) 50%),linear-gradient(135deg,var(--wood) 50%,transparent 50%);background-position:calc(100% - 9px) 55%,calc(100% - 5px) 55%;background-size:4px 4px;background-repeat:no-repeat}
 .who option{background:var(--card);color:var(--ink)}
 
