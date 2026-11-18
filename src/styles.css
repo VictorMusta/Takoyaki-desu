@@ -124,7 +124,7 @@ nav a[aria-current="page"] b{color:var(--beni)}
 .cell.learn{background:var(--tile-learn);border:1.5px solid var(--ink);color:var(--ink)}
 .cell.done{background:var(--kin);border:1.5px solid var(--kin);color:var(--on-kin)}
 .cell.done::after{content:"極";position:absolute;top:2px;right:3px;font-family:var(--display);font-weight:500;font-size:9px;line-height:1}
-.cell.locked{opacity:.3}
+.cell.locked{opacity:.68}.cell.locked small{visibility:hidden}
 .legend .cell{font-style:normal;display:inline-flex;width:28px;height:28px;aspect-ratio:auto;font-size:14px;cursor:default;vertical-align:middle;margin-right:8px}
 .legend .cell.done::after{font-size:6px;top:1px;right:1px}
 .cell.empty{visibility:hidden}

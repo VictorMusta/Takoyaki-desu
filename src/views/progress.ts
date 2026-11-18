@@ -27,7 +27,7 @@ export function viewProgress(): void {
         return;
       }
       const k = cs[s], st = status(p, k.k), m = Math.round(mastery(p, k.k, t) * 100);
-      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}" aria-label="Fiche de ${k.k}, maîtrise ${m} %">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small></button>`;
+      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
     });
   });
   const done = KANA.filter((k) => status(p, k.k) === "done").length;
