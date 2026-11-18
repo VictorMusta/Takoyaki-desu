@@ -7,6 +7,7 @@ import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
 import { mailTo } from "../config";
 import { route } from "../router";
+import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup } from "../core/backup";
 
 export function viewSettings(): void {
   const p = profile(), v = view();
@@ -202,9 +203,14 @@ export function viewSettings(): void {
   /* ---- backup ---- */
   v.appendChild(
     el(`<section class="card"><h3>Sauvegarde</h3>
-    <p class="small muted" style="margin:0">Tous les profils de ce téléphone tiennent dans ce texte. Copiez-le de temps en temps pour ne rien perdre, ou pour tout transférer sur un autre appareil. Importer remplace les données actuelles.</p>
+    <p class="small muted" style="margin:0">Votre progression (tous les profils) ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps : choisissez votre appli de mail dans le menu de partage, et mettez votre propre adresse. Il ne contient que votre progression, rien de personnel.</p>
+    <p class="small" style="margin:0">${everBackedUp() ? `Dernière sauvegarde : il y a ${daysSinceBackup()} jour(s).` : "Aucune sauvegarde pour l'instant."}${persisted === true ? " Stockage protégé : le navigateur ne l'effacera pas de lui-même." : persisted === false ? " Le navigateur peut effacer ces données s'il manque de place : installez l'appli sur l'écran d'accueil pour les protéger." : ""}</p>
+    <button class="btn primary big" id="bksend">M'envoyer ma sauvegarde</button>
+    <div class="row"><button class="btn" id="bkdl">Télécharger le fichier</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,application/json,text/plain" class="hidden"></div>
+    <details><summary class="small">Par copier-coller</summary>
+    <p class="small muted" style="margin:8px 0 0">Les mêmes données en texte. Importer remplace les données actuelles.</p>
     <textarea id="exp" aria-label="Données de progression"></textarea>
-    <div class="row"><button class="btn" id="cp">Copier les données</button><button class="btn" id="im">Importer le texte collé</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,application/json" class="hidden"></div>
+    <div class="row"><button class="btn" id="cp">Copier les données</button><button class="btn" id="im">Importer le texte collé</button></div></details>
     <p class="small muted hidden" id="msg" role="status"></p></section>`),
   );
   const exp = $<HTMLTextAreaElement>("#exp");
@@ -228,6 +234,15 @@ export function viewSettings(): void {
     else msg("Ce texte n'est pas une sauvegarde valide.");
   };
   $("#im").onclick = () => imp(exp.value);
+  $("#bksend").onclick = async () => {
+    const r = await sendBackup();
+    if (r === "shared") msg("Sauvegarde envoyée. Pour la restaurer : « Importer un fichier » avec la pièce jointe.");
+    else if (r === "downloaded") msg("Partage de fichier indisponible ici : le fichier est téléchargé.");
+  };
+  $("#bkdl").onclick = () => {
+    downloadBackup();
+    msg("Fichier téléchargé.");
+  };
   $<HTMLInputElement>("#file").onchange = (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) f.text().then(imp);

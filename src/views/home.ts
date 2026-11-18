@@ -2,11 +2,12 @@ import { LINES } from "../data/kana";
 import { buildQueue, dayRec, today } from "../core/scheduler";
 import { buildWordQueue } from "../core/vocab";
 import { memoryOnly, profile, state } from "../core/store";
-import { $opt, el, esc, showWave, view } from "../ui/dom";
+import { $, $opt, el, esc, showWave, view } from "../ui/dom";
 import { startSession } from "./session";
 import { continueBlock } from "./more";
 import { available, MODES } from "../core/drills";
 import { startDrills } from "./session";
+import { backupDue, daysSinceBackup, everBackedUp, sendBackup, snoozeBackup } from "../core/backup";
 
 export function viewHome(): void {
   const p = profile(), t = today();
@@ -28,6 +29,23 @@ export function viewHome(): void {
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
   );
+  if (backupDue()) {
+    const n = daysSinceBackup();
+    const bk = el(`<section class="card backup-nag"><h3>Mettre votre progression à l'abri</h3>
+      <p class="small" style="margin:0">${everBackedUp() ? `Dernière sauvegarde il y a ${n} jours.` : "Aucune sauvegarde pour l'instant."} Elle ne vit que dans ce téléphone : envoyez-vous le fichier par mail, il suffira de l'importer pour tout retrouver.</p>
+      <div class="row"><button class="btn primary" id="bk">M'envoyer ma sauvegarde</button><button class="btn" id="bkl">Plus tard</button></div>
+      <p class="small muted hidden" id="bkm" role="status" style="margin:0"></p></section>`);
+    v.appendChild(bk);
+    $<HTMLButtonElement>("#bk").onclick = async () => {
+      const r = await sendBackup();
+      if (r === "cancelled") return;
+      bk.innerHTML = `<p class="small" style="margin:0">${r === "shared" ? "Merci ! Gardez ce mail : prochain rappel dans une semaine." : "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine."}</p>`;
+    };
+    $<HTMLButtonElement>("#bkl").onclick = () => {
+      snoozeBackup();
+      bk.remove();
+    };
+  }
   v.appendChild(
     el(`<section class="card"><details><summary>Comment ça marche</summary>
     <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${LINES[p.unlocked - 1]} » tient au moins 3 jours.</p></details></section>`),
