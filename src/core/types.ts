@@ -85,8 +85,16 @@ export interface Profile {
 }
 
 export interface AppState {
+  /** Data format version (see core/migrations.ts); absent means 1. */
+  v?: number;
   active: string;
   profiles: Record<string, Profile>;
+}
+
+/** A backup file: the state plus when and by which version it was made. */
+export interface Backup extends AppState {
+  exportedAt?: string;
+  appVersion?: string;
 }
 
 export interface QueueItem {

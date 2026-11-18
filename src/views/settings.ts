@@ -1,5 +1,5 @@
 import { KANA, LINES } from "../data/kana";
-import { addProfile, deleteProfile, exportState, importState, profile, profileNames, renameProfile, save, setActive, state } from "../core/store";
+import { addProfile, deleteProfile, exportState, importState, profile, profileNames, readBackup, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
 import { confirmModal } from "../ui/modal";
@@ -250,9 +250,19 @@ export function viewSettings(): void {
       msg("Copie bloquée : le texte est sélectionné, copiez-le à la main.");
     }
   };
-  const imp = (txt: string) => {
-    if (importState(txt)) refresh();
-    else msg("Ce texte n'est pas une sauvegarde valide.");
+  // Import: say what the backup holds and when it was made, then ask before replacing anything.
+  const imp = async (txt: string) => {
+    const b = readBackup(txt);
+    if (!b) return msg("Ce texte n'est pas une sauvegarde valide.");
+    if (b.newer) return msg("Cette sauvegarde vient d'une version plus récente de l'appli : mettez d'abord l'appli à jour (fermez-la et rouvrez-la).");
+    const when = b.exportedAt ? new Date(b.exportedAt).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" }) : "date inconnue";
+    const who = Object.entries(b.state.profiles).map(([n, pr]) => `${esc(n)} (${Object.values(pr.cards).filter((c) => c.seen).length} signes vus)`).join(", ");
+    const ok = await confirmModal({
+      title: "Restaurer cette sauvegarde ?",
+      body: `<p style="margin:0">Sauvegarde du ${when}.</p><p class="small" style="margin:0">Profils : ${who || "aucun"}.</p><p class="small muted" style="margin:0">Elle remplace toutes les données de ce téléphone.</p>`,
+      ok: "Restaurer",
+    });
+    if (ok && importState(txt)) refresh();
   };
   $("#im").onclick = () => imp(exp.value);
   $("#bksend").onclick = async () => {

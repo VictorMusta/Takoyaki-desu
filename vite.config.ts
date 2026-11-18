@@ -1,9 +1,11 @@
 import { defineConfig } from "vitest/config";
 import { VitePWA } from "vite-plugin-pwa";
+import pkg from "./package.json";
 
 // Relative base: the app works at any path (GitHub Pages serves it under /<repo>/).
 export default defineConfig({
   base: "./",
+  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [
     VitePWA({
       registerType: "prompt", // src/pwa.ts decides when to apply an update (never mid-session)
