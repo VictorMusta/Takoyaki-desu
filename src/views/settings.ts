@@ -68,7 +68,9 @@ export function viewSettings(): void {
             else refresh();
           };
           $("[data-ok]", row).onclick = ok;
-          inp.onkeydown = (e) => e.key === "Enter" && ok();
+          inp.onkeydown = (e) => {
+            if (e.key === "Enter") ok();
+          };
           $("[data-no]", row).onclick = () => viewSettings();
         } else if (act === "del") {
           row.innerHTML = `<span class="pn">Supprimer ${esc(name)} et toute sa progression ?</span><button class="btn sm danger" data-ok>Supprimer</button><button class="btn sm" data-no>Annuler</button>`;

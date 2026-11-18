@@ -99,7 +99,10 @@ function readWord(body: HTMLElement, w: string, r: string, fr: string, done: (g:
     };
   };
   $("#chk", body).onclick = check;
-  inp.onkeydown = (e) => e.key === "Enter" && check();
+  // A handler must not return false: that would cancel every key (Backspace included).
+  inp.onkeydown = (e) => {
+    if (e.key === "Enter") check();
+  };
 }
 
 /** Meaning shown: rebuild the word from its signs mixed with look-alikes. */
