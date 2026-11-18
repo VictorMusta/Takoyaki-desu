@@ -68,6 +68,8 @@ export interface Profile {
   fluent?: { since: number; backup: Omit<Profile, "fluent"> };
   /** Signs written the learner's own way (fluent mode): stroke count and order are not checked. */
   variants?: Record<string, true>;
+  /** Alphabet mastery in %, one value per day (for the curve in Progrès). */
+  hist?: Record<number, number>;
 }
 
 export interface AppState {

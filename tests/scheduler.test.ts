@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { lineCards } from "../src/data/kana";
 import {
+  alphabetMastery,
   applyGrade,
+  mastery,
+  recordMastery,
   dueCount,
   peekCard,
   practiceQueue,
@@ -169,5 +172,37 @@ describe("voir le signe", () => {
     p.cards["い"] = { ...newCard(), seen: true, interval: 1, reps: 0, due: T };
     pullForward(p, "い", T);
     expect(p.cards["い"].due).toBe(T);
+  });
+});
+
+describe("mastery", () => {
+  it("grows with how long a sign is remembered, 100 % at 7 days", () => {
+    const p = freshProfile();
+    const at = (interval: number) => {
+      p.cards["あ"] = { ...newCard(), seen: true, interval, due: T + interval };
+      return Math.round(mastery(p, "あ", T) * 100);
+    };
+    expect(at(1)).toBe(33);
+    expect(at(3)).toBe(67);
+    expect(at(7)).toBe(100);
+    expect(at(30)).toBe(100);
+    delete p.cards["あ"];
+    expect(mastery(p, "あ", T)).toBe(0);
+  });
+
+  it("fades when a review is left waiting, never below half", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 3, due: T };
+    const fresh = mastery(p, "あ", T);
+    expect(mastery(p, "あ", T + 3)).toBeLessThan(fresh);
+    expect(mastery(p, "あ", T + 100)).toBeCloseTo(fresh / 2);
+  });
+
+  it("alphabet mastery averages the 46 signs and is recorded per day", () => {
+    const p = freshProfile();
+    p.cards["あ"] = { ...newCard(), seen: true, interval: 7, due: T + 7 };
+    expect(alphabetMastery(p, T)).toBeCloseTo(1 / 46);
+    recordMastery(p, T);
+    expect(p.hist![T]).toBe(2.2);
   });
 });

@@ -1,5 +1,5 @@
 import { byK } from "../data/kana";
-import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, status, today } from "../core/scheduler";
+import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
 import { $, el, setQuit, view } from "../ui/dom";
@@ -248,6 +248,8 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
 function viewEnd(practice = false, st?: SessionStats): void {
   setQuit(null);
   const p = profile(), t = today();
+  recordMastery(p, t);
+  save();
   const s = st ?? { bien: 0, bof: 0, rate: 0, vu: 0, ok: 0, ko: 0 };
   const drawn = s.bien + s.bof + s.rate + s.vu, ex = s.ok + s.ko;
   const day = p.log.filter((x) => x.d === t).length;

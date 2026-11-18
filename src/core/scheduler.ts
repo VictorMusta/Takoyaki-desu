@@ -95,6 +95,30 @@ export function status(p: Profile, k: string): Status {
   return c.interval >= 7 ? "done" : "learn";
 }
 
+/**
+ * Mastery of a sign, 0–1: how long it is remembered, up to the « maîtrisé » mark (7 days).
+ * 1 day ≈ 33 %, 3 days ≈ 67 %, 7 days and more = 100 %. A miss (interval back to 1) lowers it,
+ * and a review left waiting well past its date slowly lowers it too (memory fades).
+ */
+export function mastery(p: Profile, k: string, t: number): number {
+  const c = p.cards[k];
+  if (!c?.seen) return 0;
+  let m = Math.min(1, Math.log(1 + c.interval) / Math.log(8));
+  const late = t - (c.due ?? t);
+  if (late > 0) m *= Math.max(0.5, 1 - late / (2 * Math.max(1, c.interval)));
+  return m;
+}
+
+/** Mastery of the whole alphabet (46 signs, unseen ones count as 0), 0–1. */
+export function alphabetMastery(p: Profile, t: number): number {
+  return KANA.reduce((s, k) => s + mastery(p, k.k, t), 0) / KANA.length;
+}
+
+/** Keeps one value per day of the alphabet mastery, for the progress curve. */
+export function recordMastery(p: Profile, t: number): void {
+  (p.hist ??= {})[t] = Math.round(alphabetMastery(p, t) * 1000) / 10;
+}
+
 /** Today's queue: due reviews first (up to the cap), then new signs (up to the quota). */
 export function buildQueue(p: Profile, t: number): QueueItem[] {
   const d = dayRec(p, t);

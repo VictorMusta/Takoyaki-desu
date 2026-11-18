@@ -297,3 +297,12 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .wbtn{all:unset;cursor:pointer;font-family:var(--hand);font-weight:600;font-size:22px}
 .wbtn mark{background:none;color:inherit;border-bottom:1.5px solid var(--beni)}
 .wbtn:focus-visible{outline:2px solid var(--beni)}
+
+/* ---------- maîtrise ---------- */
+.cell.learn{background:linear-gradient(to top,var(--tile-learn) var(--m,0%),transparent var(--m,0%))}
+.mbar{height:6px;background:var(--paper);border:var(--hair)}
+.mbar i{display:block;height:100%;background:var(--take)}
+.curve{width:100%;height:60px;display:block}
+.curve .c-g{stroke:var(--guide);stroke-width:.5;stroke-dasharray:3 3}
+.curve .c-l{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round}
+.curve .c-d{fill:var(--beni-fill)}
