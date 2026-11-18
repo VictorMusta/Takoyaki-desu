@@ -1,0 +1,44 @@
+name: Deploy to the VPS
+
+# Runs only once the repository variable VPS_HOST is set (Settings › Secrets and variables › Actions).
+# Needs: variables VPS_HOST, VPS_USER (default: deploy), VPS_PATH (default: /srv/takoyaki-desu),
+# optional VPS_PORT; secret VPS_SSH_KEY (private key of a key allowed for that user).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ vars.VPS_HOST != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+        env:
+          VITE_FEEDBACK_MAIL: ${{ vars.FEEDBACK_MAIL }}
+      - name: Send the build over SSH
+        env:
+          KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ vars.VPS_HOST }}
+          USER: ${{ vars.VPS_USER || 'deploy' }}
+          DEST: ${{ vars.VPS_PATH || '/srv/takoyaki-desu' }}
+          PORT: ${{ vars.VPS_PORT || '22' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id
+          chmod 600 ~/.ssh/id
+          ssh-keyscan -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts
+          # Files first, service worker last: a phone never sees a new sw.js pointing to missing files.
+          rsync -az --delete --exclude sw.js -e "ssh -i ~/.ssh/id -p $PORT" dist/ "$USER@$HOST:$DEST/"
+          rsync -az -e "ssh -i ~/.ssh/id -p $PORT" dist/sw.js "$USER@$HOST:$DEST/sw.js"
