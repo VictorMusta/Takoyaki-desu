@@ -3,8 +3,9 @@ import type { Point, Stroke } from "./model";
 /**
  * Brush look for handwritten strokes, computed from the stroke's shape alone (so the same
  * drawing renders identically on the pad, in comparisons and in saved data):
- * - the brush lands and lifts: thinner at both ends;
- * - it thins where the hand moved fast (points far apart, since they are sampled in time).
+ * - the brush lands: thinner at the start;
+ * - it thins where the hand moves fast (points far apart, since they are sampled in time);
+ * - nothing is recomputed afterwards: ink already laid down keeps its width.
  * Readability first: never thinner than MIN, and the « Simple » setting turns it off.
  */
 
@@ -30,29 +31,24 @@ export function setStrokeStyle(s: StrokeStyle): void {
 /** Widths in the 109 × 109 model space. Plain strokes are 4.2 wide. */
 const BASE = 5.4, MIN = 2.8, MAX = 6.4;
 
-/** Width at each point of the stroke. */
+/**
+ * Width at each point of the stroke. Causal: a point's width depends only on the points
+ * drawn before it, so what is already on the paper never changes as the stroke goes on.
+ * - landing: the first 6 units grow from 55 % to full width;
+ * - speed: a smoothed (past-only) distance between samples; a quick hand thins the line.
+ */
 export function brushWidths(st: Stroke): number[] {
-  const n = st.length;
-  if (n < 2) return st.map(() => BASE);
-  const seg = st.map((p, i) => (i ? Math.hypot(p[0] - st[i - 1][0], p[1] - st[i - 1][1]) : 0));
-  seg[0] = seg[1];
-  const len = seg.reduce((a, b) => a + b, 0) - seg[0] || 1;
-  let along = 0;
-  const raw = st.map((_, i) => {
-    if (i) along += seg[i];
-    const t = along / len;
-    // Landing and lifting: ramps over the first 12 % and last 18 % of the stroke.
-    const ends = Math.min(1, 0.55 + (t / 0.12) * 0.45, 0.5 + ((1 - t) / 0.18) * 0.5);
-    // Speed: about 1–2 units between samples is a calm hand; 6+ is a quick flick.
-    const speed = Math.max(0.72, Math.min(1.12, 1.18 - seg[i] * 0.07));
-    return BASE * ends * speed;
-  });
-  // Smooth so the width never jumps between two samples.
-  return raw.map((_, i) => {
-    let s = 0, c = 0;
-    for (let j = Math.max(0, i - 2); j <= Math.min(n - 1, i + 2); j++) (s += raw[j]), c++;
-    return Math.max(MIN, Math.min(MAX, s / c));
-  });
+  const out: number[] = [];
+  let along = 0, pace = 0;
+  for (let i = 0; i < st.length; i++) {
+    const seg = i ? Math.hypot(st[i][0] - st[i - 1][0], st[i][1] - st[i - 1][1]) : 0;
+    along += seg;
+    pace = i <= 1 ? seg : pace * 0.7 + seg * 0.3;
+    const land = Math.min(1, 0.55 + (along / 6) * 0.45);
+    const speed = Math.max(0.72, Math.min(1.12, 1.18 - pace * 0.07));
+    out.push(Math.max(MIN, Math.min(MAX, BASE * land * speed)));
+  }
+  return out;
 }
 
 /**

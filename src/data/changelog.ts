@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.9.1",
+    date: "2026-11-19",
+    items: ["Pinceau plus naturel : l'encre déjà posée ne change plus d'épaisseur quand vous accélérez ou ralentissez."],
+  },
+  {
     v: "0.9.0",
     date: "2026-11-19",
     items: [
