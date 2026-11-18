@@ -101,7 +101,11 @@ export function status(p: Profile, k: string): Status {
  * and a review left waiting well past its date slowly lowers it too (memory fades).
  */
 export function mastery(p: Profile, k: string, t: number): number {
-  const c = p.cards[k];
+  return cardMastery(p.cards[k], t);
+}
+
+/** The same measure for any card (signs or words). */
+export function cardMastery(c: Card | undefined, t: number): number {
   if (!c?.seen) return 0;
   let m = Math.min(1, Math.log(1 + c.interval) / Math.log(8));
   const late = t - (c.due ?? t);

@@ -95,6 +95,7 @@ export function viewSettings(): void {
     <h3>Rythme</h3>
     ${paceHTML(p.settings.newPerDay, "space")}
     <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="46" value="${p.settings.newPerDay}"></label>
+    <label class="field" for="nw">Nouveaux mots par jour <input type="number" id="nw" min="0" max="20" value="${p.settings.wordsPerDay ?? 3}"></label>
     <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <label class="field" for="sn">Afficher les numéros des traits <input type="checkbox" id="sn" ${p.settings.showNums ? "checked" : ""}></label>
     <div class="row"><button class="btn" id="unl" ${p.unlocked >= LINES.length ? "disabled" : ""}>Ouvrir la ligne suivante maintenant</button></div>
@@ -112,6 +113,10 @@ export function viewSettings(): void {
       $<HTMLInputElement>("#nn").value = r.value;
     };
   });
+  $<HTMLInputElement>("#nw").onchange = (e) => {
+    p.settings.wordsPerDay = Math.min(20, Math.max(0, Math.round(+(e.target as HTMLInputElement).value)));
+    save();
+  };
   $<HTMLInputElement>("#rc").onchange = (e) => {
     p.settings.revCap = Math.max(10, +(e.target as HTMLInputElement).value || 60);
     save();

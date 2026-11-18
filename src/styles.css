@@ -306,3 +306,16 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .curve .c-g{stroke:var(--guide);stroke-width:.5;stroke-dasharray:3 3}
 .curve .c-l{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round}
 .curve .c-d{fill:var(--beni-fill)}
+
+/* ---------- vocabulaire ---------- */
+.chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;flex-direction:column;align-items:center;border:var(--hair);padding:4px 12px;font-size:12px;color:var(--wood)}
+.chip b{font-family:var(--hand);font-weight:600;font-size:26px;color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tiles .key.back{grid-column:span 4}
+.tiles .key:disabled{opacity:.25}
+.good{color:var(--ink)}
+.bad{color:var(--beni)}
+.wlist{display:flex;flex-direction:column;margin-top:8px}
+.wrow{display:grid;grid-template-columns:auto 1fr 64px;gap:8px;align-items:center;padding:4px 0;border-bottom:var(--hair)}
+.wrow .mbar{height:5px}

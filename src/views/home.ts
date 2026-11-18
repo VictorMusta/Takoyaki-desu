@@ -1,5 +1,6 @@
 import { LINES } from "../data/kana";
-import { buildQueue, dayRec, streak, today } from "../core/scheduler";
+import { buildQueue, dayRec, today } from "../core/scheduler";
+import { buildWordQueue } from "../core/vocab";
 import { memoryOnly, profile, state } from "../core/store";
 import { $opt, el, esc, showWave, view } from "../ui/dom";
 import { startSession } from "./session";
@@ -9,8 +10,9 @@ import { startDrills } from "./session";
 
 export function viewHome(): void {
   const p = profile(), t = today();
-  const q = buildQueue(p, t), d = dayRec(p, t);
-  const nDue = q.filter((x) => !x.isNew).length, nNew = q.length - nDue;
+  const q = [...buildQueue(p, t), ...buildWordQueue(p, t)], d = dayRec(p, t);
+  const nWords = q.filter((x) => x.word).length;
+  const nDue = q.filter((x) => !x.isNew && !x.word).length, nNew = q.filter((x) => x.isNew && !x.word).length;
   const v = view();
   v.innerHTML = "";
   v.appendChild(
@@ -19,7 +21,7 @@ export function viewHome(): void {
     <div class="stats">
       <div class="stat"><b>${nDue}</b><span>à réviser</span></div>
       <div class="stat"><b>${nNew}</b><span>nouveaux signes</span></div>
-      <div class="stat"><b>${streak(p, t)}</b><span>jours d'affilée</span></div>
+      <div class="stat"><b>${nWords}</b><span>mots</span></div>
     </div>
     ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
     <p class="muted small" style="margin:0">Aujourd'hui : ${d.nw} nouveau(x), ${d.rv} révision(s). Lignes ouvertes : ${LINES.slice(0, p.unlocked).join(", ")}.</p>

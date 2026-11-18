@@ -15,6 +15,8 @@ export interface Settings {
   newPerDay: number;
   revCap: number;
   showNums: boolean;
+  /** New words a day in the vocabulary track (default 3). */
+  wordsPerDay?: number;
 }
 
 export interface DayRec {
@@ -22,6 +24,8 @@ export interface DayRec {
   rv: number;
   /** Extra new signs allowed today (« 5 signes de plus »). */
   bonus?: number;
+  /** New words started today. */
+  nwW?: number;
 }
 
 export interface LogEntry {
@@ -70,6 +74,8 @@ export interface Profile {
   variants?: Record<string, true>;
   /** Alphabet mastery in %, one value per day (for the curve in Progrès). */
   hist?: Record<number, number>;
+  /** Vocabulary track: one card per word (meaning known), keyed by the word in kana. */
+  words?: Record<string, Card>;
 }
 
 export interface AppState {
@@ -92,6 +98,8 @@ export interface QueueItem {
   strokes?: Drawing;
   /** Not a drawing: another kind of exercise (choose, listen, words…). */
   drill?: import("./drills").Drill;
+  /** Vocabulary item: `k` is a word, not a sign. */
+  word?: boolean;
 }
 
 /** A lesson in progress, saved after every step so it survives a closed app. */

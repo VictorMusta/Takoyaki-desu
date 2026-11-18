@@ -13,6 +13,8 @@ import { navigate } from "../router";
 import { continueBlock } from "./more";
 import { available, LESSON_MIX, makeDrill, type DrillType } from "../core/drills";
 import { viewDrill } from "./drill";
+import { viewWord } from "./word";
+import { buildWordQueue, gradeWord } from "../core/vocab";
 
 /**
  * The lesson in progress lives in the active profile and is saved after every step,
@@ -80,7 +82,7 @@ export function startDrills(type: DrillType): void {
 export function startSession(kind: SessionKind = "day"): void {
   const p = profile(), t = today();
   if (kind === "more") dayRec(p, t).bonus = (dayRec(p, t).bonus ?? 0) + 5;
-  const q = kind === "practice" ? practiceQueue(p) : kind === "day" ? mixDrills(buildQueue(p, t)) : buildQueue(p, t);
+  const q = kind === "practice" ? practiceQueue(p) : kind === "day" ? [...mixDrills(buildQueue(p, t)), ...buildWordQueue(p, t)] : buildQueue(p, t);
   if (!q.length) return;
   p.session = { day: t, queue: q, i: 0 };
   save();
@@ -102,6 +104,20 @@ export function viewCard(): void {
   setQuit(quit);
   save(); // keeps the discovery step of a new sign
   const it = session.queue[session.i];
+  if (it.word) {
+    setQuit(quit);
+    return viewWord(it, `${session.queue.length - session.i} restant(s)`, () => save(), (g) => {
+      const s = cur();
+      if (!s) return;
+      tally(s, g);
+      gradeWord(profile(), it.k, g, today(), it.isNew && !it.counted);
+      it.counted = true;
+      if (g === "rate") requeue(s, { k: it.k, isNew: false, word: true, counted: true, step: 2 });
+      s.i++;
+      save();
+      viewCard();
+    });
+  }
   if (it.drill) {
     const left0 = session.queue.length - session.i;
     setQuit(quit);

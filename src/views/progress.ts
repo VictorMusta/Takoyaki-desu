@@ -8,6 +8,7 @@ import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
 import { WORDS } from "../data/words";
 import { EXAMPLES } from "../data/examples";
+import { knownWordCount, openWords, wordMastery } from "../core/vocab";
 
 /** Slots per line in the classic 5-column table (ya and wa have gaps). */
 const SLOTS: Record<string, (number | null)[]> = { ya: [0, null, 1, null, 2], wa: [0, null, null, 1, 2] };
@@ -82,6 +83,25 @@ export function viewProgress(): void {
       fc.scrollIntoView({ behavior: "smooth" });
     };
   });
+
+  /* ---- vocabulary ---- */
+  const studied = WORDS.filter(([w]) => p.words?.[w]?.seen);
+  const open = openWords(p).length;
+  v.appendChild(
+    el(`<section class="card"><h3>Vocabulaire</h3>
+    <div class="stats"><div class="stat"><b>${knownWordCount(p)}</b><span>mots sus</span></div><div class="stat"><b>${studied.length}</b><span>mots étudiés</span></div><div class="stat"><b>${open - studied.length}</b><span>à découvrir</span></div></div>
+    <p class="small muted" style="margin:0">Un mot compte comme su quand son sens a été retrouvé et tient au moins un jour. De nouveaux mots s'ouvrent à mesure que vous apprenez leurs signes.</p>
+    ${
+      studied.length
+        ? `<details><summary>Mes mots (${studied.length})</summary><div class="wlist">${studied
+            .map(([w, r, fr]) => {
+              const m = Math.round(wordMastery(p, w, t) * 100);
+              return `<div class="wrow"><span class="kana-s">${w}</span><span class="small">${r} · ${esc(fr)}</span><span class="mbar" role="img" aria-label="Maîtrise ${m} %"><i style="width:${m}%"></i></span></div>`;
+            })
+            .join("")}</div></details>`
+        : ""
+    }</section>`),
+  );
 
   const cal = calibration(p, t);
   v.appendChild(
