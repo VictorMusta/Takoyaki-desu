@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.17.1",
+    date: "2026-11-19",
+    items: ["« Écrivez ce mot à la main » vérifie maintenant les traits de chaque signe (une petite note sous chaque signe), et les boutons s'appellent « Raté » et « Juste »."],
+  },
+  {
     v: "0.17.0",
     date: "2026-11-19",
     items: ["Glissez le doigt vers la gauche ou la droite pour passer d'un onglet à l'autre (hors séance)."],

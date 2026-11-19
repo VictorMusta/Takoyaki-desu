@@ -7,6 +7,7 @@ import { $, el, esc, view } from "../ui/dom";
 import { kanaField, kanaKeyboard } from "../ui/keyboard";
 import { modelSVG, userSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
+import { checkDrawing, explain } from "../core/strokecheck";
 import { speak } from "../ui/speech";
 import { setQuietNow, soundOff } from "../core/sound";
 
@@ -195,12 +196,24 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
         ok.onclick = () => { drawn.push(pad.strokes.slice()); step(); };
       };
       const review = () => {
-        body.appendChild(el(`<div class="word-cmp">${want.map((k, i) => `<div><div class="stage">${userSVG(drawn[i], false)}</div><div class="stage">${modelSVG(k, "color", false)}</div></div>`).join("")}</div>`));
-        const g = el(`<div class="opts-grid"><button class="btn" data-g="ko">Pas tout à fait</button><button class="btn g-bien" data-g="ok">Juste</button></div>`);
+        // The same stroke check as a lesson, compact: a short note in ocre under each sign
+        // and a halo on the wrong strokes. The learner still decides.
+        const checks = want.map((k, i) => {
+          const r = checkDrawing(drawn[i], byK[k].s, k);
+          const ok = r.count && r.order && r.shape;
+          const bad = ok ? [] : [...new Set([...r.swapped, ...r.issues.map((x) => x.n)])].map((n) => n - 1);
+          return { ok, bad, why: ok ? [] : explain(r) };
+        });
+        body.appendChild(el(`<div class="word-cmp">${want.map((k, i) => `<div><div class="stage">${userSVG(drawn[i], false, "", checks[i].bad)}</div><div class="stage">${modelSVG(k, "color", false)}</div>
+          <p class="wc-note ${checks[i].ok ? "ok" : "ko"}"><b>${k}</b> ${(checks[i].ok ? ["Traits vérifiés."] : checks[i].why).map((w) => `<span>${esc(w)}</span>`).join(" ")}</p></div>`).join("")}</div>`));
+        const g = el(`<div class="opts-grid"><button class="btn g-rate" data-g="ko">Raté</button><button class="btn g-bien" data-g="ok">Juste</button></div>`);
         body.appendChild(g);
         g.onclick = (e) => {
           const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-g]");
-          if (b) done(b.dataset.g === "ok", b.dataset.g === "ok" ? [] : want);
+          if (!b) return;
+          // A miss brings back the signs the check flagged (all of them if it saw nothing).
+          const flagged = want.filter((_, i) => !checks[i].ok);
+          done(b.dataset.g === "ok", b.dataset.g === "ok" ? [] : flagged.length ? flagged : want);
         };
       };
       step();

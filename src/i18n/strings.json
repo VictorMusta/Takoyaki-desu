@@ -1036,6 +1036,7 @@
   "s": "Raté",
   "files": [
    "src/views/compare.ts",
+   "src/views/drill.ts",
    "src/views/session.ts"
   ]
  },
@@ -1246,12 +1247,6 @@
   ]
  },
  {
-  "s": "Pas tout à fait",
-  "files": [
-   "src/views/drill.ts"
-  ]
- },
- {
   "s": "Pas tout à fait.",
   "files": [
    "src/views/drill.ts"
@@ -1311,6 +1306,12 @@
  },
  {
   "s": "Souligner les signes que je connais",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Traits vérifiés.",
   "files": [
    "src/views/drill.ts"
   ]

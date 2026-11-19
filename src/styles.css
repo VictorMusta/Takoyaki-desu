@@ -277,6 +277,10 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .word-cmp{display:flex;flex-direction:column;gap:8px}
 .word-cmp>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .word-cmp .stage{max-width:none}
+.word-cmp .wc-note{grid-column:1/-1;margin:-2px 0 4px;font-size:13px;line-height:1.5}
+.word-cmp .wc-note.ok{color:var(--take)}
+.word-cmp .wc-note.ko{color:var(--kin)}
+.word-cmp .bad-halo{stroke:var(--kin)}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .modes .opt{padding:8px}
 .corr table td{vertical-align:top}
