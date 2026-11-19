@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.14.0",
+    date: "2026-11-19",
+    items: [
+      "Progrès › Partager ma progression : une story à poster (signes maîtrisés, série, temps de pratique, calendrier).",
+      "Se comparer : envoyez votre lien, ouvrez celui de l'autre, et voyez vos progressions côte à côte.",
+      "L'appli compte maintenant votre temps de pratique réel et vos ratés de chaque jour ; l'historique s'exporte en tableur.",
+    ],
+  },
+  {
     v: "0.13.1",
     date: "2026-11-19",
     items: ["L'entraînement choisit au hasard, mais les signes fragiles ou ratés récemment (même bien maîtrisés) ont plus de chances de revenir."],

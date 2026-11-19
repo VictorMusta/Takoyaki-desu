@@ -260,6 +260,8 @@ export function recordMiss(p: Profile, k: string, t: number): void {
   const c = p.cards[k];
   if (!c) return;
   c.miss = c.miss?.d === t ? { d: t, n: c.miss.n + 1 } : { d: t, n: 1 };
+  const d = dayRec(p, t);
+  d.ko = (d.ko ?? 0) + 1;
 }
 
 /** n distinct items drawn at random, each with chance proportional to its weight. */

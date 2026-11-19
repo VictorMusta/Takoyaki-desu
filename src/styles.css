@@ -390,3 +390,17 @@ body:has(.modal) .note-fab{display:none}
 .btn.tile b{font:500 32px/1 var(--display);color:var(--beni)}
 .btn.tile span{font:500 18px var(--display)}
 .btn.tile small{font:400 13px var(--body);color:var(--wood)}
+
+/* Comparing with someone */
+.duel table{width:100%;border-collapse:collapse}
+.duel th,.duel td{padding:8px 4px;border-bottom:var(--hair);text-align:right;font-variant-numeric:tabular-nums}
+.duel th[scope="row"]{text-align:left;font-weight:400;color:var(--wood)}
+.duel td.win{color:var(--take);font-weight:500}
+.duel svg{width:100%;height:auto}
+.duel .b-me{fill:var(--beni)}
+.duel .b-them{fill:var(--take)}
+.duel .axis{stroke:var(--wood);stroke-width:.5}
+.legend2{display:flex;align-items:center;gap:6px;margin:0}
+.legend2 span{display:inline-block;width:10px;height:10px}
+.legend2 .k-me{background:var(--beni)}
+.legend2 .k-them{background:var(--take);margin-left:12px}

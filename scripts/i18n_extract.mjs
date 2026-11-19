@@ -28,7 +28,7 @@ function addSegment(seg, file) {
   const t = seg.replace(/\s+/g, " ").trim();
   if (AUTHOR_ONLY.test(t)) return;
   if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(t.replace(/[ー]/g, "")) && !/[a-zà-ÿ]{3,}/.test(t)) return; // already Japanese
-  if (IGNORE.has(t) || /^takoyaki-|^_|^[:.#(\[]|^[a-z-]+\[|^[a-z0-9]+(, [a-z0-9]+)+$|cubic-bezier|stroke-line|prefers-reduced|theme-color|^input\[|^\.tiles|^:scope/.test(t)) return;
+  if (IGNORE.has(t) || /^takoyaki-|^_|^[:.#(\[]|^[a-z-]+\[|^[a-z0-9]+(, [a-z0-9]+)+$|px "|^rgba\(|^class=|^abcé|^たこ焼きです蛸|cubic-bezier|stroke-line|prefers-reduced|theme-color|^input\[|^\.tiles|^:scope/.test(t)) return;
   if (!FRENCH.test(t.replace(/\{\d+\}/g, ""))) return;
   // One lowercase word: keep it only if it is French (accents, or listed), not an identifier.
   if (!/\s/.test(t) && /^[a-z]+$/.test(t) && !WORDS_FR.has(t)) return;

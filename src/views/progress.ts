@@ -1,3 +1,6 @@
+import { shareStory } from "../ui/story";
+import { rivals, shareMyLink } from "./duel";
+import { dayDate, history, historyCSV } from "../core/stats";
 import { meaningFor } from "../data/gloss-ja";
 import { isJa } from "../i18n";
 import { byK, isKata, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
@@ -57,6 +60,32 @@ export function viewProgress(): void {
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );
+  // Show it, compare it, keep it.
+  const rv = Object.keys(rivals());
+  const sh = el(`<section class="card"><h3>Partager ma progression</h3>
+    <div class="opts">
+      <button class="btn opt" id="sh-story"><span>Story de progression</span><small>Une image à poster : signes maîtrisés, série, temps de pratique, calendrier</small></button>
+      <button class="btn opt" id="sh-link"><span>Se comparer</span><small>Envoyez votre lien à quelqu'un qui apprend aussi ; ouvrez le sien pour voir vos progressions côte à côte</small></button>
+      ${rv.length ? `<a class="btn opt" href="#duel"><span>Mes comparaisons</span><small>${rv.map(esc).join(", ")}</small></a>` : ""}
+    </div>
+    <details><summary class="small">Exporter l'historique</summary>
+      <p class="small muted" style="margin:8px 0">Jour par jour : nouveaux signes, révisions, mots, exercices, minutes actives, ratés, maîtrise. Pour un tableur ou un carnet de voyage.</p>
+      <div class="row"><button class="btn" id="sh-csv">Tableur (CSV)</button><button class="btn" id="sh-json">Données (JSON)</button></div>
+    </details></section>`);
+  v.appendChild(sh);
+  sh.querySelector<HTMLButtonElement>("#sh-story")!.onclick = () => void shareStory(p, state.active, t);
+  sh.querySelector<HTMLButtonElement>("#sh-link")!.onclick = () => void shareMyLink();
+  const dl = (text: string, name: string, type: string) => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([text], { type }));
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  };
+  const stamp = new Date().toISOString().slice(0, 10);
+  sh.querySelector<HTMLButtonElement>("#sh-csv")!.onclick = () => dl("\ufeff" + historyCSV(p), `takoyaki-desu-historique-${state.active}-${stamp}.csv`, "text/csv");
+  sh.querySelector<HTMLButtonElement>("#sh-json")!.onclick = () =>
+    dl(JSON.stringify({ app: "takoyaki-desu", version: __APP_VERSION__, name: state.active, exportedAt: new Date().toISOString(), days: history(p).map((l) => ({ date: dayDate(l.d), ...l })) }, null, 1), `takoyaki-desu-historique-${state.active}-${stamp}.json`, "application/json");
   v.querySelectorAll<HTMLButtonElement>(".cell[data-k]").forEach((b) => {
     b.onclick = () => {
       const k = b.dataset.k!;

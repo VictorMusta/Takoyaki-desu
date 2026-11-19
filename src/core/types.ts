@@ -36,6 +36,10 @@ export interface DayRec {
   nwW?: number;
   /** Exercises answered and words practised today (any kind, lesson or free). */
   ex?: number;
+  /** Active time today, in seconds (see ui/activity.ts). */
+  sec?: number;
+  /** Misses today: lesson, practice, games, peeks, exams. */
+  ko?: number;
 }
 
 export interface LogEntry {

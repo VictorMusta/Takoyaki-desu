@@ -109,6 +109,51 @@
   ]
  },
  {
+  "s": "maîtrise hiragana %",
+  "files": [
+   "src/core/stats.ts"
+  ]
+ },
+ {
+  "s": "maîtrise katakana %",
+  "files": [
+   "src/core/stats.ts"
+  ]
+ },
+ {
+  "s": "minutes actives",
+  "files": [
+   "src/core/stats.ts"
+  ]
+ },
+ {
+  "s": "nouveaux mots",
+  "files": [
+   "src/core/stats.ts",
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "nouveaux signes",
+  "files": [
+   "src/core/stats.ts",
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "ratés",
+  "files": [
+   "src/core/stats.ts"
+  ]
+ },
+ {
+  "s": "révisions",
+  "files": [
+   "src/core/stats.ts",
+   "src/views/home.ts"
+  ]
+ },
+ {
   "s": "{0} trait{1} au lieu de {2}.",
   "files": [
    "src/core/strokecheck.ts"
@@ -710,6 +755,93 @@
   ]
  },
  {
+  "s": "apprend à écrire le japonais",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "de pratique",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "découverts",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "Fermer",
+  "files": [
+   "src/ui/story.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "hiragana maîtrisés",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "Image impossible à créer sur cet appareil.",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "Image téléchargée : ajoutez-la à votre story depuis la galerie.",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "jours d'affilée",
+  "files": [
+   "src/ui/story.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "katakana maîtrisés",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "maîtrise",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "Partager",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "signes et exercices",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
+  "s": "Story de progression",
+  "files": [
+   "src/ui/story.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Votre story de progression",
+  "files": [
+   "src/ui/story.ts"
+  ]
+ },
+ {
   "s": "« {0} » est débloqué.{1}",
   "files": [
    "src/views/compare.ts"
@@ -1165,6 +1297,127 @@
   ]
  },
  {
+  "s": "{0} apprend à écrire le japonais avec Takoyaki desu. Compare ta progression avec la mienne :",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Ce lien de comparaison est incomplet ou abîmé. Demandez-en un nouveau.",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Commencer à apprendre",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Copie impossible ici.",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Envoyer mon lien",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Envoyez votre lien à quelqu'un qui utilise l'appli, et demandez-lui le sien : en l'ouvrant, vous verrez vos progressions côte à côte.",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Exercices cette semaine",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Hiragana maîtrisés",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Jours d'affilée",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Katakana maîtrisés",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Lien copié : envoyez-le à qui vous voulez.",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Lien illisible",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Maîtrise des hiragana",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Minutes cette semaine",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Minutes de pratique par jour sur 14 jours, {0}{1}",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Minutes de pratique, 14 derniers jours",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Mots sus",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Progression de {0} au {1}. Pour la mettre à jour, demandez-lui un nouveau lien.",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Se comparer",
+  "files": [
+   "src/views/duel.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Vous",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
   "s": "20 signes au hasard",
   "files": [
    "src/views/exam.ts"
@@ -1514,18 +1767,6 @@
   ]
  },
  {
-  "s": "nouveaux mots",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
-  "s": "nouveaux signes",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
   "s": "Parcours de test",
   "files": [
    "src/views/home.ts"
@@ -1557,12 +1798,6 @@
  },
  {
   "s": "révision",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
-  "s": "révisions",
   "files": [
    "src/views/home.ts"
   ]
@@ -1737,6 +1972,12 @@
   ]
  },
  {
+  "s": "Données (JSON)",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Écart",
   "files": [
    "src/views/progress.ts"
@@ -1761,6 +2002,12 @@
   ]
  },
  {
+  "s": "Envoyez votre lien à quelqu'un qui apprend aussi ; ouvrez le sien pour voir vos progressions côte à côte",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Estompé",
   "files": [
    "src/views/progress.ts"
@@ -1773,13 +2020,13 @@
   ]
  },
  {
-  "s": "Faites quelques séances et un examen pour voir si vos notes sont fiables.",
+  "s": "Exporter l'historique",
   "files": [
    "src/views/progress.ts"
   ]
  },
  {
-  "s": "Fermer",
+  "s": "Faites quelques séances et un examen pour voir si vos notes sont fiables.",
   "files": [
    "src/views/progress.ts"
   ]
@@ -1791,7 +2038,7 @@
   ]
  },
  {
-  "s": "jours d'affilée",
+  "s": "Jour par jour : nouveaux signes, révisions, mots, exercices, minutes actives, ratés, maîtrise. Pour un tableur ou un carnet de voyage.",
   "files": [
    "src/views/progress.ts"
   ]
@@ -1845,6 +2092,12 @@
   ]
  },
  {
+  "s": "Mes comparaisons",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Mes mots ({0})",
   "files": [
    "src/views/progress.ts"
@@ -1882,6 +2135,12 @@
  },
  {
   "s": "mots sus",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Partager ma progression",
   "files": [
    "src/views/progress.ts"
   ]
@@ -1953,6 +2212,12 @@
   ]
  },
  {
+  "s": "Tableur (CSV)",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Touchez un signe pour voir sa fiche.",
   "files": [
    "src/views/progress.ts"
@@ -1960,6 +2225,12 @@
  },
  {
   "s": "Un mot compte comme su quand son sens a été retrouvé et tient au moins un jour. De nouveaux mots s'ouvrent à mesure que vous apprenez leurs signes.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Une image à poster : signes maîtrisés, série, temps de pratique, calendrier",
   "files": [
    "src/views/progress.ts"
   ]

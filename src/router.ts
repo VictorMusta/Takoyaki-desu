@@ -8,14 +8,15 @@ import { viewSettings } from "./views/settings";
 import { viewWelcome } from "./views/welcome";
 import { viewInvite } from "./views/invite";
 import { viewTrain } from "./views/train";
+import { viewDuel } from "./views/duel";
 import { maybeApplyUpdate } from "./pwa";
 
-export type Route = "seance" | "entrainement" | "progres" | "examen" | "reglages" | "invite";
-const ROUTES: Route[] = ["seance", "entrainement", "progres", "examen", "reglages", "invite"];
+export type Route = "seance" | "entrainement" | "progres" | "examen" | "reglages" | "invite" | "duel";
+const ROUTES: Route[] = ["seance", "entrainement", "progres", "examen", "reglages", "invite", "duel"];
 const NEW = "__new__";
 
 function current(): Route {
-  const h = location.hash.slice(1) as Route;
+  const h = location.hash.slice(1).split("=")[0] as Route;
   return ROUTES.includes(h) ? h : "seance";
 }
 
@@ -70,6 +71,11 @@ export function route(): void {
   renderProfiles();
   window.scrollTo(0, 0);
   enter();
+  // A comparison link works without a profile too (someone who hasn't started yet).
+  if (r === "duel") {
+    $("nav").classList.toggle("hidden", !hasProfile());
+    return viewDuel(location.hash.slice(1).split("=").slice(1).join("="));
+  }
   // The invitation works without a profile (a tester opening the link on her own phone).
   if (r === "invite") {
     $("nav").classList.toggle("hidden", !hasProfile());
