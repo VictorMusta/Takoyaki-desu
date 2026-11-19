@@ -767,6 +767,12 @@
   ]
  },
  {
+  "s": "Son réactivé : les jeux d'écoute reviennent.",
+  "files": [
+   "src/ui/speech.ts"
+  ]
+ },
+ {
   "s": "apprend à écrire le japonais",
   "files": [
    "src/ui/story.ts"

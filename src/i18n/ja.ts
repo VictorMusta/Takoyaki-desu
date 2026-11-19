@@ -576,4 +576,5 @@ export const JA: Record<string, string> = {
   "Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.": "聞き取りの問題を出さず、音も自動で流しません。「聞く」ボタンは残ります。電車の中など少しの時間だけ音を消すときは、「練習」の「今は音なし」にチェックを入れてください。",
   "Jamais de son": "音を使わない",
   "Sans son pour l'instant": "今は音なし",
+  "Son réactivé : les jeux d'écoute reviennent.": "音をオンにしました。聞き取りの問題も出ます。",
 };
