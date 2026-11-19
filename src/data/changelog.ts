@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.17.0",
+    date: "2026-11-19",
+    items: ["Glissez le doigt vers la gauche ou la droite pour passer d'un onglet à l'autre (hors séance)."],
+  },
+  {
     v: "0.16.1",
     date: "2026-11-19",
     items: ["Rideau d'entrée (noren) : la fente du tissu ne coupe plus le texte.", "iPhone : l'écriture marche enfin. Le doigt était pris pour la paume et ignoré, et un trait pouvait bloquer les suivants."],
