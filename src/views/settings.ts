@@ -1,7 +1,8 @@
+import { resetCoach } from "../ui/coach";
 import { setSilentAlways, silentAlways } from "../core/sound";
 import { KANA, LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, readBackup, renameProfile, save, setActive, state } from "../core/store";
-import { $, el, esc, view } from "../ui/dom";
+import { $, el, esc, toast, view } from "../ui/dom";
 import { getTheme, paceHTML, setPace, setTheme, type Theme } from "../ui/prefs";
 import { confirmModal } from "../ui/modal";
 import { enableFluent, revertFluent } from "../core/fluent";
@@ -99,16 +100,27 @@ export function viewSettings(): void {
   }
 
   /* ---- learning settings for the active profile ---- */
+  const fl = p.fluent;
+  const since = fl ? new Date(Date.now() - (today() - fl.since) * 86400000).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
   v.appendChild(
     el(`<section class="card"><h2>Réglages de ${esc(state.active)}</h2>
     <h3>Rythme</h3>
     ${paceHTML(p.settings.newPerDay, "space", p.settings.intensive)}
-    <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="${KANA.length}" value="${p.settings.newPerDay}"></label>
     <label class="field" for="nw">Nouveaux mots par jour <input type="number" id="nw" min="0" max="20" value="${p.settings.wordsPerDay ?? 3}"></label>
-    <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <label class="field" for="sn">Afficher les numéros des traits <input type="checkbox" id="sn" ${p.settings.showNums ? "checked" : ""}></label>
+    <details class="fine"><summary>Réglages fins</summary>
+    <label class="field" for="nn">Nombre précis de signes par jour <input type="number" id="nn" min="1" max="${KANA.length}" value="${p.settings.newPerDay}"></label>
+    <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
     <div class="row"><button class="btn" id="unl" ${p.unlocked >= LINES.length ? "disabled" : ""}>Ouvrir la ligne suivante maintenant</button></div>
-    <p class="small muted" style="margin:0">Lignes ouvertes : ${p.unlocked} / ${LINES.length}. Utile si vous connaissez déjà certains signes.</p></section>`),
+    <p class="small muted" style="margin:0">Lignes ouvertes : ${p.unlocked} / ${LINES.length}. Utile si vous connaissez déjà certains signes.</p>
+    <h3>Niveau</h3>
+    <p class="small muted" style="margin:0">${
+      fl
+        ? `Depuis le ${since}, ${esc(state.active)} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose tous les signes.`
+        : "Vous lisez et écrivez déjà les hiragana ? Ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes."
+    }</p>
+    <div class="row"><button class="btn" id="fluent">${fl ? "J'ai menti" : "Je parle déjà japonais"}</button></div>
+    </details></section>`),
   );
   $<HTMLInputElement>("#nn").onchange = (e) => {
     p.settings.newPerDay = Math.min(KANA.length, Math.max(1, +(e.target as HTMLInputElement).value || 10));
@@ -141,18 +153,6 @@ export function viewSettings(): void {
     viewSettings();
   };
 
-  /* ---- level: « je parle déjà japonais » (reversible) ---- */
-  const fl = p.fluent;
-  const since = fl ? new Date(Date.now() - (today() - fl.since) * 86400000).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
-  v.appendChild(
-    el(`<section class="card"><h3>Niveau</h3>
-    <p class="small muted" style="margin:0">${
-      fl
-        ? `Depuis le ${since}, ${esc(state.active)} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose tous les signes.`
-        : "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes."
-    }</p>
-    <div class="row"><button class="btn" id="fluent">${fl ? "J'ai menti" : "Je parle déjà japonais"}</button></div></section>`),
-  );
   $("#fluent").onclick = async () => {
     const yes = fl
       ? await confirmModal({
@@ -180,13 +180,14 @@ export function viewSettings(): void {
     el(`<section class="card"><h3>Apparence</h3>
     <div class="seg" role="group" aria-label="Langue" data-noi18n><button class="btn" data-lang="fr" aria-pressed="${getLang() === "fr"}" lang="fr">Français</button><button class="btn" data-lang="ja" aria-pressed="${getLang() === "ja"}" lang="ja">日本語</button></div>
     <div class="seg" role="group" aria-label="Thème">${thOpt("auto", "Automatique")}${thOpt("light", "Papier")}${thOpt("dark", "Nuit")}</div>
-    <p class="small muted" style="margin:0">Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.</p>
+    <p class="small muted" style="margin:0">Automatique suit le téléphone.</p>
     <h3 style="margin-top:8px">Trait</h3>
     <div class="seg" role="group" aria-label="Rendu du trait">${stOpt("brush", "Pinceau")}${stOpt("plain", "Simple")}</div>
-    <p class="small muted" style="margin:0">Pinceau : le trait s'affine au départ, à l'arrivée et quand la main va vite. Simple : un trait régulier, le plus lisible.</p>
-    ${canVibrate() ? `<label class="field" for="hap">Vibrations <input type="checkbox" id="hap" ${getHaptics() ? "checked" : ""}></label><p class="small muted" style="margin:0">Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.</p>` : ""}
+    <p class="small muted" style="margin:0">Simple est le plus lisible.</p>
+    ${canVibrate() ? `<label class="field" for="hap">Vibrations <input type="checkbox" id="hap" ${getHaptics() ? "checked" : ""}></label>` : ""}
     <label class="field" for="mute">Jamais de son <input type="checkbox" id="mute" ${silentAlways() ? "checked" : ""}></label>
-    <p class="small muted" style="margin:0">Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.</p></section>`),
+    <p class="small muted" style="margin:0">Ni jeu d'écoute, ni son automatique. « Écouter » marche toujours.</p>
+    <div class="row"><button class="btn" id="coach-reset">Revoir les bulles d'aide</button></div></section>`),
   );
   v.querySelectorAll<HTMLButtonElement>("[data-st]").forEach((b) => {
     b.onclick = () => {
@@ -194,6 +195,10 @@ export function viewSettings(): void {
       v.querySelectorAll("[data-st]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     };
   });
+  $("#coach-reset").onclick = () => {
+    resetCoach();
+    toast("Les bulles d'aide reviendront au fil des écrans.");
+  };
   const mute = v.querySelector<HTMLInputElement>("#mute")!;
   mute.onchange = () => setSilentAlways(mute.checked);
   const hap = v.querySelector<HTMLInputElement>("#hap");
@@ -254,21 +259,17 @@ export function viewSettings(): void {
   }
 
   /* ---- credits ---- */
-  if (!isJa())
-    v.appendChild(
-      el(`<section class="card"><details><summary>Nouveautés</summary>${newsHTML()}</details></section>`),
-    );
+  // News, privacy and credits: one quiet card at the bottom.
   v.appendChild(
-    el(`<section class="card"><details><summary>Confidentialité</summary><div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+    el(`<section class="card about">${isJa() ? "" : `<details><summary>Nouveautés</summary>${newsHTML()}</details>`}
+    <details><summary>Confidentialité</summary><div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       <p style="margin:0"><b>Rien ne quitte votre téléphone sans vous.</b> Pas de compte, pas de serveur à nous : votre progression vit uniquement dans ce navigateur.</p>
       <p style="margin:0">Aucune mesure d'audience, aucun cookie, aucune publicité, aucun outil tiers. Les polices sont livrées avec l'appli.</p>
       <p style="margin:0">Des données ne partent que si vous le décidez : une sauvegarde que vous vous envoyez, un retour par mail, un ticket GitHub.</p>
       <p style="margin:0">Ce qui reste hors de nos mains : l'hébergeur (GitHub Pages) voit, comme tout site, l'adresse IP qui charge l'appli. Selon le téléphone, la voix de « Écouter » peut être produite en ligne par le système.</p>
       <p style="margin:0">Tout effacer : supprimez les profils ci-dessus, ou effacez les données du site dans votre navigateur.</p>
-    </div></details></section>`),
-  );
-  v.appendChild(
-    el(`<section class="card"><details><summary>Crédits</summary>
+    </div></details>
+    <details><summary>Crédits</summary>
     <div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       <p style="margin:0">Tracés et ordre des traits : <a href="http://kanjivg.tagaini.net">KanjiVG</a>, d'Ulrich Apel, sous licence CC BY-SA 3.0.</p>
       <p style="margin:0">Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Zen Maru Gothic et Yuji Syuku (SIL Open Font License), livrées avec l'appli.</p>
@@ -279,7 +280,7 @@ export function viewSettings(): void {
   /* ---- backup ---- */
   v.appendChild(
     el(`<section class="card"><h3>Sauvegarde</h3>
-    <p class="small muted" style="margin:0">Votre progression (tous les profils) ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps : choisissez votre appli de mail dans le menu de partage, et mettez votre propre adresse. Il ne contient que votre progression, rien de personnel.</p>
+    <p class="small muted" style="margin:0">Votre progression ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps, à votre propre adresse.</p>
     <p class="small" style="margin:0">${everBackedUp() ? `Dernière sauvegarde : il y a ${daysSinceBackup()} jour(s).` : "Aucune sauvegarde pour l'instant."}${persisted === true ? " Stockage protégé : le navigateur ne l'effacera pas de lui-même." : persisted === false ? " Le navigateur peut effacer ces données s'il manque de place : installez l'appli sur l'écran d'accueil pour les protéger." : ""}</p>
     <button class="btn primary big" id="bksend">M'envoyer ma sauvegarde</button>
     <div class="row"><button class="btn" id="bkdl">Télécharger le fichier</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,application/json,text/plain" class="hidden"></div>
@@ -335,7 +336,7 @@ export function viewSettings(): void {
   };
 
   // Most used first: pace and backup; profiles, level and the rest further down.
-  const order = ["Réglages de", "Sauvegarde", "Apparence", "Profils sur", "Niveau", "Un avis", "Nouveautés", "Confidentialité", "Crédits"];
+  const order = ["Réglages de", "Sauvegarde", "Apparence", "Profils sur", "Un avis", "Nouveautés", "Confidentialité"];
   const secs = [...v.querySelectorAll<HTMLElement>(":scope > section")];
   const rank = (sec: HTMLElement) => {
     const h = sec.querySelector("h2, h3, summary")?.textContent ?? "";

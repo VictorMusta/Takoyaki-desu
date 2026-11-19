@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.16.0",
+    date: "2026-11-19",
+    items: [
+      "Interface allégée : Progrès ne montre plus les lignes pas encore ouvertes (repliées en « lignes à venir »), et Réglages range les options rares dans « Réglages fins ».",
+      "Écran d'un nouveau signe plus court : polices, mots d'exemple et pièges sont dans « Le signe et des exemples ».",
+      "Petites bulles d'aide, une seule fois, au bon moment (premier signe, première note, Progrès…). Réglages › « Revoir les bulles d'aide » pour les revoir.",
+    ],
+  },
+  {
     v: "0.15.1",
     date: "2026-11-19",
     items: ["Plus jamais deux fois le même jeu sur le même exemple dans une série : s'il n'y a plus d'exemple neuf, l'appli passe à un autre jeu."],

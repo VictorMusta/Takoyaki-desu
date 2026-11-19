@@ -2,6 +2,7 @@ import { byK } from "../data/kana";
 import type { Grade } from "../core/types";
 import { profile } from "../core/store";
 import { $, el, view } from "../ui/dom";
+import { coachAt } from "../ui/coach";
 import { ficheHTML } from "../ui/fiche";
 import { animate, badSVG, innerOf, modelSVG, userSVG, type Stroke } from "../ui/model";
 import { markSeen, pickTip, setHidden } from "../core/tips";
@@ -49,10 +50,9 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
               : `<ul>${why.map((t) => `<li>${t}</li>`).join("")}</ul><button class="btn sm" id="contest">Je pense que c'est juste</button>`
           }</div>`
     }
-    <div class="row"><button class="btn" id="anim">Revoir l'ordre des traits</button>${
+    <div class="row cmp-links"><button class="btn sm" id="anim">Revoir l'ordre des traits</button>${
       prof.fluent && !peeked ? `<button class="btn sm" id="mine">${own ? "Revenir au modèle" : "Moi je le fais pas comme ça"}</button>` : ""
-    }</div>
-    ${exam ? "" : mnemoHTML(k, false)}
+    }${exam ? "" : mnemoHTML(k, false)}</div>
     <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
 
@@ -70,6 +70,8 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
   </section>`),
   );
 
+  const links = v.querySelector(".cmp-links");
+  if (links && !exam && !retry && !peeked) coachAt("grade", "Notez honnêtement : la note décide quand le signe reviendra.", links.parentElement!, links);
   // A tip, rarely (lessons only): the sign's trap first, else now and then a generic one.
   const p = profile(), day = today();
   const tip = exam ? null : pickTip(p, k, day);
@@ -140,7 +142,7 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
       return;
     }
     btn("bien").disabled = blocked || hinted;
-    hint.textContent = hinted ? "Astuce utilisée : au mieux « Bof »." : blocked ? "« Bien » est bloqué : notez « Bof » ou « Raté »." : "";
+    hint.textContent = hinted ? "Astuce utilisée : au mieux « Bof »." : blocked ? "« Bien » est bloqué : la vérification a vu un souci. Notez « Bof » ou « Raté », ou contestez-la." : "";
     hint.classList.toggle("hidden", !hint.textContent);
   };
   // A wrong order or direction: show the right one straight away.

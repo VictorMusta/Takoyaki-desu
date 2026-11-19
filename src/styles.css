@@ -335,6 +335,8 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .mnemo p{margin:8px 0 0;font-size:15px;line-height:1.7}
 .helps{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .helps .ii,.btn .ii{display:inline-flex;width:16px;height:16px;align-items:center;justify-content:center;border:1px solid currentColor;border-radius:50%;font-family:var(--display);font-style:italic;font-size:11px;line-height:1;vertical-align:-2px}
+.cmp-links{align-items:center;flex-wrap:wrap}
+.cmp-links .mnemo[open]{flex-basis:100%}
 .mnemo.hint{border-top:var(--hair);border-bottom:var(--hair);padding:8px 0}
 .mnemo.hint p{margin:0;font-size:15px;line-height:1.6}
 .own summary{cursor:pointer;font-size:13px;color:var(--wood)}
@@ -345,6 +347,8 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .verdict .v-h{font-weight:500;margin:0 0 4px}
 .verdict ul{margin:0 0 8px;padding-left:20px}
 .verdict li{margin:2px 0}
+.grid > details.later{grid-column:1/-1}
+.later > summary{color:var(--wood);padding:4px 0}
 .scripth{grid-column:1/-1;margin:16px 0 0;font-family:var(--f-title, inherit)}
 .scripth:first-child{margin-top:0}
 .today{border-left:2px solid var(--kin);padding:4px 0 4px 16px;display:flex;flex-direction:column;gap:4px}
@@ -411,3 +415,14 @@ body:has(.kbd) .note-fab{bottom:auto;top:40%;writing-mode:vertical-rl;padding:10
 .legend2 span{display:inline-block;width:10px;height:10px}
 .legend2 .k-me{background:var(--beni)}
 .legend2 .k-them{background:var(--take);margin-left:12px}
+
+/* Pace: only the chosen option says more */
+.pace .opt:not(:has(input:checked)) small{display:none}
+details.fine{border-top:var(--hair);padding-top:8px}
+details.fine[open] > * + *{margin-top:12px}
+details.fine > summary{color:var(--wood)}
+/* First-time bubbles */
+.coach{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--take);border-left-width:3px;background:var(--card);padding:10px 12px;animation:enter .4s}
+.coach p{margin:0;font-size:14px;line-height:1.55}
+.coach .btn{flex:none}
+.about details + details{border-top:var(--hair);margin-top:12px;padding-top:12px}

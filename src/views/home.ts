@@ -1,6 +1,7 @@
+import { coachAt } from "../ui/coach";
 import { isJa } from "../i18n";
 import { writeNote } from "../ui/notes";
-import { isKata, KANA, LINES, lineLabel } from "../data/kana";
+import { isKata, KANA } from "../data/kana";
 import { alphabetMastery, buildQueue, dayRec, kataStarted, nextSoon, pending, recordMastery, streak, today } from "../core/scheduler";
 import { save } from "../core/store";
 import type { DayRec, Profile } from "../core/types";
@@ -32,10 +33,11 @@ export function viewHome(): void {
     ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
     ${soonLine(p, t, q.length > 0)}
     ${progressLine(p, t, d)}
-    <p class="muted small" style="margin:0">Ligne en cours : ${lineLabel(LINES[p.unlocked - 1])}.</p>
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
   );
+  const stats = v.querySelector(".stats");
+  if (nDue > 0 && stats) coachAt("reviews", "Les révisions passent d'abord : ce sont les signes à rappeler avant de les oublier.", stats.parentElement!, stats.nextElementSibling);
   if (backupDue()) {
     const n = daysSinceBackup();
     const bk = el(`<section class="card backup-nag"><h3>Mettre votre progression à l'abri</h3>
@@ -53,10 +55,6 @@ export function viewHome(): void {
       bk.remove();
     };
   }
-  v.appendChild(
-    el(`<section class="card"><details><summary>Comment ça marche</summary>
-    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 3 étapes : tracer sur le modèle animé, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
-  );
   showWave();
   const go = $opt<HTMLButtonElement>("#go");
   if (go) go.onclick = () => startSession("day");
@@ -86,11 +84,10 @@ function progressLine(p: Profile, t: number, d: DayRec): string {
   const s = streak(p, t);
   // Practice not yet confirmed, as points of the whole script (see practiceGain).
   const pend = Math.round((KANA.filter((k) => isKata(k.k) === kata).reduce((a, k) => a + pending(p.cards[k.k]), 0) / KANA.filter((k) => isKata(k.k) === kata).length) * 100);
-  const pool = KANA.filter((k) => isKata(k.k) === kata), total = pool.length, seen = pool.filter((k) => p.cards[k.k]?.seen).length;
   const now = activity(d), before = activity(p.days[t - 1]);
   return `<div class="today">
     <p style="margin:0">${now ? `Aujourd'hui : ${now}.` : before ? `Hier : ${before}.` : "Pas encore d'activité aujourd'hui."}</p>
-    <p class="small" style="margin:0">${seen} ${kata ? "katakana" : "hiragana"} découverts sur ${total} · maîtrise ${m} %${pend ? ` <span>(+${pend} à confirmer)</span>` : ""}${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
+    <p class="small" style="margin:0">Maîtrise des ${kata ? "katakana" : "hiragana"} : ${m} %${pend ? ` <span>(+${pend} à confirmer)</span>` : ""}${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
   </div>`;
 }
 

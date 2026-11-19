@@ -1,3 +1,4 @@
+import { coachAt } from "../ui/coach";
 import { shareStory } from "../ui/story";
 import { rivals, shareMyLink } from "./duel";
 import { dayDate, history, historyCSV } from "../core/stats";
@@ -21,20 +22,31 @@ import { knownWordCount, openWords, wordMastery } from "../core/vocab";
 export function viewProgress(): void {
   const p = profile(), t = today(), v = view();
   v.innerHTML = "";
-  let grid = "";
-  LINES.forEach((ln, i) => {
+  // Open lines in full; the lines still closed fold into one line each script, sheets still reachable.
+  const lineHTML = (ln: string, i: number) => {
     const cs = lineCards(i), locked = i >= p.unlocked;
-    if (i === 0 || i === KATA_START) grid += `<h3 class="scripth">${i ? "Katakana" : "Hiragana"}</h3>`;
-    grid += `<div class="lineh">Ligne ${lineLabel(ln).replace(" · katakana", "")}${locked ? " · fermée" : ""}</div>`;
+    let h = `<div class="lineh">Ligne ${lineLabel(ln).replace(" · katakana", "")}${locked ? " · fermée" : ""}</div>`;
     (SLOTS[ln] ?? [0, 1, 2, 3, 4]).forEach((s) => {
       if (s === null) {
-        grid += `<div class="cell empty"></div>`;
+        h += `<div class="cell empty"></div>`;
         return;
       }
       const k = cs[s], st = status(p, k.k), m = Math.round(mastery(p, k.k, t) * 100);
       const b = Math.min(100, m + Math.round(pending(p.cards[k.k]) * 100));
-      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%;--b:${b}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
+      h += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%;--b:${b}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
     });
+    return h;
+  };
+  let grid = "";
+  [0, KATA_START].forEach((from) => {
+    const to = from ? LINES.length : KATA_START, kat = from > 0;
+    const idx = Array.from({ length: to - from }, (_, j) => from + j);
+    const open = idx.filter((i) => i < p.unlocked || lineCards(i).some((c) => p.cards[c.k]?.seen));
+    const closed = idx.filter((i) => !open.includes(i));
+    grid += `<h3 class="scripth">${kat ? "Katakana" : "Hiragana"}</h3>`;
+    grid += open.map((i) => lineHTML(LINES[i], i)).join("");
+    if (closed.length)
+      grid += `<details class="later"><summary class="small">${!open.length ? "Pas encore commencés" : closed.length === 1 ? "1 ligne à venir" : `${closed.length} lignes à venir`}</summary><div class="grid">${closed.map((i) => lineHTML(LINES[i], i)).join("")}</div></details>`;
   });
   const hira = KANA.filter((k) => !isKata(k.k)), doneH = hira.filter((k) => status(p, k.k) === "done").length;
   recordMastery(p, t);
@@ -60,6 +72,8 @@ export function viewProgress(): void {
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );
+  const gridEl = v.querySelector(".grid");
+  if (gridEl) coachAt("progress", "Une case par signe : elle se remplit sur plusieurs jours, pas en une seule séance.", gridEl.parentElement!, gridEl);
   // Show it, compare it, keep it.
   const rv = Object.keys(rivals());
   const sh = el(`<section class="card"><h3>Partager ma progression</h3>

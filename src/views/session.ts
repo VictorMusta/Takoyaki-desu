@@ -2,7 +2,8 @@ import { byK, sound } from "../data/kana";
 import { buildQueue, cardOf, dayRec, gradeCard, peekCard, practiceGain, practiceQueue, pullForward, recordMastery, saturated, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
-import { $, el, esc, setQuit, view } from "../ui/dom";
+import { $, el, esc, setQuit, toast, view } from "../ui/dom";
+import { coachAt } from "../ui/coach";
 import { celebrate } from "../ui/celebrate";
 import { ficheHTML } from "../ui/fiche";
 import { mnemoHTML, mnemoText } from "../ui/mnemo";
@@ -172,13 +173,14 @@ export function viewCard(): void {
     // draw at once (a tester tried before finding « Apprendre »), so there is nothing to tap first.
     v.appendChild(
       el(`<section class="card">${head}
-      <p class="small muted" style="margin:0">Regardez l'ordre des traits, puis tracez par-dessus avec le doigt, en suivant les numéros.</p>
+      <p class="small muted" style="margin:0">Tracez par-dessus, en suivant les numéros.</p>
       <div class="stage" id="st"></div>
       <div class="tools"><button class="btn" id="replay">Revoir l'ordre</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Suivant</button></div>
       ${mnemoHTML(it.k, true)}
-      <h3>Le signe ${K.k} dans les polices courantes</h3>${ficheHTML(it.k)}</section>`),
+      <details><summary>Le signe et des exemples</summary>${ficheHTML(it.k)}</details></section>`),
     );
     const st = $("#st");
+    coachAt("sign", "Trois étapes pour chaque nouveau signe : sur le modèle, au pochoir, puis de mémoire.", st.parentElement!, st);
     const pad = makePad(st, modelSVG(it.k, "learn", show));
     const play = () => requestAnimationFrame(() => requestAnimationFrame(() => learnSeq(st.firstElementChild!)));
     play();
@@ -211,7 +213,7 @@ export function viewCard(): void {
     if (it.isNew) it.step = 4;
     v.appendChild(
       el(`<section class="card">${head}
-      ${enough ? `<p class="small muted enough" style="margin:0">Assez vu pour aujourd'hui : ce signe ne progressera plus avant demain. Rien n'empêche de s'entraîner.</p>` : ""}
+      ${enough ? `<p class="small muted enough" style="margin:0">Assez vu pour aujourd'hui.</p>` : ""}
       ${it.hinted && !it.peeked ? `<div class="mnemo hint"><p><span class="ii" aria-hidden="true">i</span> ${esc(mnemoText(it.k))}</p></div>` : ""}
       <div class="stage" id="st"></div>
       <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
@@ -221,10 +223,13 @@ export function viewCard(): void {
           : `<div class="helps"><span class="small muted">Besoin d'aide ?</span>${
               it.hinted || !mnemoText(it.k) ? "" : `<button class="btn sm" id="hint1"><span class="ii" aria-hidden="true">i</span> L'astuce</button>`
             }<button class="btn sm" id="peek">Voir le signe</button></div>
-      <p class="small muted" style="margin:-8px 0 0">${it.hinted ? "Astuce utilisée : la note ira au mieux jusqu'à « Bof »." : "L'astuce limite la note à « Bof » ; voir le signe compte comme « Raté »."}</p>`
+      ${it.hinted ? `<p class="small muted" style="margin:-8px 0 0">Astuce utilisée : la note ira au mieux jusqu'à « Bof ».</p>` : ""}`
       }</section>`),
     );
-    const pad = makePad($("#st"), modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
+    const rst = $("#st");
+    if (enough) coachAt("enough", "Ce signe a fait le plein pour aujourd'hui : il progressera demain. Rien n'empêche de s'entraîner.", rst.parentElement!, rst);
+    else if (!it.peeked) coachAt("recall", "De mémoire, sans modèle. Raté, ce n'est pas grave : c'est en cherchant qu'on retient.", rst.parentElement!, rst);
+    const pad = makePad(rst, modelSVG(it.k, it.peeked ? "stencil" : "blank", show));
     const h1 = document.querySelector<HTMLButtonElement>("#hint1");
     if (h1)
       h1.onclick = () => {
@@ -241,6 +246,7 @@ export function viewCard(): void {
       peek.onclick = () => {
         it.peeked = true;
         save();
+        toast("Voir le signe compte comme « Raté » : il reviendra plus tard.");
         viewCard();
       };
     const correct = (strokes: Drawing) => {

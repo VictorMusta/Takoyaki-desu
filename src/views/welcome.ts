@@ -12,7 +12,7 @@ export function viewWelcome(): void {
     el(`<section class="card">
     <p class="hero" aria-hidden="true">あいう</p>
     <h2>Bienvenue</h2>
-    <p class="small muted" style="margin:0">Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Quelques minutes par jour suffisent. Chaque personne a son propre profil, et vous pouvez en créer plusieurs sur ce téléphone.</p>
+    <p class="small muted" style="margin:0">Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Un signe est maîtrisé quand il tient plusieurs jours : la progression se compte en jours, pas en heures.</p>
     <form id="f" novalidate style="display:flex;flex-direction:column;gap:16px">
       <label class="sr-only" for="name">Votre prénom</label>
       <input id="name" class="text" aria-label="Votre prénom" placeholder="Votre prénom" autocomplete="given-name" maxlength="24" required>

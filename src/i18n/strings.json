@@ -454,6 +454,13 @@
   ]
  },
  {
+  "s": "Compris",
+  "files": [
+   "src/ui/coach.ts",
+   "src/views/drill.ts"
+  ]
+ },
+ {
   "s": "Abandonner",
   "files": [
    "src/ui/dom.ts"
@@ -866,7 +873,7 @@
   ]
  },
  {
-  "s": "« Bien » est bloqué : notez « Bof » ou « Raté ».",
+  "s": "« Bien » est bloqué : la vérification a vu un souci. Notez « Bof » ou « Raté », ou contestez-la.",
   "files": [
    "src/views/compare.ts"
   ]
@@ -972,7 +979,8 @@
  {
   "s": "Le signe et des exemples",
   "files": [
-   "src/views/compare.ts"
+   "src/views/compare.ts",
+   "src/views/session.ts"
   ]
  },
  {
@@ -995,6 +1003,12 @@
  },
  {
   "s": "Nombre, ordre et sens corrects.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Notez honnêtement : la note décide quand le signe reviendra.",
   "files": [
    "src/views/compare.ts"
   ]
@@ -1139,12 +1153,6 @@
    "src/views/exam.ts",
    "src/views/progress.ts",
    "src/views/session.ts"
-  ]
- },
- {
-  "s": "Compris",
-  "files": [
-   "src/views/drill.ts"
   ]
  },
  {
@@ -1644,12 +1652,6 @@
   ]
  },
  {
-  "s": "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}{6}",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
   "s": "{0} Elle ne vit que dans ce téléphone : envoyez-vous le fichier par mail, il suffira de l'importer pour tout retrouver.",
   "files": [
    "src/views/home.ts"
@@ -1687,22 +1689,10 @@
   ]
  },
  {
-  "s": "Chaque nouveau signe passe par 3 étapes : tracer sur le modèle animé, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « {0} » tient au moins 3 jours.",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
   "s": "Commencer",
   "files": [
    "src/views/home.ts",
    "src/views/welcome.ts"
-  ]
- },
- {
-  "s": "Comment ça marche",
-  "files": [
-   "src/views/home.ts"
   ]
  },
  {
@@ -1760,7 +1750,7 @@
   ]
  },
  {
-  "s": "Ligne en cours : {0}.",
+  "s": "Les révisions passent d'abord : ce sont les signes à rappeler avant de les oublier.",
   "files": [
    "src/views/home.ts"
   ]
@@ -1770,6 +1760,12 @@
   "files": [
    "src/views/home.ts",
    "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Maîtrise des {0} : {1} %{2}{3}{4}",
+  "files": [
+   "src/views/home.ts"
   ]
  },
  {
@@ -1942,6 +1938,12 @@
   ]
  },
  {
+  "s": "{0} lignes à venir",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "{0}, ouvrir la fiche",
   "files": [
    "src/views/progress.ts"
@@ -1949,6 +1951,12 @@
  },
  {
   "s": "+{0} % d'entraînement, à confirmer à la prochaine révision.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "1 ligne à venir",
   "files": [
    "src/views/progress.ts"
   ]
@@ -1968,7 +1976,8 @@
  {
   "s": "Assez vu pour aujourd'hui.",
   "files": [
-   "src/views/progress.ts"
+   "src/views/progress.ts",
+   "src/views/session.ts"
   ]
  },
  {
@@ -2182,6 +2191,12 @@
   ]
  },
  {
+  "s": "Pas encore commencés",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Pas encore vu",
   "files": [
    "src/views/progress.ts"
@@ -2260,6 +2275,12 @@
   ]
  },
  {
+  "s": "Une case par signe : elle se remplit sur plusieurs jours, pas en une seule séance.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "Une image à poster : signes maîtrisés, série, temps de pratique, calendrier",
   "files": [
    "src/views/progress.ts"
@@ -2327,12 +2348,6 @@
   ]
  },
  {
-  "s": "Assez vu pour aujourd'hui : ce signe ne progressera plus avant demain. Rien n'empêche de s'entraîner.",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
   "s": "Astuce utilisée : la note ira au mieux jusqu'à « Bof ».",
   "files": [
    "src/views/session.ts"
@@ -2351,6 +2366,12 @@
   ]
  },
  {
+  "s": "Ce signe a fait le plein pour aujourd'hui : il progressera demain. Rien n'empêche de s'entraîner.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "Continuer ?",
   "files": [
    "src/views/session.ts"
@@ -2358,6 +2379,12 @@
  },
  {
   "s": "Corrigez tout de suite, pendant que la correction est fraîche. Votre note ne change pas ; une réussite fait un peu progresser le signe.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "De mémoire, sans modèle. Raté, ce n'est pas grave : c'est en cherchant qu'on retient.",
   "files": [
    "src/views/session.ts"
   ]
@@ -2405,19 +2432,7 @@
   ]
  },
  {
-  "s": "L'astuce limite la note à « Bof » ; voir le signe compte comme « Raté ».",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
   "s": "Le pochoir s'efface : seuls restent les points de départ.",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
-  "s": "Le signe {0} dans les polices courantes",
   "files": [
    "src/views/session.ts"
   ]
@@ -2436,12 +2451,6 @@
  },
  {
   "s": "Raté (dont {0} « vu »)",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
-  "s": "Regardez l'ordre des traits, puis tracez par-dessus avec le doigt, en suivant les numéros.",
   "files": [
    "src/views/session.ts"
   ]
@@ -2489,7 +2498,25 @@
   ]
  },
  {
+  "s": "Tracez par-dessus, en suivant les numéros.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Trois étapes pour chaque nouveau signe : sur le modèle, au pochoir, puis de mémoire.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "Voir le signe",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Voir le signe compte comme « Raté » : il reviendra plus tard.",
   "files": [
    "src/views/session.ts"
   ]
@@ -2537,12 +2564,6 @@
   ]
  },
  {
-  "s": "Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
   "s": "Aucune mesure d'audience, aucun cookie, aucune publicité, aucun outil tiers. Les polices sont livrées avec l'appli.",
   "files": [
    "src/views/settings.ts"
@@ -2555,7 +2576,7 @@
   ]
  },
  {
-  "s": "Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.",
+  "s": "Automatique suit le téléphone.",
   "files": [
    "src/views/settings.ts"
   ]
@@ -2778,6 +2799,12 @@
   ]
  },
  {
+  "s": "Les bulles d'aide reviendront au fil des écrans.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Les mêmes données en texte. Importer remplace les données actuelles.",
   "files": [
    "src/views/settings.ts"
@@ -2790,7 +2817,19 @@
   ]
  },
  {
+  "s": "Ni jeu d'écoute, ni son automatique. « Écouter » marche toujours.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Niveau",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Nombre précis de signes par jour",
   "files": [
    "src/views/settings.ts"
   ]
@@ -2815,12 +2854,6 @@
  },
  {
   "s": "Nuit",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
-  "s": "Ou un nombre précis par jour",
   "files": [
    "src/views/settings.ts"
   ]
@@ -2851,12 +2884,6 @@
  },
  {
   "s": "Pas de compte, pas de serveur à nous : votre progression vit uniquement dans ce navigateur.",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
-  "s": "Pinceau : le trait s'affine au départ, à l'arrivée et quand la main va vite. Simple : un trait régulier, le plus lisible.",
   "files": [
    "src/views/settings.ts"
   ]
@@ -2916,6 +2943,12 @@
   ]
  },
  {
+  "s": "Réglages fins",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Remarques des testeurs",
   "files": [
    "src/views/settings.ts"
@@ -2965,6 +2998,12 @@
   ]
  },
  {
+  "s": "Revoir les bulles d'aide",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Rien ne quitte votre téléphone sans vous.",
   "files": [
    "src/views/settings.ts"
@@ -2995,13 +3034,13 @@
   ]
  },
  {
-  "s": "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes.",
+  "s": "Simple",
   "files": [
    "src/views/settings.ts"
   ]
  },
  {
-  "s": "Simple",
+  "s": "Simple est le plus lisible.",
   "files": [
    "src/views/settings.ts"
   ]
@@ -3085,25 +3124,25 @@
   ]
  },
  {
-  "s": "Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
   "s": "Vibrations",
   "files": [
    "src/views/settings.ts"
   ]
  },
  {
-  "s": "Votre progression (tous les profils) ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps : choisissez votre appli de mail dans le menu de partage, et mettez votre propre adresse. Il ne contient que votre progression, rien de personnel.",
+  "s": "Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.",
   "files": [
    "src/views/settings.ts"
   ]
  },
  {
-  "s": "Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.",
+  "s": "Votre progression ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps, à votre propre adresse.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Vous lisez et écrivez déjà les hiragana ? Ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes.",
   "files": [
    "src/views/settings.ts"
   ]
@@ -3169,7 +3208,7 @@
   ]
  },
  {
-  "s": "Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Quelques minutes par jour suffisent. Chaque personne a son propre profil, et vous pouvez en créer plusieurs sur ce téléphone.",
+  "s": "Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Un signe est maîtrisé quand il tient plusieurs jours : la progression se compte en jours, pas en heures.",
   "files": [
    "src/views/welcome.ts"
   ]
