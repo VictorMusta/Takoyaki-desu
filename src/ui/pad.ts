@@ -10,7 +10,9 @@ export interface Pad {
   onchange: (() => void) | null;
 }
 
-const PALM_SIZE = 45; // px: wider touches are treated as a resting palm
+// px: wider touches are treated as a resting palm. iPhones report a finger as 40 to 70 px wide
+// (Android as 1 to 30), so the bar is high: only a real palm, never a pressed finger.
+const PALM_SIZE = 110;
 
 /** A drawing surface over `underSVG`, storing strokes in the 109 × 109 model space. */
 export function makePad(stage: HTMLElement, underSVG: string): Pad {
@@ -57,11 +59,28 @@ export function makePad(stage: HTMLElement, underSVG: string): Pad {
     draw();
   }
 
+  const finish = () => {
+    if (!cur) return;
+    strokes.push(cur);
+    cur = null;
+    pid = null;
+    draw();
+    pad.onchange?.();
+  };
   cv.addEventListener("pointerdown", (e) => {
-    if (pid !== null) return;
+    if (pid !== null) {
+      // A new first finger means the last stroke is over, even if its « pointerup » got lost
+      // (iOS sometimes drops it): close it rather than ignore every stroke from now on.
+      if (!e.isPrimary) return;
+      finish();
+    }
     if (e.pointerType === "touch" && (e.width > PALM_SIZE || e.height > PALM_SIZE)) return;
     pid = e.pointerId;
-    cv.setPointerCapture(pid);
+    try {
+      cv.setPointerCapture(pid);
+    } catch {
+      /* the pointer is already gone: the stroke still works without capture */
+    }
     cur = [pt(e)];
     buzz("tick");
     draw();
@@ -76,15 +95,16 @@ export function makePad(stage: HTMLElement, underSVG: string): Pad {
     }
   });
   const end = (e: PointerEvent) => {
-    if (e.pointerId !== pid || !cur) return;
-    strokes.push(cur);
-    cur = null;
-    pid = null;
-    draw();
-    pad.onchange?.();
+    if (e.pointerId === pid) finish();
   };
   cv.addEventListener("pointerup", end);
   cv.addEventListener("pointercancel", end);
+  cv.addEventListener("lostpointercapture", end);
+  // iOS Safari: no double-tap zoom, magnifier or text selection while drawing quick strokes.
+  const stop = (e: TouchEvent) => e.preventDefault();
+  cv.addEventListener("touchstart", stop, { passive: false });
+  cv.addEventListener("touchmove", stop, { passive: false });
+  cv.addEventListener("dblclick", (e) => e.preventDefault());
 
   const ro = new ResizeObserver(size);
   ro.observe(stage);

@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.16.1",
+    date: "2026-11-19",
+    items: ["iPhone : l'écriture marche enfin. Le doigt était pris pour la paume et ignoré, et un trait pouvait bloquer les suivants."],
+  },
+  {
     v: "0.16.0",
     date: "2026-11-19",
     items: [

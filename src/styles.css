@@ -95,6 +95,7 @@ nav a[aria-current="page"] b{color:var(--beni)}
 .card .stage{background:var(--paper)}
 .stage svg,.stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .stage canvas{touch-action:none}
+.stage{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 .tools{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .pair .stage{max-width:none}
