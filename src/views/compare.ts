@@ -13,7 +13,7 @@ import { buzz } from "../ui/haptics";
 import { mnemoHTML } from "../ui/mnemo";
 import { save } from "../core/store";
 
-type Answer = Grade | "ok" | "ko" | "peek";
+type Answer = Grade | "ok" | "ko" | "peek" | "fixed" | "again" | "skip";
 
 /**
  * Side-by-side (or overlaid) comparison, an automatic check of the drawing, then the grade.
@@ -22,7 +22,7 @@ type Answer = Grade | "ok" | "ko" | "peek";
  */
 /** peeked: the learner looked at the sign while recalling it; no self-grade, it simply comes back sooner. */
 /** hinted: the memory hook was read during recall, so « Bien » is out of reach (Bof at best). */
-export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false, hinted = false): void {
+export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswer: (a: Answer) => void, peeked = false, hinted = false, retry = false): void {
   const K = byK[k];
   const show = profile().settings.showNums;
   const prof = profile();
@@ -56,9 +56,11 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     <div id="tip"></div>
     <details><summary>Le signe et des exemples</summary>${ficheHTML(k)}</details>
 
-    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${peeked ? "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain." : ""}</p>
+    <div class="gradebar"><p class="hintline" id="hint" aria-live="polite">${retry ? "Deuxième essai : il ne change pas votre note." : peeked ? "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain." : ""}</p>
     ${
-      peeked
+      retry
+        ? `<div class="grades" style="grid-template-columns:1fr 1fr 1fr"><button class="btn" data-g="skip">Passer à la suite</button><button class="btn" data-g="again">Réessayer</button><button class="btn g-bien" data-g="fixed">C'est bon !</button></div>`
+        : peeked
         ? `<div class="grades" style="grid-template-columns:1fr"><button class="btn primary" data-g="peek">Continuer (compte comme Raté)</button></div>`
         : exam
         ? `<div class="grades" style="grid-template-columns:1fr 1fr"><button class="btn g-rate" data-g="ko"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19"/></svg>Faux</button><button class="btn g-bien" data-g="ok" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Correct</button></div>`
@@ -126,6 +128,11 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     if (peeked) return;
     const blocked = !okAll && !contested;
     const hint = $("#hint");
+    if (retry) {
+      btn("fixed").disabled = blocked;
+      hint.textContent = blocked ? "Pas encore tout à fait : réessayez, ou passez à la suite." : "Deuxième essai : il ne change pas votre note.";
+      return;
+    }
     if (exam) {
       btn("ok").disabled = blocked;
       hint.textContent = blocked ? "« Correct » est bloqué par la vérification." : "";
@@ -152,7 +159,7 @@ export function viewCompare(k: string, strokes: Stroke[], exam: boolean, onAnswe
     };
   update();
   if (chk) buzz(okAll ? "ok" : "ko");
-  const feel: Record<string, "ok" | "soft" | "ko"> = { bien: "ok", ok: "ok", bof: "soft", rate: "ko", ko: "ko", peek: "ko" };
+  const feel: Record<string, "ok" | "soft" | "ko"> = { bien: "ok", ok: "ok", fixed: "ok", bof: "soft", again: "soft", rate: "ko", ko: "ko", peek: "ko" };
   v.querySelectorAll<HTMLButtonElement>("[data-g]").forEach(
     (b) =>
       (b.onclick = () => {

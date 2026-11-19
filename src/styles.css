@@ -383,3 +383,10 @@ body:has(.modal) .note-fab{display:none}
 .soon{border-left:2px solid var(--beni);padding:4px 0 4px 16px}
 .opt.primary-opt{border-color:var(--beni);border-width:1.5px}
 .opt.primary-opt span{color:var(--beni)}
+
+/* S'entraîner: two big tiles */
+.train-main{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn.tile{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:16px;text-align:left;min-height:120px}
+.btn.tile b{font:500 32px/1 var(--display);color:var(--beni)}
+.btn.tile span{font:500 18px var(--display)}
+.btn.tile small{font:400 13px var(--body);color:var(--wood)}

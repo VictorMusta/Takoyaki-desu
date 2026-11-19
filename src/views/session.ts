@@ -261,6 +261,48 @@ function requeue(session: SavedSession, item: QueueItem): void {
  */
 export const LEARN_RECALLS = 2;
 
+/**
+ * After a miss, a « Bof » or a peek: a second try right away, to fix the mistake while the
+ * correction is fresh. It never changes the grade just given; getting it right adds a little
+ * capped practice (half a free rep). « Passer à la suite » skips it at any time.
+ */
+function next(k: string, g: Grade | "peek"): void {
+  if (g === "bien") return viewCard();
+  viewRetry(k);
+}
+
+function viewRetry(k: string): void {
+  const K = byK[k];
+  const show = profile().settings.showNums;
+  const v = view();
+  v.innerHTML = "";
+  v.appendChild(
+    el(`<section class="card">
+    <div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">Deuxième essai · de mémoire</div></div><div class="row"><button class="btn sm" id="say">Écouter</button></div></div>
+    <p class="small muted" style="margin:0">Corrigez tout de suite, pendant que la correction est fraîche. Votre note ne change pas ; une réussite fait un peu progresser le signe.</p>
+    <div class="stage" id="st"></div>
+    <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="cmp2" disabled>Comparer</button></div>
+    <div class="row"><button class="btn" id="skip">Passer à la suite</button></div></section>`),
+  );
+  const pad = makePad($("#st"), modelSVG(k, "blank", show));
+  const cmp = $<HTMLButtonElement>("#cmp2");
+  pad.onchange = () => (cmp.disabled = pad.strokes.length === 0);
+  $("#undo").onclick = () => pad.undo();
+  $("#clr").onclick = () => pad.clear();
+  $("#skip").onclick = () => viewCard();
+  $("#say").onclick = () => speak(K.k);
+  cmp.onclick = () =>
+    viewCompare(k, pad.strokes.slice() as Drawing, false, (a) => {
+      if (a === "fixed") {
+        practiceGain(profile(), k, today(), 0.5);
+        save();
+        return viewCard();
+      }
+      if (a === "again") return viewRetry(k);
+      viewCard();
+    }, false, false, true);
+}
+
 function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const session = cur();
   if (!session) return;
@@ -278,7 +320,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
     }
     session.i++;
     save();
-    return viewCard();
+    return next(it.k, g);
   }
   if (g === "peek") {
     if (!it.counted) {
@@ -289,7 +331,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
     requeue(session, { k: it.k, isNew: false, counted: true, ...(it.isNew || it.learn !== undefined ? { learn: 0 } : {}) });
     session.i++;
     save();
-    return viewCard();
+    return next(it.k, g);
   }
   if (!it.counted) {
     if (it.isNew) d.nw++;
@@ -306,14 +348,14 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
       session.queue.splice(Math.min(session.queue.length, session.i + 3), 0, { k: it.k, isNew: false, counted: true, learn: 0 });
       session.i++;
       save();
-      return viewCard();
+      return next(it.k, g);
     }
     const done = (it.learn ?? 0) + 1;
     if (done < LEARN_RECALLS) {
       requeue(session, { k: it.k, isNew: false, counted: true, learn: done });
       session.i++;
       save();
-      return viewCard();
+      return next(it.k, g);
     }
   }
   const before = status(p, it.k);
@@ -323,7 +365,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
   session.i++;
   save();
   if (before !== "done" && status(p, it.k) === "done") celebrate(it.k, viewCard);
-  else viewCard();
+  else next(it.k, g);
 }
 
 function viewEnd(practice = false, st?: SessionStats): void {

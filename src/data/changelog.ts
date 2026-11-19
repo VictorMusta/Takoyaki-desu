@@ -10,6 +10,14 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.13.0",
+    date: "2026-11-19",
+    items: [
+      "Nouvel onglet « S'entraîner » (練) : Écrire, Jouer (10 jeux au hasard), un jeu précis, et l'examen. L'onglet Examen y est rangé.",
+      "Après un raté, un « Bof » ou un signe regardé : un deuxième essai tout de suite pour corriger. Il ne change pas la note, mais une réussite fait un peu progresser le signe. « Passer à la suite » pour laisser tomber.",
+    ],
+  },
+  {
     v: "0.12.0",
     date: "2026-11-19",
     items: [

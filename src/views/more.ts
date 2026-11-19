@@ -2,7 +2,8 @@ import { LINES, lineLabel } from "../data/kana";
 import { dueCount, unseenOpen, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import { el } from "../ui/dom";
-import type { SessionKind } from "./session";
+import { startDrills, type SessionKind } from "./session";
+import { allGames } from "./train";
 
 /**
  * « Continuer » once today's lesson is done. Three safe ways to go on:
@@ -18,8 +19,10 @@ export function continueBlock(box: HTMLElement, start: (k: SessionKind) => void)
     `<button class="btn opt" id="${id}"><span>${title}</span><small>${sub}</small></button>`;
   let html = "";
   // « Sans limite »: the next batch first, practice after.
-  const prac = seen ? opt("m-prac", "Réviser encore", "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.") : "";
-  if (seen && !p.settings.intensive) html += opt("m-prac", "Réviser encore", "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.");
+  const prac = seen
+    ? opt("m-prac", "Écrire encore", "10 signes fragiles, de mémoire. Sans repousser vos révisions.") + opt("m-play", "Jouer", "10 jeux au hasard sur ce que vous avez vu.")
+    : "";
+  if (!p.settings.intensive) html += prac;
   if (dueNow > 0) {
     html += `<p class="small muted" style="margin:0">Encore ${dueNow} révision(s) prévue(s) aujourd'hui au-delà de votre plafond : faites-les avant d'apprendre de nouveaux signes.</p>`;
   } else if (unseen > 0) {
@@ -41,6 +44,7 @@ export function continueBlock(box: HTMLElement, start: (k: SessionKind) => void)
     if (b) b.onclick = f;
   };
   on("m-prac", () => start("practice"));
+  on("m-play", () => startDrills(allGames()));
   on("m-more", () => start("more"));
   on("m-line", () => {
     p.unlocked++;

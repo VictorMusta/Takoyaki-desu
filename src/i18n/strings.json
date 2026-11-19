@@ -1,11 +1,5 @@
 [
  {
-  "s": "Examen",
-  "files": [
-   "index.html"
-  ]
- },
- {
   "s": "Progrès",
   "files": [
    "index.html"
@@ -15,6 +9,13 @@
   "s": "Réglages",
   "files": [
    "index.html"
+  ]
+ },
+ {
+  "s": "S'entraîner",
+  "files": [
+   "index.html",
+   "src/views/train.ts"
   ]
  },
  {
@@ -759,6 +760,12 @@
   ]
  },
  {
+  "s": "C'est bon !",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
   "s": "Continuer (compte comme Raté)",
   "files": [
    "src/views/compare.ts"
@@ -778,6 +785,12 @@
  },
  {
   "s": "D'accord, vous avez le dernier mot.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Deuxième essai : il ne change pas votre note.",
   "files": [
    "src/views/compare.ts"
   ]
@@ -837,6 +850,19 @@
   ]
  },
  {
+  "s": "Pas encore tout à fait : réessayez, ou passez à la suite.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Passer à la suite",
+  "files": [
+   "src/views/compare.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "pour qu'il corrige la vérification.",
   "files": [
    "src/views/compare.ts"
@@ -847,6 +873,13 @@
   "files": [
    "src/views/compare.ts",
    "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Réessayer",
+  "files": [
+   "src/views/compare.ts",
+   "src/views/progress.ts"
   ]
  },
  {
@@ -1170,7 +1203,8 @@
  {
   "s": "Examen strict",
   "files": [
-   "src/views/exam.ts"
+   "src/views/exam.ts",
+   "src/views/train.ts"
   ]
  },
  {
@@ -1345,12 +1379,6 @@
   ]
  },
  {
-  "s": "Après quelques signes de plus",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
   "s": "Aucune sauvegarde pour l'instant.",
   "files": [
    "src/views/home.ts",
@@ -1408,12 +1436,6 @@
  },
  {
   "s": "Dernière sauvegarde il y a {0} jours.",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
-  "s": "Dix exercices variés sur ce que vous avez déjà vu, sans limite et sans repousser vos révisions.",
   "files": [
    "src/views/home.ts"
   ]
@@ -1546,12 +1568,6 @@
   ]
  },
  {
-  "s": "S'entraîner autrement",
-  "files": [
-   "src/views/home.ts"
-  ]
- },
- {
   "s": "Séance du jour, {0}",
   "files": [
    "src/views/home.ts"
@@ -1582,7 +1598,13 @@
   ]
  },
  {
-  "s": "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.",
+  "s": "10 jeux au hasard sur ce que vous avez vu.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "10 signes fragiles, de mémoire. Sans repousser vos révisions.",
   "files": [
    "src/views/more.ts"
   ]
@@ -1606,19 +1628,26 @@
   ]
  },
  {
+  "s": "Écrire encore",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
   "s": "Encore {0} révision(s) prévue(s) aujourd'hui au-delà de votre plafond : faites-les avant d'apprendre de nouveaux signes.",
   "files": [
    "src/views/more.ts"
   ]
  },
  {
-  "s": "Ouvrir la ligne « {0} » et continuer",
+  "s": "Jouer",
   "files": [
-   "src/views/more.ts"
+   "src/views/more.ts",
+   "src/views/train.ts"
   ]
  },
  {
-  "s": "Réviser encore",
+  "s": "Ouvrir la ligne « {0} » et continuer",
   "files": [
    "src/views/more.ts"
   ]
@@ -1888,12 +1917,6 @@
   ]
  },
  {
-  "s": "Réessayer",
-  "files": [
-   "src/views/progress.ts"
-  ]
- },
- {
   "s": "Rejouer le tracé",
   "files": [
    "src/views/progress.ts"
@@ -2028,6 +2051,18 @@
  },
  {
   "s": "Continuer ?",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Corrigez tout de suite, pendant que la correction est fraîche. Votre note ne change pas ; une réussite fait un peu progresser le signe.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Deuxième essai · de mémoire",
   "files": [
    "src/views/session.ts"
   ]
@@ -2758,6 +2793,60 @@
   "s": "Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.",
   "files": [
    "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "10 jeux au hasard",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "10 signes fragiles, de mémoire",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Apprenez d'abord quelques signes dans la séance du jour.",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Après quelques signes de plus",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Autant que vous voulez, sans repousser vos révisions. Chaque réussite fait un peu progresser le signe, jusqu'à « Assez vu pour aujourd'hui ».",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Écrire",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Passer un examen",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Quelques signes sans aide, pour vérifier que vos notes sont honnêtes. Ne change pas vos révisions.",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Un jeu précis",
+  "files": [
+   "src/views/train.ts"
   ]
  },
  {

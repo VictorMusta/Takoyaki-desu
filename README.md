@@ -29,7 +29,8 @@ Reconnaître un signe ne suffit pas pour savoir l'écrire. Ici, on **écrit chaq
 
 - **151 signes** : hiragana complets (base, ten-ten, maru, petits signes), puis katakana avec la barre ー. Chaque signe a son astuce mnémotechnique, des mots d'exemple et une fiche (5 polices, son jumeau dans l'autre écriture).
 - **262 mots utiles**, du quotidien et du voyage (でんしゃ, きっぷ, コンビニ…). Un mot s'ouvre dès que ses signes sont appris. Les romaji s'effacent quand un signe est bien acquis.
-- **Exercices** : reconnaître les signes, lire des mots, écrire des mots (clavier ou main), phrases, proverbes, et vrais textes vus au Japon (panneaux, menus, stèles).
+- **S'entraîner** (onglet 練) : écrire de mémoire les signes fragiles, jouer à 10 jeux au hasard ou choisir un jeu (reconnaître les signes, lire des mots, écrire des mots au clavier ou à la main, phrases, proverbes, vrais textes vus au Japon), et l'examen strict. L'entraînement ne repousse jamais une révision ; chaque réussite ajoute un peu de maîtrise, plafonnée et confirmée à la révision suivante.
+- **Deuxième essai** : après un raté, on refait le signe tout de suite pour corriger l'erreur pendant qu'elle est fraîche.
 - **Progrès** : maîtrise par écriture, courbe sur 30 jours, calendrier d'activité, fiche de chaque signe avec traçage libre.
 - **Examen strict**, pour vérifier que ses propres notes sont honnêtes.
 - **Profils** : plusieurs personnes sur un même téléphone.

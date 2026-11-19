@@ -57,13 +57,6 @@ export function viewHome(): void {
     el(`<section class="card"><details><summary>Comment ça marche</summary>
     <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 3 étapes : tracer sur le modèle animé, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
   );
-  const modes = FAMILIES.map((f) => {
-    const ok = familyTypes(p, f.id).length > 0;
-    return `<button class="btn opt" data-m="${f.id}" ${ok ? "" : "disabled"}><span>${f.title}</span><small>${ok ? f.sub : "Après quelques signes de plus"}</small></button>`;
-  }).join("");
-  const tr = el(`<section class="card"><details><summary>S'entraîner autrement</summary><p class="small muted" style="margin:8px 0">Dix exercices variés sur ce que vous avez déjà vu, sans limite et sans repousser vos révisions.</p><div class="modes">${modes}</div></details></section>`);
-  v.appendChild(tr);
-  tr.querySelectorAll<HTMLButtonElement>("[data-m]").forEach((b) => (b.onclick = () => startDrills(familyTypes(p, b.dataset.m!))));
   showWave();
   const go = $opt<HTMLButtonElement>("#go");
   if (go) go.onclick = () => startSession("day");
