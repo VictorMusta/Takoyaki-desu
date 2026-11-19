@@ -283,7 +283,7 @@ export function viewSettings(): void {
     <p class="small muted" style="margin:0">Votre progression ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps, à votre propre adresse.</p>
     <p class="small" style="margin:0">${everBackedUp() ? `Dernière sauvegarde : il y a ${daysSinceBackup()} jour(s).` : "Aucune sauvegarde pour l'instant."}${persisted === true ? " Stockage protégé : le navigateur ne l'effacera pas de lui-même." : persisted === false ? " Le navigateur peut effacer ces données s'il manque de place : installez l'appli sur l'écran d'accueil pour les protéger." : ""}</p>
     <button class="btn primary big" id="bksend">M'envoyer ma sauvegarde</button>
-    <div class="row"><button class="btn" id="bkdl">Télécharger le fichier</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,application/json,text/plain" class="hidden"></div>
+    <div class="row"><button class="btn" id="bkdl">Télécharger le fichier</button><label class="btn" for="file">Importer un fichier</label><input type="file" id="file" accept=".json,.txt,application/json,text/plain" class="hidden"></div>
     <details><summary class="small">Par copier-coller</summary>
     <p class="small muted" style="margin:8px 0 0">Les mêmes données en texte. Importer remplace les données actuelles.</p>
     <textarea id="exp" aria-label="Données de progression"></textarea>

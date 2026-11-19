@@ -79,7 +79,7 @@ function markDone(): void {
   write({ last: Date.now(), done: true });
 }
 
-const fileName = () => `takoyaki-desu-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+const fileName = (ext = "json") => `takoyaki-desu-sauvegarde-${new Date().toISOString().slice(0, 10)}.${ext}`;
 
 function download(file: File): void {
   const a = document.createElement("a");
@@ -99,7 +99,9 @@ export type BackupResult = "shared" | "downloaded" | "cancelled";
  * downloaded instead.
  */
 export async function sendBackup(): Promise<BackupResult> {
-  const file = new File([exportState()], fileName(), { type: "application/json" });
+  // The share sheet (mail, Drive…) only takes a few file types: .json is refused on Android and
+  // iOS, .txt is accepted everywhere. Same content; « Importer un fichier » reads both.
+  const file = new File([exportState()], fileName("txt"), { type: "text/plain" });
   const text = "Ma sauvegarde Takoyaki desu. Pour la restaurer : Réglages › Sauvegarde › Importer un fichier.";
   if (navigator.canShare?.({ files: [file] })) {
     try {
