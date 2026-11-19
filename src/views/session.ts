@@ -1,5 +1,5 @@
 import { byK, sound } from "../data/kana";
-import { buildQueue, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
+import { buildQueue, cardOf, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
 import { $, el, esc, setQuit, view } from "../ui/dom";
@@ -153,7 +153,7 @@ export function viewCard(): void {
   v.innerHTML = "";
   const left = session.queue.length - session.i;
   const recall = !it.isNew || (it.step ?? 1) >= 4;
-  const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.practice ? "Entraînement libre" : "Révision";
+  const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.learn !== undefined ? `Nouveau signe · à confirmer ${it.learn + 1} / ${LEARN_RECALLS}` : it.practice ? "Entraînement libre" : "Révision";
   const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
   const head = `<div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
     <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
@@ -250,6 +250,13 @@ function requeue(session: SavedSession, item: QueueItem): void {
   session.queue.splice(Math.min(session.queue.length, session.i + 4), 0, item);
 }
 
+/**
+ * A new sign is learnt, not just seen: after its discovery it must be written from memory
+ * LEARN_RECALLS times in the lesson, a few cards apart, before it counts as learnt (« Anki
+ * learning steps »). A miss brings it back two cards later and starts the count again.
+ */
+export const LEARN_RECALLS = 2;
+
 function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const session = cur();
   if (!session) return;
@@ -273,7 +280,7 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
       else d.rv++;
     }
     peekCard(p, it.k, t);
-    requeue(session, { k: it.k, isNew: false, counted: true });
+    requeue(session, { k: it.k, isNew: false, counted: true, ...(it.isNew || it.learn !== undefined ? { learn: 0 } : {}) });
     session.i++;
     save();
     return viewCard();
@@ -282,6 +289,26 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
     if (it.isNew) d.nw++;
     else d.rv++;
     it.counted = true;
+  }
+  // Learning a new sign: count the recalls; it graduates (first real grade) at the last one.
+  if (it.isNew || it.learn !== undefined) {
+    const c = cardOf(p, it.k);
+    c.seen = true;
+    c.due ??= t; // left mid-lesson, it comes back as a review today
+    if (g === "rate") {
+      gradeCard(p, it.k, g, t);
+      session.queue.splice(Math.min(session.queue.length, session.i + 3), 0, { k: it.k, isNew: false, counted: true, learn: 0 });
+      session.i++;
+      save();
+      return viewCard();
+    }
+    const done = (it.learn ?? 0) + 1;
+    if (done < LEARN_RECALLS) {
+      requeue(session, { k: it.k, isNew: false, counted: true, learn: done });
+      session.i++;
+      save();
+      return viewCard();
+    }
   }
   const before = status(p, it.k);
   gradeCard(p, it.k, g, t);

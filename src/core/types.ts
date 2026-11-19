@@ -118,6 +118,8 @@ export interface QueueItem {
   drill?: import("./drills").Drill;
   /** Vocabulary item: `k` is a word, not a sign. */
   word?: boolean;
+  /** A sign being learnt today: successful recalls so far in this lesson (it graduates at LEARN_RECALLS). */
+  learn?: number;
 }
 
 /** A lesson in progress, saved after every step so it survives a closed app. */

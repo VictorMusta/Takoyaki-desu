@@ -217,6 +217,7 @@ export const JA: Record<string, string> = {
   "Nouveau mot": "新しい単語",
   "Nouveau prénom": "新しい名前",
   "Nouveau signe · ligne": "新しい文字・行",
+  "Nouveau signe · à confirmer {0} / {1}": "新しい文字・確認 {0} / {1}",
   "Nouveautés": "新着情報",
   "Nouveaux mots par jour": "1日に覚える新しい単語",
   "Nouveaux signes par jour": "1日に覚える新しい文字",

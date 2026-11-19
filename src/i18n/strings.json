@@ -2045,6 +2045,12 @@
   ]
  },
  {
+  "s": "Nouveau signe · à confirmer {0} / {1}",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "Nouveau signe · ligne",
   "files": [
    "src/views/session.ts"
