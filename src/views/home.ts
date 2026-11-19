@@ -1,4 +1,5 @@
 import { isJa } from "../i18n";
+import { writeNote } from "../ui/notes";
 import { isKata, KANA, LINES, lineLabel } from "../data/kana";
 import { alphabetMastery, buildQueue, dayRec, kataStarted, recordMastery, streak, today } from "../core/scheduler";
 import { save } from "../core/store";
@@ -19,6 +20,7 @@ export function viewHome(): void {
   const nDue = q.filter((x) => !x.isNew && !x.word).length, nNew = q.filter((x) => x.isNew && !x.word).length;
   const v = view();
   v.innerHTML = "";
+  if (p.tester) v.appendChild(testerPath(p));
   v.appendChild(
     el(`<section class="card">
     <h2>Séance du jour, ${esc(state.active)}</h2>
@@ -94,4 +96,51 @@ function progressLine(p: Profile, t: number, d: DayRec): string {
     <p style="margin:0">${now ? `Aujourd'hui : ${now}.` : before ? `Hier : ${before}.` : "Pas encore d'activité aujourd'hui."}</p>
     <p class="small" style="margin:0">${seen} ${kata ? "katakana" : "hiragana"} découverts sur ${total} · maîtrise ${m} %${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
   </div>`;
+}
+
+/* ---------- the testers' path ---------- */
+
+const DONE = "takoyaki-tester-done";
+const doneSteps = (): string[] => {
+  try {
+    return JSON.parse(sessionStorage.getItem(DONE) ?? "[]") as string[];
+  } catch {
+    return [];
+  }
+};
+const markDone = (id: string) => {
+  try {
+    sessionStorage.setItem(DONE, JSON.stringify([...new Set([...doneSteps(), id])]));
+  } catch {
+    /* the ticks are only a guide */
+  }
+};
+
+/** A checklist that walks a tester through every kind of screen, ticked as they go. */
+function testerPath(p: Profile): HTMLElement {
+  const done = new Set(doneSteps());
+  const step = (id: string, label: string, sub: string) =>
+    `<li class="${done.has(id) ? "done" : ""}"><button class="btn opt" data-step="${id}"><span>${label}</span><small>${sub}</small></button></li>`;
+  const fam = FAMILIES.filter((f) => familyTypes(p, f.id).length).map((f) => step(f.id, f.title, f.sub)).join("");
+  const box = el(`<section class="card tester"><h3>Parcours de test</h3>
+    <p class="small muted" style="margin:0">Une fois chaque étape, dans l'ordre que vous voulez. Notez tout ce qui cloche avec « Remarque ».</p>
+    <ol class="steps">
+      ${step("lesson", "La séance du jour", "Écrire des signes de mémoire, la vérification des traits, un nouveau signe")}
+      ${fam}
+      ${step("exam", "Un examen", "Quelques signes sans aide")}
+      ${step("fiche", "Les fiches des signes", "Dans Progrès : touchez un signe, regardez l'ordre des traits")}
+      ${step("note", "Une remarque", "Ce qui est faux, bizarre ou difficile")}
+    </ol></section>`);
+  box.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((b) => {
+    b.onclick = () => {
+      const id = b.dataset.step!;
+      markDone(id);
+      if (id === "lesson") return startSession("day");
+      if (id === "exam") return void (location.hash = "examen");
+      if (id === "fiche") return void (location.hash = "progres");
+      if (id === "note") return void writeNote().then(() => b.closest("li")?.classList.add("done"));
+      startDrills(familyTypes(p, id));
+    };
+  });
+  return box;
 }

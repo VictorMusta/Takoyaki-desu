@@ -366,3 +366,11 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .invite .qr{width:200px;max-width:70%;margin:8px auto;background:#fff;padding:8px}
 .invite .qr svg{display:block;width:100%;height:auto}
 .invite p{margin:0}
+.invite ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.invite h3{margin:8px 0 0}
+.tester .steps{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:st}
+.tester .steps li{counter-increment:st;display:flex;align-items:center;gap:8px}
+.tester .steps li::before{content:counter(st);font:500 14px var(--display);color:var(--wood);width:20px;text-align:center;flex:none}
+.tester .steps li.done::before{content:"✓";color:var(--take)}
+.tester .steps li .btn{flex:1}
+.tester .steps li.done .btn{opacity:.7}

@@ -72,6 +72,8 @@ export interface Profile {
   tips?: { seen: Record<string, number>; hidden: string[]; last: number };
   /** « Je parle déjà japonais »: day it was turned on, and the profile as it was before. */
   fluent?: { since: number; backup: Omit<Profile, "fluent"> };
+  /** Set up for testers (core/tester.ts): home shows the test path. */
+  tester?: boolean;
   /** Signs written the learner's own way (fluent mode): stroke count and order are not checked. */
   variants?: Record<string, true>;
   /** Alphabet mastery in %, one value per day (for the curve in Progrès). */

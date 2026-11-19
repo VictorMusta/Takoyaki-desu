@@ -620,7 +620,8 @@
  {
   "s": "Une remarque",
   "files": [
-   "src/ui/notes.ts"
+   "src/ui/notes.ts",
+   "src/views/home.ts"
   ]
  },
  {
@@ -1357,6 +1358,12 @@
   ]
  },
  {
+  "s": "Ce qui est faux, bizarre ou difficile",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
   "s": "Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « {0} » tient au moins 3 jours.",
   "files": [
    "src/views/home.ts"
@@ -1371,6 +1378,12 @@
  },
  {
   "s": "Comment ça marche",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Dans Progrès : touchez un signe, regardez l'ordre des traits",
   "files": [
    "src/views/home.ts"
   ]
@@ -1394,7 +1407,19 @@
   ]
  },
  {
+  "s": "Écrire des signes de mémoire, la vérification des traits, un nouveau signe",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
   "s": "Hier : {0}.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "La séance du jour",
   "files": [
    "src/views/home.ts"
   ]
@@ -1407,6 +1432,12 @@
  },
  {
   "s": "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Les fiches des signes",
   "files": [
    "src/views/home.ts"
   ]
@@ -1461,6 +1492,12 @@
   ]
  },
  {
+  "s": "Parcours de test",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
   "s": "Pas encore d'activité aujourd'hui.",
   "files": [
    "src/views/home.ts"
@@ -1468,6 +1505,12 @@
  },
  {
   "s": "Plus tard",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Quelques signes sans aide",
   "files": [
    "src/views/home.ts"
   ]
@@ -1492,6 +1535,18 @@
  },
  {
   "s": "Séance du jour, {0}",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Un examen",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Une fois chaque étape, dans l'ordre que vous voulez. Notez tout ce qui cloche avec « Remarque ».",
   "files": [
    "src/views/home.ts"
   ]

@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.10.1",
+    date: "2026-11-19",
+    items: ["Testeurs japonais : une invitation plus précise (ce qu'on attend d'eux, critiques bienvenues), un profil de test où tout est ouvert, et un parcours qui fait essayer chaque type d'écran."],
+  },
+  {
     v: "0.10.0",
     date: "2026-11-19",
     items: [
