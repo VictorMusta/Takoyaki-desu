@@ -154,7 +154,7 @@ input.text{flex:1;min-width:0;font:inherit;padding:8px 0;border:0;border-bottom:
 input.text::placeholder{color:var(--wood);opacity:.8}
 input[type=number]{width:64px;font:inherit;padding:4px 0;border:0;border-bottom:1px solid var(--wood);border-radius:0;background:transparent;color:var(--ink);text-align:right}
 input[type=checkbox]{accent-color:var(--take);width:18px;height:18px}
-textarea{width:100%;min-height:120px;font-family:ui-monospace,monospace;font-size:12px;background:var(--paper);color:var(--ink);border:var(--hair);border-radius:0;padding:8px}
+textarea{display:block;box-sizing:border-box;width:100%;align-self:stretch;resize:none;min-height:120px;font-family:ui-monospace,monospace;font-size:12px;background:var(--paper);color:var(--ink);border:var(--hair);border-radius:0;padding:8px}
 label.field{display:flex;justify-content:space-between;align-items:center;gap:8px}
 
 /* ---------- profils ---------- */
@@ -374,3 +374,7 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .tester .steps li.done::before{content:"✓";color:var(--take)}
 .tester .steps li .btn{flex:1}
 .tester .steps li.done .btn{opacity:.7}
+
+/* Free text people write (notes, comments): the reading font, not the data font */
+.modal-card textarea,textarea.prose,textarea.fb,textarea#g{font:400 16px/1.6 var(--body);min-height:160px}
+body:has(.modal) .note-fab{display:none}
