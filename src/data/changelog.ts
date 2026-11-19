@@ -10,6 +10,14 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.12.0",
+    date: "2026-11-19",
+    items: [
+      "Nouveau rythme « Sans limite » (Réglages › Rythme) : des lots de 5 signes, autant que vous voulez par jour, et la ligne suivante s'ouvre d'elle-même.",
+      "Les durées annoncées pour chaque rythme sont plus honnêtes, surtout pour les premiers jours.",
+    ],
+  },
+  {
     v: "0.11.0",
     date: "2026-11-19",
     items: [

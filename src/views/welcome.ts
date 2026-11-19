@@ -1,6 +1,6 @@
 import { addProfile, importState } from "../core/store";
 import { $, el, showWave, view } from "../ui/dom";
-import { paceHTML } from "../ui/prefs";
+import { paceHTML, setPace } from "../ui/prefs";
 import { profile, save } from "../core/store";
 import { route } from "../router";
 
@@ -43,7 +43,7 @@ export function viewWelcome(): void {
     const err = addProfile($<HTMLInputElement>("#name").value);
     if (err) return show("#e", err);
     const pace = document.querySelector<HTMLInputElement>('input[name="pace"]:checked');
-    if (pace) profile().settings.newPerDay = +pace.value;
+    if (pace) setPace(profile().settings, +pace.value);
     save();
     route();
   };

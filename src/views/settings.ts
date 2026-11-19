@@ -1,7 +1,7 @@
 import { KANA, LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, readBackup, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
-import { getTheme, paceHTML, setTheme, type Theme } from "../ui/prefs";
+import { getTheme, paceHTML, setPace, setTheme, type Theme } from "../ui/prefs";
 import { confirmModal } from "../ui/modal";
 import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
@@ -101,7 +101,7 @@ export function viewSettings(): void {
   v.appendChild(
     el(`<section class="card"><h2>Réglages de ${esc(state.active)}</h2>
     <h3>Rythme</h3>
-    ${paceHTML(p.settings.newPerDay, "space")}
+    ${paceHTML(p.settings.newPerDay, "space", p.settings.intensive)}
     <label class="field" for="nn">Ou un nombre précis par jour <input type="number" id="nn" min="1" max="${KANA.length}" value="${p.settings.newPerDay}"></label>
     <label class="field" for="nw">Nouveaux mots par jour <input type="number" id="nw" min="0" max="20" value="${p.settings.wordsPerDay ?? 3}"></label>
     <label class="field" for="rc">Plafond de révisions par jour <input type="number" id="rc" min="10" max="300" value="${p.settings.revCap}"></label>
@@ -111,14 +111,15 @@ export function viewSettings(): void {
   );
   $<HTMLInputElement>("#nn").onchange = (e) => {
     p.settings.newPerDay = Math.min(KANA.length, Math.max(1, +(e.target as HTMLInputElement).value || 10));
+    p.settings.intensive = false;
     save();
     viewSettings();
   };
   v.querySelectorAll<HTMLInputElement>('input[name="space"]').forEach((r) => {
     r.onchange = () => {
-      p.settings.newPerDay = +r.value;
+      setPace(p.settings, +r.value);
       save();
-      $<HTMLInputElement>("#nn").value = r.value;
+      $<HTMLInputElement>("#nn").value = String(p.settings.newPerDay);
     };
   });
   $<HTMLInputElement>("#nw").onchange = (e) => {

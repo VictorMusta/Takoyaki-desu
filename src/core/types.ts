@@ -21,6 +21,8 @@ export interface Settings {
   showNums: boolean;
   /** New words a day in the vocabulary track (default 3). */
   wordsPerDay?: number;
+  /** « Sans limite »: new signs in batches of 5, as many batches a day as wanted (see continueBlock). */
+  intensive?: boolean;
 }
 
 export interface DayRec {

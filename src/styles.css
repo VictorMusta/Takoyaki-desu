@@ -381,3 +381,5 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .modal-card textarea,textarea.prose,textarea.fb,textarea#g{font:400 16px/1.6 var(--body);min-height:160px}
 body:has(.modal) .note-fab{display:none}
 .soon{border-left:2px solid var(--beni);padding:4px 0 4px 16px}
+.opt.primary-opt{border-color:var(--beni);border-width:1.5px}
+.opt.primary-opt span{color:var(--beni)}

@@ -655,25 +655,37 @@
   ]
  },
  {
-  "s": "Les 75 hiragana en 3 semaines environ, puis autant pour les katakana. 10 à 15 min par jour.",
+  "s": "Les 75 hiragana en 3 à 4 semaines. Environ 10 min par jour au début, 15 ensuite.",
   "files": [
    "src/ui/prefs.ts"
   ]
  },
  {
-  "s": "Les hiragana en 10 jours environ, 20 à 25 min par jour. Recommandé.",
+  "s": "Les hiragana en 10 jours environ, 25 à 35 min par jour.",
   "files": [
    "src/ui/prefs.ts"
   ]
  },
  {
-  "s": "Les hiragana en une semaine environ, 35 min par jour, puis beaucoup de révisions.",
+  "s": "Les hiragana en 2 semaines environ, 15 à 25 min par jour. Recommandé.",
   "files": [
    "src/ui/prefs.ts"
   ]
  },
  {
   "s": "Nouveaux signes par jour",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Par lots de 5, autant que vous voulez chaque jour ; la ligne suivante s'ouvre d'elle-même. Chaque signe appris revient ensuite en révision : les jours suivants s'alourdissent d'autant.",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Sans limite",
   "files": [
    "src/ui/prefs.ts"
   ]
@@ -1571,6 +1583,12 @@
  },
  {
   "s": "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "5 signes de plus · ligne « {0} »",
   "files": [
    "src/views/more.ts"
   ]
