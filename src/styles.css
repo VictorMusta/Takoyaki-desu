@@ -91,7 +91,9 @@ nav a[aria-current="page"] b{color:var(--beni)}
 .steps{display:flex;gap:4px}
 .steps i{width:16px;height:2px;background:var(--guide)}
 .steps i.on{background:var(--ink)}
-.stage{position:relative;width:100%;max-width:360px;aspect-ratio:1;margin:0 auto;background:var(--card);border:var(--hair);touch-action:none;overflow:hidden}
+.stage{position:relative;width:100%;max-width:360px;aspect-ratio:1;margin:0 auto;background:var(--card);border:var(--hair);overflow:hidden}
+/* Only a stage you draw on holds the finger; a stage that just shows strokes lets the page scroll */
+.stage:has(canvas){touch-action:none}
 .card .stage{background:var(--paper)}
 .stage svg,.stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .stage canvas{touch-action:none}
