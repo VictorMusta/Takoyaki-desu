@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.10.2",
+    date: "2026-11-19",
+    items: ["Un nouveau signe se trace tout de suite : l'ordre des traits s'anime seul et on dessine directement par-dessus, sans bouton « Apprendre ». 3 étapes au lieu de 4."],
+  },
+  {
     v: "0.10.1",
     date: "2026-11-19",
     items: ["Testeurs japonais : une invitation plus précise (ce qu'on attend d'eux, critiques bienvenues), un profil de test où tout est ouvert, et un parcours qui fait essayer chaque type d'écran."],

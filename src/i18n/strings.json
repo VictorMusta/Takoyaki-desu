@@ -1364,7 +1364,7 @@
   ]
  },
  {
-  "s": "Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « {0} » tient au moins 3 jours.",
+  "s": "Chaque nouveau signe passe par 3 étapes : tracer sur le modèle animé, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « {0} » tient au moins 3 jours.",
   "files": [
    "src/views/home.ts"
   ]
@@ -1967,12 +1967,6 @@
   ]
  },
  {
-  "s": "Apprendre",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
   "s": "Astuce utilisée : la note ira au mieux jusqu'à « Bof ».",
   "files": [
    "src/views/session.ts"
@@ -1986,12 +1980,6 @@
  },
  {
   "s": "Besoin d'aide ?",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
-  "s": "Chaque couleur est un trait ; le chiffre marque où il commence, la flèche montre le sens.",
   "files": [
    "src/views/session.ts"
   ]
@@ -2021,19 +2009,13 @@
   ]
  },
  {
-  "s": "Étape {0} sur 4",
+  "s": "Étape {0} sur 3",
   "files": [
    "src/views/session.ts"
   ]
  },
  {
   "s": "Exercice",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
-  "s": "Je trace dans le pochoir",
   "files": [
    "src/views/session.ts"
   ]
@@ -2075,6 +2057,12 @@
   ]
  },
  {
+  "s": "Regardez l'ordre des traits, puis tracez par-dessus avec le doigt, en suivant les numéros.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "Retour à l'accueil",
   "files": [
    "src/views/session.ts"
@@ -2087,7 +2075,7 @@
   ]
  },
  {
-  "s": "Revoir",
+  "s": "Revoir l'ordre",
   "files": [
    "src/views/session.ts"
   ]
@@ -2112,12 +2100,6 @@
  },
  {
   "s": "Tracez dans le pochoir, en suivant les numéros.",
-  "files": [
-   "src/views/session.ts"
-  ]
- },
- {
-  "s": "Voici le signe {0}. Observez sa forme, puis touchez « Apprendre » pour voir l'ordre des traits.",
   "files": [
    "src/views/session.ts"
   ]

@@ -48,7 +48,7 @@ export function viewInvite(): void {
     <p><b>褒め言葉よりも、間違い・違和感・使いにくさを教えていただけるとうれしいです。</b>小さなことでも大歓迎です。私が翻訳して、すべて読みます。</p>
     <p class="small muted" style="margin:0">アカウントは不要で、データはこの端末から外に出ません。意見は「全部送る」を押したときだけ送られます。</p>
     <div class="row"><button class="btn primary big" id="try">この端末で試す</button></div>
-    <details id="qr-box"><summary>自分のスマホで開く</summary>
+    <details id="qr-box" open><summary>自分のスマホで開く</summary>
       <div class="qr" role="img" aria-label="アプリを日本語で開くQRコード">${qrSVG(inviteLink())}</div>
       <p class="small muted" style="margin:0;word-break:break-all">${inviteLink()}</p>
     </details>

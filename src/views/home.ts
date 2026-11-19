@@ -54,7 +54,7 @@ export function viewHome(): void {
   }
   v.appendChild(
     el(`<section class="card"><details><summary>Comment ça marche</summary>
-    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
+    <p class="small muted" style="margin:8px 0 0">Chaque nouveau signe passe par 3 étapes : tracer sur le modèle animé, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « ${lineLabel(LINES[p.unlocked - 1])} » tient au moins 3 jours.</p></details></section>`),
   );
   const modes = FAMILIES.map((f) => {
     const ok = familyTypes(p, f.id).length > 0;

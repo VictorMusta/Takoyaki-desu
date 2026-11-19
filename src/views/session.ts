@@ -99,10 +99,12 @@ export function startSession(kind: SessionKind = "day"): void {
   viewCard();
 }
 
-function stepper(n: number): string {
+/** Three visible steps: trace on the animated model, faded stencil, blank page (step 2 is legacy). */
+function stepper(step: number): string {
+  const n = step <= 2 ? 1 : step - 1;
   let s = "";
-  for (let i = 1; i <= 4; i++) s += `<i class="${i <= n ? "on" : ""}"></i>`;
-  return `<div class="steps" aria-label="Étape ${n} sur 4">${s}</div>`;
+  for (let i = 1; i <= 3; i++) s += `<i class="${i <= n ? "on" : ""}"></i>`;
+  return `<div class="steps" aria-label="Étape ${n} sur 3">${s}</div>`;
 }
 
 export function viewCard(): void {
@@ -157,28 +159,28 @@ export function viewCard(): void {
     <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
 
   if (it.isNew && it.step === 1) {
+    // The sign, its stroke order playing by itself, and a pad right on it: people want to
+    // draw at once (a tester tried before finding « Apprendre »), so there is nothing to tap first.
     v.appendChild(
       el(`<section class="card">${head}
-      <p class="small muted" style="margin:0" id="ins">Voici le signe ${K.k}. Observez sa forme, puis touchez « Apprendre » pour voir l'ordre des traits.</p>
+      <p class="small muted" style="margin:0">Regardez l'ordre des traits, puis tracez par-dessus avec le doigt, en suivant les numéros.</p>
       <div class="stage" id="st"></div>
-      <div class="row" id="acts"><button class="btn primary big" id="learn">Apprendre</button></div>
+      <div class="tools"><button class="btn" id="replay">Revoir l'ordre</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Suivant</button></div>
       ${mnemoHTML(it.k, true)}
       <h3>Le signe ${K.k} dans les polices courantes</h3>${ficheHTML(it.k)}</section>`),
     );
     const st = $("#st");
-    st.innerHTML = modelSVG(it.k, "learn", show);
-    const run = () => {
-      st.innerHTML = modelSVG(it.k, "learn", show);
-      $("#ins").textContent = "Chaque couleur est un trait ; le chiffre marque où il commence, la flèche montre le sens.";
-      $("#acts").innerHTML = `<button class="btn" id="replay">Revoir</button><button class="btn primary" id="next" style="flex:1">Je trace dans le pochoir</button>`;
-      $("#replay").onclick = run;
-      $("#next").onclick = () => {
-        it.step = 2;
-        viewCard();
-      };
-      requestAnimationFrame(() => requestAnimationFrame(() => learnSeq(st.firstElementChild!)));
+    const pad = makePad(st, modelSVG(it.k, "learn", show));
+    const play = () => requestAnimationFrame(() => requestAnimationFrame(() => learnSeq(st.firstElementChild!)));
+    play();
+    const next = $<HTMLButtonElement>("#next");
+    pad.onchange = () => (next.disabled = pad.strokes.length === 0);
+    $("#replay").onclick = play;
+    $("#clr").onclick = () => pad.clear();
+    next.onclick = () => {
+      it.step = 3; // the plain stencil step is now part of this one
+      viewCard();
     };
-    $("#learn").onclick = run;
   } else if (it.isNew && (it.step === 2 || it.step === 3)) {
     const full = it.step === 2;
     v.appendChild(
