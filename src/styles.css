@@ -286,8 +286,9 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .look{margin:8px auto;display:flex;align-items:center;justify-content:center;font-family:var(--hand);font-weight:600;line-height:1.4;text-align:center;padding:24px 16px;max-width:100%}
 .look b{font-weight:inherit}
 .look.hl b{border-bottom:2px solid var(--beni)}
-.look-noren{background:#26344F;color:#F4F1EA;writing-mode:vertical-rl;min-height:200px;font-size:40px;padding:24px 40px;position:relative;width:180px}
-.look-noren::after{content:"";position:absolute;left:50%;bottom:0;width:6px;height:45%;background:var(--card);transform:translateX(-50%)}
+/* The curtain's slit stays in the plain fabric under the text, never across it */
+.look-noren{background:#26344F;color:#F4F1EA;writing-mode:vertical-rl;min-height:200px;font-size:40px;padding:24px 40px 76px;position:relative;width:180px}
+.look-noren::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:56px;background:var(--card);transform:translateX(-50%)}
 .look-noren.hl b{border:0;border-left:2px solid var(--kin)}
 .look-panneau{background:#FFFFFF;color:#1F1C17;border:3px solid #1F1C17;font-family:var(--body);font-weight:500;font-size:26px}
 .look-menu{background:#2E2A24;color:#F2EADB;font-size:26px;border:8px solid #6E4E37;flex-direction:column}
