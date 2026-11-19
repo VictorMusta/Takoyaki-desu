@@ -1746,13 +1746,13 @@
   ]
  },
  {
-  "s": "La séance du jour est faite. Vous pouvez continuer :",
+  "s": "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine.",
   "files": [
    "src/views/home.ts"
   ]
  },
  {
-  "s": "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine.",
+  "s": "Le minimum du jour est fait.",
   "files": [
    "src/views/home.ts"
   ]
@@ -1820,6 +1820,12 @@
  },
  {
   "s": "Plus tard",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Pour aller plus loin :",
   "files": [
    "src/views/home.ts"
   ]

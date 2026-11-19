@@ -443,3 +443,5 @@ details.fine > summary{color:var(--wood)}
 .coach p{margin:0;font-size:14px;line-height:1.55}
 .coach .btn{flex:none}
 .about details + details{border-top:var(--hair);margin-top:12px;padding-top:12px}
+.day-done{margin:0;font-family:var(--display);font-size:20px;line-height:1.4;color:var(--take)}
+.day-done::before{content:"✓ "}

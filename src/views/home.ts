@@ -25,14 +25,22 @@ export function viewHome(): void {
   v.appendChild(
     el(`<section class="card">
     <h2>Séance du jour, ${esc(state.active)}</h2>
-    <div class="stats">
+    ${
+      q.length
+        ? `<div class="stats">
       <div class="stat"><b>${nDue}</b><span>à réviser</span></div>
       <div class="stat"><b>${nNew}</b><span>nouveaux signes</span></div>
       <div class="stat"><b>${nWords}</b><span>mots</span></div>
     </div>
-    ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
-    ${soonLine(p, t, q.length > 0)}
+    <button class="btn primary big" id="go">Commencer</button>
+    ${soonLine(p, t, true)}
+    ${progressLine(p, t, d)}`
+        : // Done for today: no row of zeros, today's work first, then what else to do.
+          `<p class="day-done">Le minimum du jour est fait.</p>
     ${progressLine(p, t, d)}
+    <p style="margin:0">Pour aller plus loin :</p><div id="more"></div>
+    ${soonLine(p, t, false)}`
+    }
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
   </section>`),
   );

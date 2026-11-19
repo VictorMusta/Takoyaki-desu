@@ -604,4 +604,6 @@ export const JA: Record<string, string> = {
   "Ce téléphone refuse les pièces jointes : la sauvegarde est partie en texte. Pour la restaurer : « Par copier-coller ».": "この端末はファイルを送れないので、テキストで送りました。戻すときは「コピー＆ペースト」から。",
   "Le partage est indisponible sur ce navigateur : le fichier est téléchargé. ({0})": "このブラウザでは共有できないので、ファイルをダウンロードしました。（{0}）",
   "{0} lien{1} faux sur {2}.": "{2}組中{0}組がまちがいです。",
+  "Le minimum du jour est fait.": "今日のぶんは終わりました。",
+  "Pour aller plus loin :": "さらに続けるなら：",
 };
