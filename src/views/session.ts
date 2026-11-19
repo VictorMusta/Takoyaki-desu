@@ -16,7 +16,7 @@ import { continueBlock } from "./more";
 import { available, FAMILIES, freshDrill, LESSON_MIX, type DrillType } from "../core/drills";
 import { viewDrill } from "./drill";
 import { viewWord } from "./word";
-import { buildWordQueue, gradeWord } from "../core/vocab";
+import { buildWordQueue, dueItems, gradeWord, nextToLearn } from "../core/vocab";
 
 /**
  * The lesson in progress lives in the active profile and is saved after every step,
@@ -91,6 +91,34 @@ export function startDrills(types: DrillType | DrillType[]): void {
   }
   if (!q.length) return;
   p.session = { day: today(), queue: q, i: 0 };
+  save();
+  viewCard();
+}
+
+/** Games for « Réviser mes mots », after the words that are due. */
+const WORD_GAMES: DrillType[] = ["pickword", "word", "typo", "cloze", "order", "gap", "dictation"];
+
+/**
+ * Vocabulary on demand. learn: five new words or travel phrases now (on top of the day's).
+ * review: the words and phrases due first (graded), then word games on what is known, ten in all.
+ */
+export function startWords(kind: "learn" | "review"): void {
+  const p = profile(), t = today();
+  const q: QueueItem[] = [];
+  if (kind === "learn") q.push(...nextToLearn(p, 5).map((k): QueueItem => ({ k, isNew: true, word: true })));
+  else {
+    q.push(...dueItems(p, t, 10).map((k): QueueItem => ({ k, isNew: false, word: true })));
+    const used = new Set<string>();
+    let last: DrillType | undefined;
+    while (q.length < 10) {
+      const d = freshDrill(p, WORD_GAMES, used, last);
+      if (!d) break;
+      q.push({ k: d.ks[0] ?? "", isNew: false, practice: true, drill: d });
+      last = d.type;
+    }
+  }
+  if (!q.length) return;
+  p.session = { day: t, queue: q, i: 0 };
   save();
   viewCard();
 }

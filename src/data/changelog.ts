@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.19.0",
+    date: "2026-11-19",
+    items: [
+      "Mots et phrases du voyage (S'entraîner) : « Apprendre 5 mots » d'un coup (bonjour, merci, ça va, toilettes, l'addition, nous sommes deux…) et « Réviser mes mots ».",
+      "30 phrases utiles en voyage, ouvertes tout de suite : la lecture s'affiche sous les signes que vous ne connaissez pas encore.",
+      "Nouveaux jeux : le bon mot, la faute dans le mot, la phrase à remettre dans l'ordre, le bloc qui manque.",
+    ],
+  },
+  {
     v: "0.18.0",
     date: "2026-11-19",
     items: ["Séance finie : plus de ligne de zéros. L'accueil dit « Le minimum du jour est fait » et montre d'abord le bilan du jour.", "On peut faire défiler la page en posant le doigt sur un tracé affiché (corrections, comparaisons) : seules les feuilles où l'on écrit bloquent le doigt.", "Nouveau « Reliez » : signes en haut, syllabes en bas, un signe toujours sélectionné. Touchez sa syllabe pour tracer le lien ; on peut corriger, « Effacer » retire le dernier lien, et la vérification se fait à la fin."],

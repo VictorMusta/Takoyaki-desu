@@ -44,7 +44,7 @@ describe("drills only use what the learner knows", () => {
           expect(new Set(d.options).size).toBe(d.options.length);
         }
         if (["choose", "listen", "duel"].includes(d.type)) d.options!.forEach((o) => expect(known.has(o)).toBe(true));
-        if (d.full) signsOf(d.full).forEach((c) => expect(known.has(c), d.full).toBe(true));
+        if (d.full && !d.full.includes("|")) signsOf(d.full).forEach((c) => expect(known.has(c), d.full).toBe(true));
         d.ks.forEach((k) => expect(known.has(k)).toBe(true));
       }
     }
@@ -78,5 +78,40 @@ describe("a round never repeats an exercise", () => {
     }
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys.length).toBeGreaterThan(5);
+  });
+});
+
+import { PHRASES, readingsOf, tilesOf } from "../src/data/phrases";
+import { nextToLearn } from "../src/core/vocab";
+describe("travel words and phrases", () => {
+  it("phrases: kana the app teaches, one reading per block", () => {
+    PHRASES.forEach((x) => {
+      expect(tilesOf(x).length, x.w).toBe(readingsOf(x).length);
+      expect(signsOf(x.w.replace(/\|/g, "")).every((c) => BASE.has(c)), x.w).toBe(true);
+    });
+  });
+  it("« Apprendre 5 mots »: travel words and phrases first, phrases even with few signs", () => {
+    const few = nextToLearn(knowing("あいうえお"), 5);
+    expect(few.length).toBe(5);
+    expect(few.filter((k) => k.includes("|")).length).toBeGreaterThan(0);
+    const many = nextToLearn(knowing(ALL), 6);
+    expect(many).toContain("はい");
+    expect(many.some((k) => k.includes("|"))).toBe(true);
+  });
+  it("word games: the right word is among the options, the typo is a real look-alike, blocks fit", () => {
+    const p = knowing(ALL);
+    PHRASES.slice(0, 5).forEach((x) => (p.words = { ...(p.words ?? {}), [x.w]: { ...newCard(), seen: true } }));
+    for (let i = 0; i < 40; i++) {
+      const pw = makeDrill(p, "pickword", undefined, rnd)!;
+      expect(pw.options).toContain(pw.answer);
+      const ty = makeDrill(p, "typo", undefined, rnd)!;
+      expect(ty.tiles!.join("")).not.toBe(ty.full);
+      expect(ty.tiles!.filter((c, j) => c !== [...ty.full!][j]).length).toBe(1);
+      const or = makeDrill(p, "order", undefined, rnd)!;
+      expect(or.tiles!.length).toBe(or.readings!.length);
+      const gp = makeDrill(p, "gap", undefined, rnd)!;
+      expect(gp.options).toContain(gp.tiles![gp.gap!]);
+      expect(new Set(gp.options).size).toBe(4);
+    }
   });
 });

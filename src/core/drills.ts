@@ -1,6 +1,7 @@
 import { soundOff } from "./sound";
 import { byK, isKata, isPlain, KANA } from "../data/kana";
-import { SENTENCES, signsOf, WORDS } from "../data/words";
+import { SENTENCES, signsOf, WORDS, type Word } from "../data/words";
+import { PHRASES, readingsOf, tilesOf } from "../data/phrases";
 import { isHira, TEXTS, textOf } from "../data/texts";
 import type { Profile } from "./types";
 import { toRomaji } from "./romaji";
@@ -27,7 +28,11 @@ export type DrillType =
   | "dictation" // meaning + sound → type the word
   | "drawword" // meaning + sound → draw the word sign by sign
   | "sentence" // sentence or proverb → pick the meaning
-  | "text"; // real text in 3 scripts → guess, then read the correction
+  | "text" // real text in 3 scripts → guess, then read the correction
+  | "pickword" // meaning → pick the word among four
+  | "typo" // a word with one wrong sign → find it
+  | "order" // a phrase in blocks, mixed → put them back in order
+  | "gap"; // a phrase with a missing block → pick it
 
 export interface Drill {
   type: DrillType;
@@ -49,6 +54,9 @@ export interface Drill {
   pairs?: [string, string][];
   /** text: id in TEXTS. */
   text?: string;
+  /** order / gap: the phrase's blocks and their readings; typo: the misspelt word. */
+  tiles?: string[];
+  readings?: string[];
 }
 
 /** Look-alike groups, used as wrong options and for duels. */
@@ -86,6 +94,21 @@ export const knownSentences = (p: Profile) => {
   const known = knownSet(p);
   return SENTENCES.filter((s) => allKnown(s.w, known));
 };
+/** Words for word games: those whose signs are known, and those learnt in « Apprendre 5 mots ». */
+export const wordPool = (p: Profile): Word[] => {
+  const known = knownSet(p);
+  return WORDS.filter(([w]) => allKnown(w, known) || p.words?.[w]?.seen);
+};
+/** Phrases for the block games: travel phrases learnt, and sentences whose signs are known. */
+export const phrasePool = (p: Profile): { w: string; tiles: string[]; readings: string[]; fr: string }[] => [
+  ...PHRASES.filter((x) => p.words?.[x.w]?.seen).map((x) => ({ w: x.w, tiles: tilesOf(x), readings: readingsOf(x), fr: x.fr })),
+  ...knownSentences(p)
+    .filter((x) => !x.proverb && x.w.split(" ").length === x.r.split(" ").length)
+    .map((x) => ({ w: x.w.replace(/ /g, "|"), tiles: x.w.split(" "), readings: x.r.split(" "), fr: x.fr })),
+].filter((x) => x.tiles.length >= 2);
+/** Signs of a word that can be misspelt with a look-alike, by position. */
+const typoSpots = (w: string) => [...w].map((c, i) => ((LOOKALIKES.find((g) => g.includes(c))?.length ?? 0) > 1 ? i : -1)).filter((i) => i >= 0);
+
 /** Texts in 3 scripts open after 10 signs, once half of their hiragana are known (the rest is guessing). */
 export const openTexts = (p: Profile) => {
   const known = knownSet(p);
@@ -118,6 +141,10 @@ export function available(p: Profile, type: DrillType): boolean {
     case "cloze": case "dictation": case "drawword": return knownWords(p).length >= 1;
     case "sentence": return knownSentences(p).length >= 1;
     case "text": return openTexts(p).length >= 1;
+    case "pickword": return wordPool(p).length >= 4;
+    case "typo": return wordPool(p).some(([w]) => w.length >= 2 && typoSpots(w).length > 0);
+    case "order": return phrasePool(p).length >= 1;
+    case "gap": return phrasePool(p).length >= 1 && phrasePool(p).flatMap((x) => x.tiles).length >= 6;
   }
 }
 
@@ -224,8 +251,39 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       const t = pick(openTexts(p), rnd);
       return { type, ks: [], prompt: textOf(t), text: t.id };
     }
+    case "pickword": {
+      const ws = wordPool(p), withK = ws.filter(([w]) => w.includes(sign));
+      const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
+      const same = ws.filter((x) => x[0] !== w && x[2] !== fr && isKata(x[0][0]) === isKata(w[0]));
+      const wrong = shuffle(same.length >= 3 ? same : ws.filter((x) => x[0] !== w && x[2] !== fr), rnd).slice(0, 3).map((x) => x[0]);
+      return { type, ks: seenOf(p, w), prompt: mean(w, fr), options: shuffle([w, ...wrong], rnd), answer: w, reading: r, say: w };
+    }
+    case "typo": {
+      const ws = wordPool(p).filter(([w]) => w.length >= 2 && typoSpots(w).length > 0);
+      const withK = ws.filter(([w]) => w.includes(sign) && typoSpots(w).some((i) => [...w][i] === sign));
+      const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
+      const chars = [...w], spots = typoSpots(w);
+      const at = withK.length && spots.some((i) => chars[i] === sign) ? chars.indexOf(sign) : pick(spots, rnd);
+      const fake = pick(LOOKALIKES.find((g) => g.includes(chars[at]))!.filter((x) => x !== chars[at]), rnd);
+      const tiles = chars.map((c, i) => (i === at ? fake : c));
+      return { type, ks: p.cards[chars[at]]?.seen ? [chars[at]] : [], prompt: tiles.join(""), full: w, gap: at, tiles, meaning: mean(w, fr), reading: r, say: w };
+    }
+    case "order":
+    case "gap": {
+      const ps = phrasePool(p), withK = ps.filter((x) => x.w.includes(sign));
+      const x = pick(withK.length ? withK : ps, rnd);
+      const flat = x.tiles.join("");
+      if (type === "order") return { type, ks: seenOf(p, flat), prompt: x.fr, full: x.w, tiles: x.tiles, readings: x.readings, meaning: x.fr, say: flat };
+      const gap = Math.floor(rnd() * x.tiles.length);
+      const others = [...new Set(ps.filter((y) => y.w !== x.w).flatMap((y) => y.tiles))].filter((t2) => t2 !== x.tiles[gap]);
+      const options = shuffle([x.tiles[gap], ...shuffle(others, rnd).slice(0, 3)], rnd);
+      return { type, ks: seenOf(p, x.tiles[gap]), prompt: x.fr, full: x.w, gap, tiles: x.tiles, readings: x.readings, options, answer: x.tiles[gap], meaning: x.fr, say: flat };
+    }
   }
 }
+
+/** The signs of s already seen (a miss only brings back signs that have a card). */
+const seenOf = (p: Profile, s: string) => signsOf(s).filter((c) => p.cards[c]?.seen);
 
 /** Combinations of a known « i » sign and a known small ゃ ゅ ょ (きゃ, しゅ, ちょ…). */
 function combos(p: Profile): string[] {
@@ -244,8 +302,9 @@ export const LESSON_MIX: DrillType[] = ["choose", "listen", "read", "word", "clo
  */
 export const FAMILIES: { id: string; title: string; sub: string; types: DrillType[] }[] = [
   { id: "signs", title: "Reconnaître les signes", sub: "Choisir, écouter, relier, sosies, combinaisons", types: ["choose", "listen", "read", "match", "duel", "combo"] },
-  { id: "words", title: "Lire des mots", sub: "Le sens d'un mot, le signe qui manque", types: ["word", "cloze"] },
+  { id: "words", title: "Lire des mots", sub: "Le sens d'un mot, le bon mot, la faute, le signe qui manque", types: ["word", "pickword", "typo", "cloze"] },
   { id: "spell", title: "Écrire des mots", sub: "Dictée au clavier ou à la main", types: ["dictation", "drawword"] },
-  { id: "texts", title: "Phrases et textes", sub: "Proverbes, panneaux, menus, stèles", types: ["sentence", "text"] },
+  { id: "phrases", title: "Phrases", sub: "Remettre dans l'ordre, le bloc qui manque, le sens", types: ["order", "gap", "sentence"] },
+  { id: "texts", title: "Textes", sub: "Panneaux, menus, stèles", types: ["text"] },
 ];
 export const familyTypes = (p: Profile, id: string): DrillType[] => (FAMILIES.find((f) => f.id === id)?.types ?? []).filter((t) => available(p, t));

@@ -3,6 +3,8 @@ import { isJa } from "../i18n";
 import { buzz } from "../ui/haptics";
 import { byK } from "../data/kana";
 import { WORDS } from "../data/words";
+import { isPhrase, phraseOf, readingsOf, shown, spoken, tilesOf } from "../data/phrases";
+import { markOrder, mixed, orderBoard } from "../ui/order";
 import { LOOKALIKES, shuffle } from "../core/drills";
 import { profile } from "../core/store";
 import { romajiOk, wordOf } from "../core/vocab";
@@ -18,6 +20,7 @@ import { speak } from "../ui/speech";
  * rebuild the word from a set of signs). Both parts right → Bien, one → Bof, none → Raté.
  */
 export function viewWord(it: QueueItem, head: string, onStep: () => void, done: (g: Grade) => void): void {
+  if (isPhrase(it.k)) return viewPhrase(it, head, onStep, done);
   const [w, r, frOnly] = wordOf(it.k)!;
   const fr = meaningFor(w, frOnly, isJa());
   const v = view();
@@ -152,4 +155,51 @@ function writeWord(body: HTMLElement, w: string, r: string, fr: string, done: (g
     const g: Grade = wrong === 0 ? "bien" : wrong === 1 && want.length >= 3 ? "bof" : "rate";
     finish(body, g, `${w} · ${r}`, done);
   };
+}
+
+/* ---------- travel phrases ---------- */
+
+/** The reading under a block while one of its signs is not solid yet (romaji fade out). */
+export function tileHints(tiles: string[], readings: string[]): string[] {
+  const p = profile(), t = today();
+  return tiles.map((x, i) => ([...x].every((c) => !byK[c] || solid(p, c, t)) ? "" : readings[i] ?? ""));
+}
+
+/**
+ * A phrase: discovery (sound, blocks with their reading, meaning), then « compose »: from the
+ * meaning, put the blocks back in order. Right → Bien, wrong → Raté (with the right order).
+ */
+function viewPhrase(it: QueueItem, head: string, onStep: () => void, done: (g: Grade) => void): void {
+  const ph = phraseOf(it.k)!;
+  const tiles = tilesOf(ph), rs = readingsOf(ph), hints = tileHints(tiles, rs);
+  const v = view();
+  v.innerHTML = "";
+  const card = el(`<section class="card drill"><div class="prompt"><div><h2 style="font-size:21px">${it.isNew && !it.step ? "Nouvelle phrase" : "Phrase utile"}</h2><div class="small muted">${head}</div></div><button class="btn sm" id="say">Écouter</button></div><div id="body" style="display:flex;flex-direction:column;gap:16px"></div></section>`);
+  v.appendChild(card);
+  const body = $("#body", card);
+  $("#say", card).onclick = () => speak(spoken(ph.w));
+  if (it.isNew && !it.step) {
+    speak(spoken(ph.w), true);
+    body.innerHTML = `<p class="drill-big" style="font-family:var(--display);margin:0">${esc(ph.fr)}</p>
+      <div class="order-bank">${tiles.map((x, i) => `<span class="otile btn"><span class="kana-l">${x}</span><small>${rs[i]}</small></span>`).join("")}</div>
+      <p class="reading">${shown(ph.r)}</p>
+      <button class="btn primary big" id="ok">Je la retiens, on vérifie</button>`;
+    $("#ok", body).onclick = () => {
+      it.step = 2;
+      onStep();
+      viewPhrase(it, head, onStep, done);
+    };
+    return;
+  }
+  const order = mixed(tiles.length);
+  body.appendChild(el(`<p class="drill-big" style="font-family:var(--display);margin:0">${esc(ph.fr)}</p>`));
+  body.appendChild(
+    orderBoard(order.map((i) => tiles[i]), order.map((i) => hints[i]), tiles.length, (picked, board) => {
+      const ok = picked.map((j, pos) => order[j] === pos || tiles[order[j]] === tiles[pos]);
+      markOrder(board, ok);
+      speak(spoken(ph.w), true);
+      const g: Grade = ok.every(Boolean) ? "bien" : "rate";
+      finish(body, g, `${shown(ph.w)} · ${shown(ph.r)}`, done);
+    }),
+  );
 }

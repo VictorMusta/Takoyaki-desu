@@ -445,3 +445,18 @@ details.fine > summary{color:var(--wood)}
 .about details + details{border-top:var(--hair);margin-top:12px;padding-top:12px}
 .day-done{margin:0;font-family:var(--display);font-size:20px;line-height:1.4;color:var(--take)}
 .day-done::before{content:"✓ "}
+/* Compose a sentence from blocks */
+.order{display:flex;flex-direction:column;gap:14px}
+.order-line{min-height:64px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border-bottom:1.5px solid var(--ink)}
+.order-bank{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.otile{display:flex;flex-direction:column;align-items:center;padding:6px 10px;min-height:48px;line-height:1.2}
+.otile .kana-l{font-family:var(--hand);font-weight:600;font-size:20px}
+.otile small{font-size:11px;opacity:.75}
+.otile.right{background:var(--take);border-color:var(--take);color:var(--on-take)}
+.otile.wrong{border:1.5px solid var(--beni);color:var(--beni)}
+.otile:disabled{opacity:1}
+.typo-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.typo-row .key{min-width:56px;min-height:64px;font-size:30px;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.typo-row .key small{font-size:14px;color:var(--take)}
+.typo-row .key.wrong{border:1.5px solid var(--beni);color:var(--beni)}
+.typo-row .key.picked{background:var(--card);border-color:var(--ink)}

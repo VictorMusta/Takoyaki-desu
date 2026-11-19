@@ -64,6 +64,12 @@ export const WORDS: Word[] = [
   ["おてら", "otera", "temple bouddhiste"], ["ゆっくり", "yukkuri", "lentement"], ["ぜんぶ", "zenbu", "tout"], ["げんき", "genki", "en forme"], ["でんわ", "denwa", "téléphone"],
   ["えんぴつ", "enpitsu", "crayon"], ["さんぽ", "sanpo", "promenade"], ["かんぱい", "kanpai", "santé !"], ["てんぷら", "tenpura", "tempura"], ["いっぱい", "ippai", "plein"],
   ["しんぶん", "shinbun", "journal"], ["べんとう", "bentō", "bentō"], ["ばしょ", "basho", "endroit"], ["ちず", "chizu", "carte (plan)"], ["しょうゆ", "shōyu", "sauce soja"],
+  // travel: greetings and the words for getting by
+  ["はい", "hai", "oui"], ["いいえ", "iie", "non"], ["すみません", "sumimasen", "excusez-moi, pardon"], ["こんにちは", "konnichiwa", "bonjour"],
+  ["おはよう", "ohayō", "bonjour (le matin)"], ["こんばんは", "konbanwa", "bonsoir"], ["おやすみ", "oyasumi", "bonne nuit"], ["さようなら", "sayōnara", "au revoir"],
+  ["はじめまして", "hajimemashite", "enchanté"], ["わかりません", "wakarimasen", "je ne comprends pas"], ["いただきます", "itadakimasu", "bon appétit (avant de manger)"],
+  ["ひとり", "hitori", "une personne"], ["ふたり", "futari", "deux personnes"], ["よやく", "yoyaku", "réservation"], ["おかいけい", "okaikei", "l'addition"],
+  ["じこくひょう", "jikokuhyō", "horaire (des trains)"], ["ふくろ", "fukuro", "sac (de course)"], ["おすすめ", "osusume", "recommandation"], ["いりません", "irimasen", "je n'en ai pas besoin"],
   // katakana: loanwords seen everywhere
   ["パン", "pan", "pain"], ["バス", "basu", "bus"], ["ホテル", "hoteru", "hôtel"], ["トイレ", "toire", "toilettes"], ["タクシー", "takushī", "taxi"],
   ["コーヒー", "kōhī", "café"], ["ビール", "bīru", "bière"], ["ワイン", "wain", "vin"], ["ミルク", "miruku", "lait"], ["ジュース", "jūsu", "jus"],

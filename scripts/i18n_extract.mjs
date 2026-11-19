@@ -9,7 +9,7 @@ import { join } from "node:path";
 const ROOT = new URL("..", import.meta.url).pathname;
 const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
 // Learning content stays as it is (kana, words, mnemonics, real texts); the interface is translated.
-const SKIP = /\/(data\/(words|examples|mnemonics|texts|font-chars|changelog|gloss-ja)|i18n\/)|\.d\.ts$/;
+const SKIP = /\/(data\/(words|phrases|examples|mnemonics|texts|font-chars|changelog|gloss-ja)|i18n\/)|\.d\.ts$/;
 // Code that happens to look like words: selectors, CSS, API names, locales.
 const IGNORE = new Set(["AbortError", "NFD", "UTC", "fr-FR", "ja-JP", "Escape", "Enter", "kyōkasho", "KanjiVG", "OK", "btn sm quit", "verdict ok", "no share", "primary big", "bold 20px system-ui", "var(--beni)", "github.com/VictorMusta/Takoyaki-desu", "Missing element {0}", "class=\"cal-t\"", "Takoyaki desu", "Mincho", "KA", "2-digit", "nav a"]);
 // Mail subjects and bodies sent to the author: they stay in French, he reads them.

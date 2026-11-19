@@ -1,3 +1,4 @@
+import { PHRASES, shown } from "../data/phrases";
 import { coachAt } from "../ui/coach";
 import { shareStory } from "../ui/story";
 import { rivals, shareMyLink } from "./duel";
@@ -162,6 +163,7 @@ export function viewProgress(): void {
 
   /* ---- vocabulary ---- */
   const studied = WORDS.filter(([w]) => p.words?.[w]?.seen);
+  const phr = PHRASES.filter((x) => p.words?.[x.w]?.seen);
   const open = openWords(p).length;
   v.appendChild(
     el(`<section class="card"><h3>Vocabulaire</h3>
@@ -173,6 +175,15 @@ export function viewProgress(): void {
             .map(([w, r, fr]) => {
               const m = Math.round(wordMastery(p, w, t) * 100);
               return `<div class="wrow"><span class="kana-s">${w}</span><span class="small">${r} · ${esc(meaningFor(w, fr, isJa()))}</span><span class="mbar" role="img" aria-label="Maîtrise ${m} %"><i style="width:${m}%"></i></span></div>`;
+            })
+            .join("")}</div></details>`
+        : ""
+    }${
+      phr.length
+        ? `<details><summary>Mes phrases (${phr.length})</summary><div class="wlist">${phr
+            .map((x) => {
+              const m = Math.round(wordMastery(p, x.w, t) * 100);
+              return `<div class="wrow"><span class="kana-s">${shown(x.w)}</span><span class="small">${shown(x.r)} · ${esc(x.fr)}</span><span class="mbar" role="img" aria-label="Maîtrise ${m} %"><i style="width:${m}%"></i></span></div>`;
             })
             .join("")}</div></details>`
         : ""

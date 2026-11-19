@@ -55,7 +55,7 @@
   ]
  },
  {
-  "s": "Le sens d'un mot, le signe qui manque",
+  "s": "Le sens d'un mot, le bon mot, la faute, le signe qui manque",
   "files": [
    "src/core/drills.ts"
   ]
@@ -67,19 +67,31 @@
   ]
  },
  {
-  "s": "Phrases et textes",
+  "s": "Panneaux, menus, stèles",
   "files": [
    "src/core/drills.ts"
   ]
  },
  {
-  "s": "Proverbes, panneaux, menus, stèles",
+  "s": "Phrases",
   "files": [
    "src/core/drills.ts"
   ]
  },
  {
   "s": "Reconnaître les signes",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Remettre dans l'ordre, le bloc qui manque, le sens",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Textes",
   "files": [
    "src/core/drills.ts"
   ]
@@ -702,6 +714,20 @@
   ]
  },
  {
+  "s": "Touchez les blocs dans l'ordre.",
+  "files": [
+   "src/ui/order.ts"
+  ]
+ },
+ {
+  "s": "Vérifier",
+  "files": [
+   "src/ui/order.ts",
+   "src/views/drill.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
   "s": "{0} · {1} par jour",
   "files": [
    "src/ui/prefs.ts"
@@ -1284,6 +1310,18 @@
   ]
  },
  {
+  "s": "Quel bloc manque ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Quel est le bon mot ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
   "s": "Quel signe manque ?",
   "files": [
    "src/views/drill.ts"
@@ -1312,6 +1350,12 @@
   ]
  },
  {
+  "s": "Remettez la phrase dans l'ordre",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
   "s": "Signe suivant",
   "files": [
    "src/views/drill.ts"
@@ -1330,10 +1374,9 @@
   ]
  },
  {
-  "s": "Vérifier",
+  "s": "Un signe est faux : lequel ?",
   "files": [
-   "src/views/drill.ts",
-   "src/views/word.ts"
+   "src/views/drill.ts"
   ]
  },
  {
@@ -1484,7 +1527,8 @@
  {
   "s": "Apprenez d'abord quelques signes",
   "files": [
-   "src/views/exam.ts"
+   "src/views/exam.ts",
+   "src/views/train.ts"
   ]
  },
  {
@@ -2158,6 +2202,12 @@
  },
  {
   "s": "Mes mots ({0})",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Mes phrases ({0})",
   "files": [
    "src/views/progress.ts"
   ]
@@ -3168,6 +3218,18 @@
   ]
  },
  {
+  "s": "{0} à revoir aujourd'hui, puis des jeux",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "{0} appris, en jeux",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
   "s": "10 jeux au hasard",
   "files": [
    "src/views/train.ts"
@@ -3175,6 +3237,12 @@
  },
  {
   "s": "10 signes fragiles, de mémoire",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Apprendre {0} mots",
   "files": [
    "src/views/train.ts"
   ]
@@ -3192,6 +3260,12 @@
   ]
  },
  {
+  "s": "Après vos premiers mots",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
   "s": "Autant que vous voulez, sans repousser vos révisions. Chaque réussite fait un peu progresser le signe, jusqu'à « Assez vu pour aujourd'hui ».",
   "files": [
    "src/views/train.ts"
@@ -3204,6 +3278,18 @@
   ]
  },
  {
+  "s": "Mots et phrases du voyage",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Mots et phrases utiles en voyage",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
   "s": "Passer un examen",
   "files": [
    "src/views/train.ts"
@@ -3211,6 +3297,12 @@
  },
  {
   "s": "Quelques signes sans aide, pour vérifier que vos notes sont honnêtes. Ne change pas vos révisions.",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Réviser mes mots",
   "files": [
    "src/views/train.ts"
   ]
@@ -3300,6 +3392,12 @@
   ]
  },
  {
+  "s": "Je la retiens, on vérifie",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
   "s": "Je le retiens, on vérifie",
   "files": [
    "src/views/word.ts"
@@ -3318,6 +3416,12 @@
   ]
  },
  {
+  "s": "Nouvelle phrase",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
   "s": "On lit « {0} ».",
   "files": [
    "src/views/word.ts"
@@ -3331,6 +3435,12 @@
  },
  {
   "s": "Pas encore.",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Phrase utile",
   "files": [
    "src/views/word.ts"
   ]

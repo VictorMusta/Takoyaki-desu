@@ -5,6 +5,8 @@ import { knownSigns, type Drill } from "../core/drills";
 import { profile } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { kanaField, kanaKeyboard } from "../ui/keyboard";
+import { markOrder, mixed, orderBoard } from "../ui/order";
+import { tileHints } from "./word";
 import { modelSVG, userSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
 import { checkDrawing, explain } from "../core/strokecheck";
@@ -27,6 +29,10 @@ const TITLES: Record<Drill["type"], string> = {
   drawword: "Écrivez ce mot à la main",
   sentence: "Que veut dire cette phrase ?",
   text: "Que dit ce texte ?",
+  pickword: "Quel est le bon mot ?",
+  typo: "Un signe est faux : lequel ?",
+  order: "Remettez la phrase dans l'ordre",
+  gap: "Quel bloc manque ?",
 };
 
 /** One exercise screen. `head` is the lesson caption (what, how many left). */
@@ -57,12 +63,16 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
     case "duel":
     case "combo":
     case "word":
-    case "sentence": {
+    case "sentence":
+    case "pickword":
+    case "gap": {
       const big =
         d.type === "listen" ? `<button class="btn big" id="play">Réécouter le son</button>`
+        : d.type === "pickword" ? `<p class="drill-big" style="font-family:var(--display)">${esc(d.prompt)}</p>`
+        : d.type === "gap" ? `<p class="drill-big" style="font-family:var(--display);font-size:22px">${esc(d.prompt)}</p><p class="drill-big kana-l" style="font-size:26px">${d.tiles!.map((t2, i) => (i === d.gap ? `<span class="gap">？</span>` : t2)).join(" ")}</p>`
         : d.type === "choose" || d.type === "duel" ? `<p class="drill-big romaji">${d.prompt}</p>`
         : `<p class="drill-big kana-l">${d.prompt}</p>`;
-      const kana = d.type === "choose" || d.type === "listen" || d.type === "duel";
+      const kana = d.type === "choose" || d.type === "listen" || d.type === "duel" || d.type === "pickword" || d.type === "gap";
       body.appendChild(el(`<div>${big}</div>`));
       const grid = el(`<div class="opts-grid${kana ? " kana" : ""}${d.type === "sentence" || d.type === "word" ? " one" : ""}">${d.options!.map((o) => `<button class="btn opt-b" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`);
       body.appendChild(grid);
@@ -87,7 +97,11 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
           if (x.dataset.o === d.answer) x.classList.add("right");
         });
         if (!ok) b.classList.add("wrong");
-        const note = d.type === "sentence" ? `Lecture : ${d.meaning}.` : d.type === "word" || d.type === "read" || d.type === "combo" ? "" : `${d.answer} se lit « ${byK[d.answer!]?.r ?? ""} ».`;
+        const note =
+          d.type === "sentence" ? `Lecture : ${d.meaning}.`
+          : d.type === "pickword" ? `${d.answer} · ${d.reading}`
+          : d.type === "gap" ? `${d.tiles!.join(" ")} · ${d.readings!.join(" ")}`
+          : d.type === "word" || d.type === "read" || d.type === "combo" ? "" : `${d.answer} se lit « ${byK[d.answer!]?.r ?? ""} ».`;
         next(ok, ok ? [] : d.ks, note);
       };
       break;
@@ -167,6 +181,40 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
         const missed = left.filter((_, i) => !result![i]);
         next(missed.length === 0, missed, missed.length ? `${missed.length} lien${missed.length > 1 ? "s" : ""} faux sur ${n}.` : "");
       };
+      break;
+    }
+    case "typo": {
+      // The misspelt word, sign by sign: touch the wrong one.
+      body.appendChild(el(`<p class="drill-big" style="font-family:var(--display);font-size:22px;margin:0">${esc(d.meaning!)}</p>`));
+      const row = el(`<div class="typo-row">${d.tiles!.map((c, i) => `<button class="btn key" type="button" data-i="${i}">${c}</button>`).join("")}</div>`);
+      body.appendChild(row);
+      row.onclick = (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-i]");
+        if (!b || row.dataset.done) return;
+        row.dataset.done = "1";
+        const ok = +b.dataset.i! === d.gap;
+        const bad = row.querySelector<HTMLButtonElement>(`[data-i="${d.gap}"]`)!;
+        bad.classList.add("wrong");
+        bad.innerHTML = `${d.tiles![d.gap!]}<small>${[...d.full!][d.gap!]}</small>`;
+        if (!ok) b.classList.add("picked");
+        speak(d.say!, true);
+        next(ok, ok ? [] : d.ks, `${d.full} · ${d.reading}`);
+      };
+      break;
+    }
+    case "order": {
+      const order = mixed(d.tiles!.length);
+      const hints = tileHints(d.tiles!, d.readings!);
+      body.appendChild(el(`<p class="drill-big" style="font-family:var(--display);font-size:22px;margin:0">${esc(d.prompt)}</p>`));
+      body.appendChild(
+        orderBoard(order.map((i) => d.tiles![i]), order.map((i) => hints[i]), d.tiles!.length, (picked, board) => {
+          const ok = picked.map((j, pos) => d.tiles![order[j]] === d.tiles![pos]);
+          markOrder(board, ok);
+          speak(d.say!, true);
+          const all = ok.every(Boolean);
+          next(all, all ? [] : d.ks, `${d.tiles!.join(" ")} · ${d.readings!.join(" ")}`);
+        }),
+      );
       break;
     }
     case "cloze": {

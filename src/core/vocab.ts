@@ -1,5 +1,6 @@
 import { toRomaji } from "./romaji";
 import { signsOf, WORDS, type Word } from "../data/words";
+import { PHRASES, phraseOf } from "../data/phrases";
 import { applyGrade, cardMastery, dayRec, newCard } from "./scheduler";
 import type { Card, Grade, Profile, QueueItem } from "./types";
 
@@ -18,14 +19,44 @@ export function openWords(p: Profile): Word[] {
   return WORDS.filter(([w]) => signsOf(w).every((c) => p.cards[c]?.seen));
 }
 
+/** Travel words, learnt first in « Apprendre 5 mots ». */
+const TRAVEL = new Set(["はい", "いいえ", "すみません", "ありがとう", "だいじょうぶ", "こんにちは", "おはよう", "こんばんは", "おやすみ", "さようなら", "はじめまして", "わかりません",
+  "いただきます", "ひとり", "ふたり", "よやく", "おかいけい", "じこくひょう", "ごはん", "みず", "トイレ", "えき", "でんしゃ", "きっぷ", "いくら", "どこ", "でぐち",
+  "いりぐち", "ホテル", "レストラン", "コンビニ", "メニュー", "おいしい", "かんぱい", "じかん", "ちず", "にほんご", "えいご", "ふくろ", "おすすめ", "いりません"]);
+
+/** Every word or phrase the learner has met (« Réviser mes mots »). */
+export const learnedItems = (p: Profile): string[] => Object.keys(p.words ?? {}).filter((k) => p.words![k].seen && (wordOf(k) || phraseOf(k)));
+
+/**
+ * The next `n` things to learn on demand: travel words whose signs are known and travel
+ * phrases (open at once, reading shown), taken in turn, then the other open words.
+ */
+export function nextToLearn(p: Profile, n: number): string[] {
+  const fresh = (k: string) => !p.words?.[k]?.seen;
+  const words = openWords(p).map(([w]) => w).filter(fresh);
+  const travel = [...TRAVEL].filter((w) => words.includes(w)), phrases = PHRASES.map((x) => x.w).filter(fresh);
+  const out: string[] = [];
+  for (let i = 0; out.length < n && (i < travel.length || i < phrases.length); i++) {
+    if (i < travel.length) out.push(travel[i]);
+    if (out.length < n && i < phrases.length) out.push(phrases[i]);
+  }
+  for (const w of words) if (out.length < n && !out.includes(w)) out.push(w);
+  return out;
+}
+
+/** Learnt words and phrases due today, the oldest due first. */
+export function dueItems(p: Profile, t: number, cap = WORD_REV_CAP): string[] {
+  return learnedItems(p)
+    .filter((k) => (p.words![k].due ?? Infinity) <= t)
+    .sort((a, b) => (p.words![a].due ?? 0) - (p.words![b].due ?? 0))
+    .slice(0, cap);
+}
+
 /** Today's words: due reviews first, then new words up to the daily quota. */
 export function buildWordQueue(p: Profile, t: number): QueueItem[] {
   const d = dayRec(p, t), open = openWords(p);
-  const due = open
-    .filter(([w]) => p.words?.[w]?.seen && (p.words[w].due ?? Infinity) <= t)
-    .sort(([a], [b]) => (p.words![a].due ?? 0) - (p.words![b].due ?? 0))
-    .slice(0, WORD_REV_CAP)
-    .map(([w]): QueueItem => ({ k: w, isNew: false, word: true }));
+  // Reviews: words and phrases learnt (phrases come from « Apprendre 5 mots »).
+  const due = dueItems(p, t).map((k): QueueItem => ({ k, isNew: false, word: true }));
   const quota = Math.max(0, (p.settings.wordsPerDay ?? WORDS_PER_DAY) - (d.nwW ?? 0));
   const fresh = open
     .filter(([w]) => !p.words?.[w]?.seen)

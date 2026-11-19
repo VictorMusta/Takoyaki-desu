@@ -3,7 +3,9 @@ import { FAMILIES, familyTypes } from "../core/drills";
 import type { DrillType } from "../core/drills";
 import { profile } from "../core/store";
 import { el, showWave, view } from "../ui/dom";
-import { startDrills, startSession } from "./session";
+import { startDrills, startSession, startWords } from "./session";
+import { dueItems, learnedItems, nextToLearn } from "../core/vocab";
+import { today } from "../core/scheduler";
 
 /** Every exercise type possible right now, for a « Jouer » round. */
 export const allGames = (): DrillType[] => FAMILIES.flatMap((f) => familyTypes(profile(), f.id));
@@ -34,6 +36,15 @@ export function viewTrain(): void {
     ${seen ? "" : `<p class="small muted" style="margin:0">Apprenez d'abord quelques signes dans la séance du jour.</p>`}
     </section>`),
   );
+  // Vocabulary on demand: travel words and phrases first.
+  const toLearn = nextToLearn(p, 5).length, learned = learnedItems(p).length, due = dueItems(p, today()).length;
+  v.appendChild(
+    el(`<section class="card"><h3>Mots et phrases du voyage</h3>
+    <div class="train-main">
+      <button class="btn tile" id="w-learn" ${toLearn ? "" : "disabled"}><b aria-hidden="true">言</b><span>Apprendre ${toLearn || 5} mots</span><small>${toLearn ? "Mots et phrases utiles en voyage" : "Apprenez d'abord quelques signes"}</small></button>
+      <button class="btn tile" id="w-review" ${learned ? "" : "disabled"}><b aria-hidden="true">復</b><span>Réviser mes mots</span><small>${learned ? (due ? `${due} à revoir aujourd'hui, puis des jeux` : `${learned} appris, en jeux`) : "Après vos premiers mots"}</small></button>
+    </div></section>`),
+  );
   v.appendChild(el(`<section class="card"><h3>Un jeu précis</h3><div class="modes">${fam}</div></section>`));
   v.appendChild(
     el(`<section class="card"><h3>Examen strict</h3>
@@ -45,5 +56,7 @@ export function viewTrain(): void {
   showWave();
   (v.querySelector("#t-write") as HTMLButtonElement).onclick = () => startSession("practice");
   (v.querySelector("#t-play") as HTMLButtonElement).onclick = () => startDrills(allGames());
+  (v.querySelector("#w-learn") as HTMLButtonElement).onclick = () => startWords("learn");
+  (v.querySelector("#w-review") as HTMLButtonElement).onclick = () => startWords("review");
   v.querySelectorAll<HTMLButtonElement>("[data-m]").forEach((b) => (b.onclick = () => startDrills(familyTypes(p, b.dataset.m!))));
 }
