@@ -285,3 +285,24 @@ describe("capped practice bonus", () => {
     expect(p.cards["え"].boost).toBeUndefined();
   });
 });
+
+import { practiceWeight, weightedSample, recordMiss } from "../src/core/scheduler";
+describe("practice picks", () => {
+  it("weak and recently missed signs come up more often, every sign keeps a chance", () => {
+    const p = freshProfile(), t = 20776;
+    p.cards["あ"] = { seen: true, ease: 2.5, interval: 10, reps: 4, due: t + 5 }; // mastered
+    p.cards["い"] = { seen: true, ease: 2.5, interval: 1, reps: 1, due: t + 1 }; // fresh
+    p.cards["う"] = { seen: true, ease: 2.5, interval: 10, reps: 4, due: t + 5 };
+    [1, 2, 3].forEach(() => recordMiss(p, "う", t)); // mastered but missed 3 times today
+    expect(practiceWeight(p, "い", t)).toBeGreaterThan(practiceWeight(p, "あ", t) * 2);
+    expect(practiceWeight(p, "う", t)).toBeGreaterThan(practiceWeight(p, "い", t));
+    expect(practiceWeight(p, "う", t + 2)).toBeCloseTo(practiceWeight(p, "あ", t + 2));
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const count: Record<string, number> = { あ: 0, い: 0, う: 0 };
+    for (let i = 0; i < 3000; i++) count[weightedSample(["あ", "い", "う"], (k) => practiceWeight(p, k, t), 1, rnd)[0]]++;
+    expect(count["あ"]).toBeGreaterThan(150); // still drawn sometimes
+    expect(count["い"]).toBeGreaterThan(count["あ"] * 2);
+    expect(count["う"]).toBeGreaterThan(count["い"]);
+  });
+});

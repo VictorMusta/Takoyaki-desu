@@ -1,7 +1,7 @@
 {
   "name": "takoyaki-desu",
   "private": true,
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Apprendre les hiragana en les écrivant de mémoire, avec répétition espacée.",
   "type": "module",
   "scripts": {

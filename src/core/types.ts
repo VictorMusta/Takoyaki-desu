@@ -13,6 +13,8 @@ export interface Card {
   soon?: number;
   /** Practice not yet confirmed (see practiceGain): pending mastery, last day practised, reps that day. */
   boost?: { pts: number; d: number; n: number };
+  /** Recent misses (any kind: lesson, practice, games, peeks): day and count that day. */
+  miss?: { d: number; n: number };
 }
 
 export interface Settings {

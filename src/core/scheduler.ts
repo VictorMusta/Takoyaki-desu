@@ -77,6 +77,7 @@ export function gradeCard(p: Profile, k: string, g: Grade, t: number, now: numbe
     if (c.interval === 1) c.soon = now + SOON_MS;
     else delete c.soon;
   }
+  if (g === "rate") recordMiss(p, k, t);
   // Practice made real: a success stretches the new interval by the pending share; a miss drops it.
   if (c.boost) {
     if (g !== "rate" && c.interval >= 1) {
@@ -100,6 +101,7 @@ export function peekCard(p: Profile, k: string, t: number): void {
   c.interval = 1;
   c.due = t + 1;
   c.seen = true;
+  recordMiss(p, k, t);
   p.log.push({ d: t, k, g: "rate" });
 }
 
@@ -137,6 +139,7 @@ export function pullForward(p: Profile, k: string, t: number): void {
   const c = p.cards[k];
   if (!c?.seen) return;
   delete c.boost;
+  recordMiss(p, k, t);
   c.reps = 0;
   c.interval = Math.min(c.interval, 1);
   c.due = Math.min(c.due ?? t + 1, t + 1);
@@ -239,20 +242,44 @@ export function unseenOpen(p: Profile): number {
 }
 
 /**
- * Free practice round: the weakest seen signs first (short interval, low ease), shuffled.
- * These items never touch the schedule, so extra practice can't distort the spacing.
+ * How likely a sign is to be picked for practice: weak signs more often, but by chance, not in
+ * order. A sign never studied well weighs 1.3, a mastered one 0.3 (about 4 to 1), and a sign
+ * already « assez vu » today a third of that: every sign keeps a fair chance to come up.
+ */
+export function practiceWeight(p: Profile, k: string, t: number): number {
+  const c = p.cards[k];
+  let w = 0.3 + (1 - Math.min(1, cardMastery(c, t) + pending(c)));
+  // Recent misses push a sign forward even if its mastery is high: +0.4 per miss today
+  // (up to 3), half that for yesterday's.
+  if (c?.miss && t - c.miss.d <= 1) w += (t === c.miss.d ? 0.4 : 0.2) * Math.min(3, c.miss.n);
+  return saturated(c, t) ? w / 3 : w;
+}
+
+/** Remembers a miss on a sign today (used to bring it up more often in practice). */
+export function recordMiss(p: Profile, k: string, t: number): void {
+  const c = p.cards[k];
+  if (!c) return;
+  c.miss = c.miss?.d === t ? { d: t, n: c.miss.n + 1 } : { d: t, n: 1 };
+}
+
+/** n distinct items drawn at random, each with chance proportional to its weight. */
+export function weightedSample<T>(items: T[], weight: (x: T) => number, n: number, rnd: () => number = Math.random): T[] {
+  // Efraimidis–Spirakis: key = u^(1/w), keep the n largest.
+  return items
+    .map((x) => ({ x, key: Math.pow(rnd() || 1e-9, 1 / Math.max(1e-6, weight(x))) }))
+    .sort((a, b) => b.key - a.key)
+    .slice(0, n)
+    .map((e) => e.x);
+}
+
+/**
+ * Free practice round: seen signs drawn at random, the weak ones more likely (practiceWeight).
+ * These items never push a review away, so extra practice can't distort the spacing.
  */
 export function practiceQueue(p: Profile, n = 10, rnd: () => number = Math.random): QueueItem[] {
-  const seen = KANA.filter((k) => p.cards[k.k]?.seen)
-    // Signs already « assez vus » today go last: practice where it still counts.
-    .map((k) => ({ k: k.k, w: p.cards[k.k].interval + p.cards[k.k].ease + rnd() + (saturated(p.cards[k.k], today()) ? 100 : 0) }))
-    .sort((a, b) => a.w - b.w)
-    .slice(0, n);
-  for (let i = seen.length - 1; i > 0; i--) {
-    const j = Math.floor(rnd() * (i + 1));
-    [seen[i], seen[j]] = [seen[j], seen[i]];
-  }
-  return seen.map((x) => ({ k: x.k, isNew: false, practice: true }));
+  const t = today();
+  const seen = KANA.filter((k) => p.cards[k.k]?.seen).map((k) => k.k);
+  return weightedSample(seen, (k) => practiceWeight(p, k, t), n, rnd).map((k) => ({ k, isNew: false, practice: true }));
 }
 
 /** Consecutive days with at least one card, ending today (or yesterday if today is empty). */

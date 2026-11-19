@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.13.1",
+    date: "2026-11-19",
+    items: ["L'entraînement choisit au hasard, mais les signes fragiles ou ratés récemment (même bien maîtrisés) ont plus de chances de revenir."],
+  },
+  {
     v: "0.13.0",
     date: "2026-11-19",
     items: [

@@ -8,7 +8,7 @@ import { isJa } from "../i18n";
 
 /** A meaning as shown: French, with the Japanese writing beside it in the Japanese interface. */
 const mean = (w: string, fr: string) => meaningFor(w, fr, isJa());
-import { allSolid, today } from "./scheduler";
+import { allSolid, practiceWeight, today, weightedSample } from "./scheduler";
 
 /**
  * Exercises other than drawing. A drill is plain data (saved with the lesson so it resumes),
@@ -122,8 +122,10 @@ export function available(p: Profile, type: DrillType): boolean {
 /** Builds one drill of this type around sign k (or a random known sign), or null if impossible. */
 export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Math.random): Drill | null {
   if (!available(p, type)) return null;
-  const known = knownPlain(p);
-  const sign = k && p.cards[k]?.seen && isPlain(k) ? k : pick(known, rnd);
+  const known = knownPlain(p), t = today();
+  // The sign an exercise is built around: weak signs more likely, still by chance.
+  const wt = (x: string) => practiceWeight(p, x, t);
+  const sign = k && p.cards[k]?.seen && isPlain(k) ? k : weightedSample(known, wt, 1, rnd)[0];
   switch (type) {
     case "choose":
     case "listen": {
@@ -137,11 +139,11 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
     case "match": {
       // Five signs with five different sounds (か and カ both read « ka »).
       const five: string[] = [];
-      for (const x of shuffle(known, rnd)) if (five.length < 5 && !five.some((y) => byK[y].r === byK[x].r)) five.push(x);
+      for (const x of weightedSample(known, wt, known.length, rnd)) if (five.length < 5 && !five.some((y) => byK[y].r === byK[x].r)) five.push(x);
       return { type, ks: five, prompt: "", pairs: five.map((x) => [x, byK[x].r]) };
     }
     case "combo": {
-      const all = combos(p), c = pick(all, rnd);
+      const all = combos(p), c = weightedSample(all, (x) => ([...x].reduce((s, y) => s + wt(y), 0) / 2), 1, rnd)[0];
       // Wrong readings: other sounds only (きゃ and キャ both read « kya »).
       const wrong: string[] = [];
       for (const x of shuffle(all, rnd)) if (wrong.length < 3 && ![c, ...wrong].some((y) => toRomaji(y) === toRomaji(x))) wrong.push(x);

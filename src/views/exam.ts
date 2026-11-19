@@ -1,5 +1,5 @@
 import { byK, KANA, sound } from "../data/kana";
-import { pullForward, today } from "../core/scheduler";
+import { pullForward, recordMiss, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, ExamRun } from "../core/types";
 import { $, $opt, el, setQuit, view } from "../ui/dom";
@@ -29,6 +29,7 @@ export function viewExam(): void {
       run!.res.push({ k, ok: a === "ok" });
       // « Je parle déjà japonais »: a sign missed at the exam comes back in the lessons tomorrow.
       if (a !== "ok" && profile().fluent) pullForward(profile(), k, today());
+      else if (a !== "ok") recordMiss(profile(), k, today()); // practice will bring it up more often
       run!.i++;
       delete run!.pending;
       save();
