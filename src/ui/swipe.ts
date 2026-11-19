@@ -3,8 +3,8 @@
  * like the tabs of a phone app. Never during a lesson or a drill (« Abandonner » is shown),
  * never on the drawing pad, a keyboard, a text field, or something that scrolls sideways.
  */
-const MIN_DX = 70; // px
-const MAX_MS = 700;
+const MIN_DX = 40; // px: a short flick is enough (asked for, even at the cost of a few accidents)
+const MAX_MS = 800;
 
 function blocked(t: EventTarget | null): boolean {
   if (document.querySelector("#prof .quit, .modal") || document.querySelector("nav")?.classList.contains("hidden")) return true;
@@ -31,7 +31,7 @@ export function setupSwipe(): void {
     if (!on) return;
     on = false;
     const p = e.changedTouches[0], dx = p.clientX - x0, dy = p.clientY - y0;
-    if (Date.now() - t0 > MAX_MS || Math.abs(dx) < MIN_DX || Math.abs(dx) < 2 * Math.abs(dy)) return;
+    if (Date.now() - t0 > MAX_MS || Math.abs(dx) < MIN_DX || Math.abs(dx) < 1.5 * Math.abs(dy)) return;
     if (window.getSelection()?.toString()) return;
     const tabs = [...document.querySelectorAll<HTMLAnchorElement>("nav a")];
     const i = tabs.findIndex((a) => a.getAttribute("aria-current") === "page");
