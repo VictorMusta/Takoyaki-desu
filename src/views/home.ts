@@ -1,7 +1,7 @@
 import { isJa } from "../i18n";
 import { writeNote } from "../ui/notes";
 import { isKata, KANA, LINES, lineLabel } from "../data/kana";
-import { alphabetMastery, buildQueue, dayRec, kataStarted, nextSoon, recordMastery, streak, today } from "../core/scheduler";
+import { alphabetMastery, buildQueue, dayRec, kataStarted, nextSoon, pending, recordMastery, streak, today } from "../core/scheduler";
 import { save } from "../core/store";
 import type { DayRec, Profile } from "../core/types";
 import { buildWordQueue } from "../core/vocab";
@@ -91,11 +91,13 @@ function progressLine(p: Profile, t: number, d: DayRec): string {
   const prev = Object.entries(h).filter(([k]) => +k < t).sort((a, b) => +a[0] - +b[0]).pop()?.[1];
   const gain = prev === undefined ? 0 : Math.round(m - prev);
   const s = streak(p, t);
+  // Practice not yet confirmed, as points of the whole script (see practiceGain).
+  const pend = Math.round((KANA.filter((k) => isKata(k.k) === kata).reduce((a, k) => a + pending(p.cards[k.k]), 0) / KANA.filter((k) => isKata(k.k) === kata).length) * 100);
   const pool = KANA.filter((k) => isKata(k.k) === kata), total = pool.length, seen = pool.filter((k) => p.cards[k.k]?.seen).length;
   const now = activity(d), before = activity(p.days[t - 1]);
   return `<div class="today">
     <p style="margin:0">${now ? `Aujourd'hui : ${now}.` : before ? `Hier : ${before}.` : "Pas encore d'activité aujourd'hui."}</p>
-    <p class="small" style="margin:0">${seen} ${kata ? "katakana" : "hiragana"} découverts sur ${total} · maîtrise ${m} %${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
+    <p class="small" style="margin:0">${seen} ${kata ? "katakana" : "hiragana"} découverts sur ${total} · maîtrise ${m} %${pend ? ` <span>(+${pend} à confirmer)</span>` : ""}${gain > 0 ? ` <b class="up">+${gain}</b> depuis la veille` : ""}${s > 1 ? ` · ${s} jours d'affilée` : ""}</p>
   </div>`;
 }
 

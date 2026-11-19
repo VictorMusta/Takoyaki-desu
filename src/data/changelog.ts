@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.11.0",
+    date: "2026-11-19",
+    items: [
+      "Un nouveau signe revient dans la séance : il faut l'écrire de mémoire deux fois pour qu'il compte comme appris.",
+      "Deuxième chance le jour même : un signe réussi revient 4 h plus tard, et le réussir encore le fait déjà avancer. L'accueil vous dit quand revenir.",
+      "L'entraînement libre compte un peu : jusqu'à +18 % par jour sur un signe, affichés en clair et confirmés à sa prochaine révision. Au-delà : « Assez vu pour aujourd'hui ».",
+    ],
+  },
+  {
     v: "0.10.2",
     date: "2026-11-19",
     items: ["Un nouveau signe se trace tout de suite : l'ordre des traits s'anime seul et on dessine directement par-dessus, sans bouton « Apprendre ». 3 étapes au lieu de 4."],

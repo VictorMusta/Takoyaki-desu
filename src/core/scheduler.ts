@@ -77,6 +77,14 @@ export function gradeCard(p: Profile, k: string, g: Grade, t: number, now: numbe
     if (c.interval === 1) c.soon = now + SOON_MS;
     else delete c.soon;
   }
+  // Practice made real: a success stretches the new interval by the pending share; a miss drops it.
+  if (c.boost) {
+    if (g !== "rate" && c.interval >= 1) {
+      c.interval = Math.max(c.interval, Math.round(c.interval * (1 + c.boost.pts)));
+      c.due = t + c.interval;
+    }
+    delete c.boost;
+  }
   p.log.push({ d: t, k, g });
   checkUnlock(p);
 }
@@ -95,10 +103,40 @@ export function peekCard(p: Profile, k: string, t: number): void {
   p.log.push({ d: t, k, g: "rate" });
 }
 
+/* ---------- practice: visible, capped, provisional ---------- */
+
+/**
+ * Extra practice on a sign (free rounds, exercises) adds pending mastery with diminishing
+ * returns: +8, +5, +3, +2 points for the 1st to 4th success of the day, then nothing (« assez vu
+ * aujourd'hui »), and 20 points pending at most. It is shown lighter on top of the real mastery.
+ * It becomes real only at the next scheduled review: a success then stretches the new interval
+ * by that much (+18 % → 3 days become 4); a miss there, or in practice, drops it. So practice is
+ * rewarded without pretending a sign is known for longer than it was proven.
+ */
+export const PRACTICE_GAINS = [0.08, 0.05, 0.03, 0.02];
+export const PENDING_CAP = 0.2;
+
+/** No more gain today for this sign. */
+export const saturated = (c: Card | undefined, t: number) => !!c?.boost && c.boost.d === t && c.boost.n >= PRACTICE_GAINS.length;
+/** Pending mastery from practice, 0–0.2. */
+export const pending = (c: Card | undefined) => c?.boost?.pts ?? 0;
+
+/** One practice success on a sign (share < 1 for lighter exercises); returns the points gained. */
+export function practiceGain(p: Profile, k: string, t: number, share = 1): number {
+  const c = p.cards[k];
+  if (!c?.seen) return 0;
+  const b = c.boost && c.boost.d === t ? c.boost : { pts: c.boost?.pts ?? 0, d: t, n: 0 };
+  const step = PRACTICE_GAINS[b.n] ?? 0;
+  const gain = Math.min(step * share, PENDING_CAP - b.pts);
+  c.boost = { pts: Math.round((b.pts + Math.max(0, gain)) * 1000) / 1000, d: t, n: b.n + 1 };
+  return Math.max(0, gain);
+}
+
 /** Free practice can only bring a sign back sooner (tomorrow at the latest), never push it away. */
 export function pullForward(p: Profile, k: string, t: number): void {
   const c = p.cards[k];
   if (!c?.seen) return;
+  delete c.boost;
   c.reps = 0;
   c.interval = Math.min(c.interval, 1);
   c.due = Math.min(c.due ?? t + 1, t + 1);
@@ -206,7 +244,8 @@ export function unseenOpen(p: Profile): number {
  */
 export function practiceQueue(p: Profile, n = 10, rnd: () => number = Math.random): QueueItem[] {
   const seen = KANA.filter((k) => p.cards[k.k]?.seen)
-    .map((k) => ({ k: k.k, w: p.cards[k.k].interval + p.cards[k.k].ease + rnd() }))
+    // Signs already « assez vus » today go last: practice where it still counts.
+    .map((k) => ({ k: k.k, w: p.cards[k.k].interval + p.cards[k.k].ease + rnd() + (saturated(p.cards[k.k], today()) ? 100 : 0) }))
     .sort((a, b) => a.w - b.w)
     .slice(0, n);
   for (let i = seen.length - 1; i > 0; i--) {

@@ -5,6 +5,8 @@
  */
 export const JA: Record<string, string> = {
   "% de réussite": "% 正解",
+  "(+{0} à confirmer)": "（練習分 +{0}、確認待ち）",
+  "+{0} % d'entraînement, à confirmer à la prochaine révision.": "練習分 +{0}%。次の復習で正解すると確定します。",
   ", d'Ulrich Apel, sous licence CC BY-SA 3.0.": "（Ulrich Apel 作、CC BY-SA 3.0 ライセンス）",
   ", licence MIT.": "（MIT ライセンス）",
   "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.": "苦手な文字から10文字。何回でもでき、復習の予定は変わりません。",
@@ -26,6 +28,8 @@ export const JA: Record<string, string> = {
   "Après quelques signes de plus": "もう少し文字を覚えたら",
   "Arrière": "一画戻す",
   "Arrondi": "丸ゴシック",
+  "Assez vu pour aujourd'hui : ce signe ne progressera plus avant demain. Rien n'empêche de s'entraîner.": "今日はもう十分練習しました。この文字は明日まで進みませんが、練習を続けるのは自由です。",
+  "Assez vu pour aujourd'hui.": "今日はもう十分練習しました。",
   "Astuce": "ヒント",
   "Astuce pour retenir": "覚え方のヒント（フランス語話者向け）",
   "Astuce pour retenir {0}": "{0}の覚え方（フランス語話者向けのヒント）",
@@ -436,6 +440,7 @@ export const JA: Record<string, string> = {
   "{0} trait{1} au lieu de {2}.": "{0}画になっています（正しくは{2}画）。",
   "{0} trait{1}{2} · le modèle d'écriture est la forme « manuscrit » (manuels scolaires).": "{0}画{2}・お手本は教科書体（手書きの形）です。",
   "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}": "{1} {2}文字中{0}文字を学習・習熟度 {3}%{4}{5}",
+  "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}{6}": "{1} {2}文字中{0}文字を学習・習熟度 {3}%{4}{5}{6}",
   "{0} · fermée": "{0}・未開放",
   "{0} · katakana": "{0}・カタカナ",
   "{0} · signe {1} sur {2} : « {3} »": "{0}・{2}文字中{1}文字目：「{3}」",

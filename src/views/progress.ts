@@ -1,7 +1,7 @@
 import { meaningFor } from "../data/gloss-ja";
 import { isJa } from "../i18n";
 import { byK, isKata, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
-import { alphabetMastery, calibration, kataStarted, mastery, recordMastery, status, streak, today } from "../core/scheduler";
+import { alphabetMastery, calibration, kataStarted, mastery, recordMastery, status, streak, today, pending, saturated } from "../core/scheduler";
 import { profile, save, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { ficheHTML } from "../ui/fiche";
@@ -29,7 +29,8 @@ export function viewProgress(): void {
         return;
       }
       const k = cs[s], st = status(p, k.k), m = Math.round(mastery(p, k.k, t) * 100);
-      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
+      const b = Math.min(100, m + Math.round(pending(p.cards[k.k]) * 100));
+      grid += `<button class="cell ${locked ? "locked" : ""} ${st === "done" ? "done" : st === "learn" ? "learn" : ""}" style="--m:${m}%;--b:${b}%" data-k="${k.k}">${k.k}<small>${st === "new" ? (k.small ? `(${k.r})` : k.r) : m + " %"}</small><span class="sr-only">${st === "new" ? "" : " de maîtrise"}, ouvrir la fiche</span></button>`;
     });
   });
   const hira = KANA.filter((k) => !isKata(k.k)), doneH = hira.filter((k) => status(p, k.k) === "done").length;
@@ -59,10 +60,10 @@ export function viewProgress(): void {
   v.querySelectorAll<HTMLButtonElement>(".cell[data-k]").forEach((b) => {
     b.onclick = () => {
       const k = b.dataset.k!;
-      const c = p.cards[k], mk = Math.round(mastery(p, k, t) * 100);
+      const c = p.cards[k], mk = Math.round(mastery(p, k, t) * 100), pk = Math.min(100 - mk, Math.round(pending(c) * 100));
       const when = !c?.seen ? "Pas encore vu en séance." : c.due! <= t ? "Révision prévue aujourd'hui." : `Prochaine révision dans ${c.due! - t} jour${c.due! - t > 1 ? "s" : ""}.`;
       fc.innerHTML = `<div class="spread"><h2>${k} · ${sound(k)}</h2><div class="row"><button class="btn sm" id="fcs">Écouter</button><button class="btn sm" id="fcx">Fermer</button></div></div>
-        <div><div class="mbar" role="img" aria-label="Maîtrise ${mk} %"><i style="width:${mk}%"></i></div><p class="small muted" style="margin:4px 0 0">Maîtrise ${mk} % · ${when}</p></div>
+        <div><div class="mbar" role="img" aria-label="Maîtrise ${mk} %"><i style="width:${mk}%"></i><i class="pend" style="width:${pk}%"></i></div><p class="small muted" style="margin:4px 0 0">Maîtrise ${mk} % · ${when}</p>${pk ? `<p class="small muted" style="margin:0">+${pk} % d'entraînement, à confirmer à la prochaine révision.</p>` : ""}${saturated(c, t) ? `<p class="small muted" style="margin:0">Assez vu pour aujourd'hui.</p>` : ""}</div>
         <div class="stage" id="fcm" style="max-width:220px">${modelSVG(k, "anim", p.settings.showNums)}</div>
         <div class="row" style="justify-content:center"><button class="btn" id="fcr">Rejouer le tracé</button></div>
         ${mnemoHTML(k, true)}

@@ -299,9 +299,11 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .wbtn:focus-visible{outline:2px solid var(--beni)}
 
 /* ---------- maîtrise ---------- */
-.cell.learn{background:linear-gradient(to top,var(--tile-learn) var(--m,0%),transparent var(--m,0%))}
+.cell.learn{background:linear-gradient(to top,var(--tile-learn) var(--m,0%),color-mix(in srgb,var(--tile-learn) 55%,transparent) var(--m,0%),color-mix(in srgb,var(--tile-learn) 55%,transparent) var(--b,var(--m,0%)),transparent var(--b,var(--m,0%)))}
 .mbar{height:6px;background:var(--paper);border:var(--hair)}
+.mbar{display:flex}
 .mbar i{display:block;height:100%;background:var(--take)}
+.mbar i.pend{background:color-mix(in srgb,var(--take) 35%,transparent)}
 .curve{width:100%;height:60px;display:block}
 .curve .c-g{stroke:var(--guide);stroke-width:.5;stroke-dasharray:3 3}
 .curve .c-l{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round}

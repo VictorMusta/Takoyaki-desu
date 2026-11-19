@@ -253,3 +253,35 @@ describe("same-day second chance", () => {
     expect(nextSoon(p, t, now + 5 * H)).toBeNull();
   });
 });
+
+import { practiceGain, saturated, pending, pullForward as pullBack } from "../src/core/scheduler";
+describe("capped practice bonus", () => {
+  const seenCard = (interval: number, due: number) => ({ seen: true, ease: 2.5, interval, reps: 2, due });
+  it("diminishing gains, nothing after the 4th success of the day, 20 points at most", () => {
+    const p = freshProfile(), t = 20776;
+    p.cards["あ"] = seenCard(3, t + 3);
+    const g = [1, 2, 3, 4, 5].map(() => Math.round(practiceGain(p, "あ", t) * 100));
+    expect(g).toEqual([8, 5, 3, 2, 0]);
+    expect(saturated(p.cards["あ"], t)).toBe(true);
+    expect(saturated(p.cards["あ"], t + 1)).toBe(false);
+    [1, 2, 3, 4].forEach(() => practiceGain(p, "あ", t + 1)); // next day: up to the cap
+    expect(pending(p.cards["あ"])).toBeCloseTo(0.2);
+  });
+  it("becomes real at the next successful review, is dropped by a miss", () => {
+    const p = freshProfile(), t = 20776;
+    p.cards["い"] = seenCard(3, t);
+    [1, 2, 3, 4].forEach(() => practiceGain(p, "い", t - 1)); // +18 % pending
+    gradeSign(p, "い", "bien", t); // 3 × 2.5 = 8 days, then × 1.18 → 9
+    expect(p.cards["い"].interval).toBe(9);
+    expect(p.cards["い"].boost).toBeUndefined();
+    p.cards["う"] = seenCard(3, t);
+    practiceGain(p, "う", t - 1);
+    gradeSign(p, "う", "rate", t);
+    expect(p.cards["う"]).toMatchObject({ interval: 1 });
+    expect(p.cards["う"].boost).toBeUndefined();
+    p.cards["え"] = seenCard(3, t + 3);
+    practiceGain(p, "え", t);
+    pullBack(p, "え", t);
+    expect(p.cards["え"].boost).toBeUndefined();
+  });
+});

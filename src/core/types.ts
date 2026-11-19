@@ -11,6 +11,8 @@ export interface Card {
   due: number | null;
   /** A sign due tomorrow may already be reviewed from this time today (ms), see SOON_MS. */
   soon?: number;
+  /** Practice not yet confirmed (see practiceGain): pending mastery, last day practised, reps that day. */
+  boost?: { pts: number; d: number; n: number };
 }
 
 export interface Settings {

@@ -1,5 +1,5 @@
 import { byK, sound } from "../data/kana";
-import { buildQueue, cardOf, dayRec, gradeCard, peekCard, practiceQueue, pullForward, recordMastery, status, today } from "../core/scheduler";
+import { buildQueue, cardOf, dayRec, gradeCard, peekCard, practiceGain, practiceQueue, pullForward, recordMastery, saturated, status, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import type { Drawing, Grade, QueueItem, SavedSession, SessionStats } from "../core/types";
 import { $, el, esc, setQuit, view } from "../ui/dom";
@@ -137,8 +137,10 @@ export function viewCard(): void {
     return viewDrill(it.drill, `${it.drill.type === "text" ? "Entraînement" : "Exercice"} · ${left0} restant(s)`, (ok, missed) => {
       const s = cur();
       if (!s) return;
-      // Like free practice: a miss brings the signs back sooner, a success changes nothing.
+      // Like free practice: a miss brings the signs back sooner; a success adds a little pending
+      // mastery (half a writing rep: recognising is easier than writing).
       if (!ok) missed.forEach((k) => pullForward(profile(), k, today()));
+      else (it.drill!.ks ?? []).forEach((k) => practiceGain(profile(), k, today(), 0.5));
       tally(s, ok ? "ok" : "ko");
       countEx();
       s.i++;
@@ -155,6 +157,7 @@ export function viewCard(): void {
   const recall = !it.isNew || (it.step ?? 1) >= 4;
   const what = it.isNew ? "Nouveau signe · ligne " + K.l : it.learn !== undefined ? `Nouveau signe · à confirmer ${it.learn + 1} / ${LEARN_RECALLS}` : it.practice ? "Entraînement libre" : "Révision";
   const task = recall ? (it.peeked ? " · recopiez le modèle" : " · de mémoire") : "";
+  const enough = it.practice && saturated(profile().cards[it.k], today());
   const head = `<div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">${what} · ${left} restant(s)${task}</div></div>
     <div class="row">${it.isNew && !recall ? stepper(it.step!) : ""}<button class="btn sm" id="say">Écouter</button></div></div>`;
 
@@ -202,6 +205,7 @@ export function viewCard(): void {
     if (it.isNew) it.step = 4;
     v.appendChild(
       el(`<section class="card">${head}
+      ${enough ? `<p class="small muted enough" style="margin:0">Assez vu pour aujourd'hui : ce signe ne progressera plus avant demain. Rien n'empêche de s'entraîner.</p>` : ""}
       ${it.hinted && !it.peeked ? `<div class="mnemo hint"><p><span class="ii" aria-hidden="true">i</span> ${esc(mnemoText(it.k))}</p></div>` : ""}
       <div class="stage" id="st"></div>
       <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="next" disabled>Comparer</button></div>
@@ -265,7 +269,9 @@ function onGrade(it: QueueItem, g: Grade | "peek"): void {
   const p = profile(), t = today(), d = dayRec(p, t);
   if (it.practice) {
     countEx();
-    // Free practice never pushes a date away; a miss or a peek brings the sign back tomorrow.
+    // Free practice never pushes a date away; a success adds capped pending mastery
+    // (core/scheduler practiceGain); a miss or a peek brings the sign back tomorrow.
+    if (g === "bien" || g === "bof") practiceGain(p, it.k, t, g === "bien" ? 1 : 0.5);
     if (g === "rate" || g === "peek") {
       pullForward(p, it.k, t);
       requeue(session, { k: it.k, isNew: false, practice: true });

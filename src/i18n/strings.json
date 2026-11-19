@@ -1315,7 +1315,7 @@
   ]
  },
  {
-  "s": "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}",
+  "s": "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}{6}",
   "files": [
    "src/views/home.ts"
   ]
@@ -1636,6 +1636,12 @@
   ]
  },
  {
+  "s": "+{0} % d'entraînement, à confirmer à la prochaine révision.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
   "s": "à découvrir",
   "files": [
    "src/views/progress.ts"
@@ -1643,6 +1649,12 @@
  },
  {
   "s": "Aide au tracé",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Assez vu pour aujourd'hui.",
   "files": [
    "src/views/progress.ts"
   ]
@@ -1968,6 +1980,12 @@
  },
  {
   "s": "à revoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Assez vu pour aujourd'hui : ce signe ne progressera plus avant demain. Rien n'empêche de s'entraîner.",
   "files": [
    "src/views/session.ts"
   ]
