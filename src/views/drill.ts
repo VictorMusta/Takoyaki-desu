@@ -93,32 +93,73 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
       break;
     }
     case "match": {
+      // Signs on top, sounds below, a line between them. One sign is always selected: touch its
+      // sound to link them, and the next free sign is selected. Links can be moved or cleared;
+      // the check comes at the end, with the right sound under each mistake.
       const left = d.pairs!.map(([k]) => k), right = [...d.pairs!.map(([, r]) => r)].sort(() => Math.random() - 0.5);
-      const box = el(`<div class="match"><div>${left.map((k) => `<button class="btn mk kana-m" data-k="${k}">${k}</button>`).join("")}</div><div>${right.map((r) => `<button class="btn mk" data-r="${r}">${r}</button>`).join("")}</div></div>`);
+      const n = left.length;
+      const box = el(`<div class="match2" style="--n:${n}">
+        <div class="mrow">${left.map((k, i) => `<button class="btn mk kana-m" data-i="${i}">${k}</button>`).join("")}</div>
+        <svg class="mlinks" aria-hidden="true"></svg>
+        <div class="mrow">${right.map((r, j) => `<button class="btn mk" data-j="${j}">${r}</button>`).join("")}</div>
+      </div>`);
+      const tools = el(`<div class="opts-grid"><button class="btn" id="m-clr">Effacer</button><button class="btn primary" id="m-chk" disabled>Vérifier</button></div>`);
       body.appendChild(box);
-      let selK: HTMLButtonElement | null = null, selR: HTMLButtonElement | null = null, found = 0;
-      const missed = new Set<string>();
-      const tryPair = () => {
-        if (!selK || !selR) return;
-        const k = selK.dataset.k!, r = selR.dataset.r!;
-        if (byK[k].r === r) {
-          [selK, selR].forEach((b) => { b.disabled = true; b.classList.add("right"); b.classList.remove("sel"); });
-          found++;
-          if (found === left.length) next(missed.size <= 1, [...missed]);
-        } else {
-          missed.add(k);
-          const a = selK, b2 = selR;
-          [a, b2].forEach((b) => b.classList.add("wrong"));
-          setTimeout(() => [a, b2].forEach((b) => b.classList.remove("wrong", "sel")), 500);
-        }
-        selK = selR = null;
+      body.appendChild(tools);
+      const tops = [...box.querySelectorAll<HTMLButtonElement>("[data-i]")], bots = [...box.querySelectorAll<HTMLButtonElement>("[data-j]")];
+      const svg = box.querySelector<SVGSVGElement>(".mlinks")!;
+      const link = new Map<number, number>();
+      let sel: number | null = 0, result: boolean[] | null = null;
+      const nextFree = (from: number) => {
+        for (let s2 = 1; s2 <= n; s2++) if (!link.has((from + s2) % n)) return (from + s2) % n;
+        return null;
       };
+      const paint = () => {
+        const R = box.getBoundingClientRect();
+        let lines = `<line class="msep" x1="0" x2="${R.width}" y1="50%" y2="50%"/>`;
+        link.forEach((j, i) => {
+          const a = tops[i].getBoundingClientRect(), z = bots[j].getBoundingClientRect();
+          const cls = result ? (result[i] ? "ok" : "ko") : "";
+          lines += `<line class="${cls}" x1="${a.left + a.width / 2 - R.left}" y1="${a.bottom - R.top}" x2="${z.left + z.width / 2 - R.left}" y2="${z.top - R.top}"/>`;
+        });
+        svg.innerHTML = lines;
+        const used = new Set(link.values());
+        tops.forEach((b, i) => { b.classList.toggle("sel", i === sel && !result); b.classList.toggle("linked", link.has(i)); });
+        bots.forEach((b, j) => b.classList.toggle("linked", used.has(j)));
+        $<HTMLButtonElement>("#m-chk", tools).disabled = link.size < n || !!result;
+      };
+      requestAnimationFrame(paint);
+      const ro = new ResizeObserver(() => (box.isConnected ? paint() : ro.disconnect()));
+      ro.observe(box);
       box.onclick = (e) => {
+        if (result) return;
         const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button");
-        if (!b || b.disabled) return;
-        if (b.dataset.k) { selK?.classList.remove("sel"); selK = b; } else { selR?.classList.remove("sel"); selR = b; }
-        b.classList.add("sel");
-        tryPair();
+        if (!b) return;
+        if (b.dataset.i !== undefined) sel = +b.dataset.i;
+        else if (b.dataset.j !== undefined && sel !== null) {
+          const j = +b.dataset.j;
+          link.forEach((jj, i) => jj === j && link.delete(i)); // a sound belongs to one sign
+          link.set(sel, j);
+          buzz("tick");
+          sel = nextFree(sel);
+        }
+        paint();
+      };
+      $<HTMLButtonElement>("#m-clr", tools).onclick = () => {
+        link.clear();
+        sel = 0;
+        paint();
+      };
+      $<HTMLButtonElement>("#m-chk", tools).onclick = () => {
+        result = left.map((k, i) => byK[k].r === right[link.get(i)!]);
+        tops.forEach((b, i) => {
+          b.classList.add(result![i] ? "right" : "wrong");
+          if (!result![i]) b.insertAdjacentHTML("beforeend", `<small>${byK[left[i]].r}</small>`);
+        });
+        tools.remove();
+        paint();
+        const missed = left.filter((_, i) => !result![i]);
+        next(missed.length === 0, missed, missed.length ? `${missed.length} lien${missed.length > 1 ? "s" : ""} faux sur ${n}.` : "");
       };
       break;
     }

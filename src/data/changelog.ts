@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.18.0",
+    date: "2026-11-19",
+    items: ["Nouveau « Reliez » : signes en haut, syllabes en bas, un signe toujours sélectionné. Touchez sa syllabe pour tracer le lien ; on peut corriger ou effacer, et la vérification se fait à la fin."],
+  },
+  {
     v: "0.17.2",
     date: "2026-11-19",
     items: ["Sauvegarde : si le téléphone refuse la pièce jointe, elle part en texte dans le menu de partage plutôt que d'être téléchargée."],

@@ -1102,6 +1102,12 @@
   ]
  },
  {
+  "s": "{0} lien{1} faux sur {2}.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
   "s": "{0} se lit « {1} ».",
   "files": [
    "src/views/drill.ts"
@@ -1195,6 +1201,13 @@
   "s": "Écrivez ce mot à la main",
   "files": [
    "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Effacer",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/settings.ts"
   ]
  },
  {
@@ -2699,12 +2712,6 @@
  },
  {
   "s": "Données de progression",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
-  "s": "Effacer",
   "files": [
    "src/views/settings.ts"
   ]
