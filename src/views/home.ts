@@ -1,7 +1,7 @@
 import { isJa } from "../i18n";
 import { writeNote } from "../ui/notes";
 import { isKata, KANA, LINES, lineLabel } from "../data/kana";
-import { alphabetMastery, buildQueue, dayRec, kataStarted, recordMastery, streak, today } from "../core/scheduler";
+import { alphabetMastery, buildQueue, dayRec, kataStarted, nextSoon, recordMastery, streak, today } from "../core/scheduler";
 import { save } from "../core/store";
 import type { DayRec, Profile } from "../core/types";
 import { buildWordQueue } from "../core/vocab";
@@ -30,6 +30,7 @@ export function viewHome(): void {
       <div class="stat"><b>${nWords}</b><span>mots</span></div>
     </div>
     ${q.length ? `<button class="btn primary big" id="go">Commencer</button>` : `<p style="margin:0">La séance du jour est faite. Vous pouvez continuer :</p><div id="more"></div>`}
+    ${soonLine(p, t, q.length > 0)}
     ${progressLine(p, t, d)}
     <p class="muted small" style="margin:0">Ligne en cours : ${lineLabel(LINES[p.unlocked - 1])}.</p>
     ${memoryOnly ? '<p class="note">Ce navigateur ne garde pas les données : exportez votre progression (Réglages).</p>' : ""}
@@ -143,4 +144,12 @@ function testerPath(p: Profile): HTMLElement {
     };
   });
   return box;
+}
+
+/** When today's lesson is done but some signs get their same-day second chance later. */
+function soonLine(p: Profile, t: number, busy: boolean): string {
+  const s = nextSoon(p, t);
+  if (!s || busy) return "";
+  const at = new Date(s.at).toLocaleTimeString(isJa() ? "ja-JP" : "fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return `<p class="soon" style="margin:0">Revenez vers ${at} : ${s.n} signe(s) pourront déjà progresser.</p>`;
 }

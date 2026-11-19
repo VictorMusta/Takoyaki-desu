@@ -1516,6 +1516,12 @@
   ]
  },
  {
+  "s": "Revenez vers {0} : {1} signe(s) pourront déjà progresser.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
   "s": "révision",
   "files": [
    "src/views/home.ts"

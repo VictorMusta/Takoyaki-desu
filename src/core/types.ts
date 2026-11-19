@@ -9,6 +9,8 @@ export interface Card {
   reps: number;
   /** Day number of the next review, or null if never seen. */
   due: number | null;
+  /** A sign due tomorrow may already be reviewed from this time today (ms), see SOON_MS. */
+  soon?: number;
 }
 
 export interface Settings {

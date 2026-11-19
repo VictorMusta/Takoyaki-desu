@@ -291,6 +291,7 @@ export const JA: Record<string, string> = {
   "Retour sur {0}": "{0} についての意見",
   "Retour à l'accueil": "ホームに戻る",
   "Retour à l'accueil : ce qui a été fait est gardé": "ホームに戻ります（ここまでの記録は残ります）",
+  "Revenez vers {0} : {1} signe(s) pourront déjà progresser.": "{0}ごろにまた来てください。{1}文字がもう一段階進めます。",
   "Revenir au modèle": "お手本に戻す",
   "Revenir en arrière ?": "元に戻しますか？",
   "Revenir un trait en arrière": "一画戻す",

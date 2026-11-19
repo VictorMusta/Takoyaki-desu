@@ -378,3 +378,4 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 /* Free text people write (notes, comments): the reading font, not the data font */
 .modal-card textarea,textarea.prose,textarea.fb,textarea#g{font:400 16px/1.6 var(--body);min-height:160px}
 body:has(.modal) .note-fab{display:none}
+.soon{border-left:2px solid var(--beni);padding:4px 0 4px 16px}

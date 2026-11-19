@@ -51,8 +51,32 @@ export function applyGrade(c: Card, g: Grade, t: number): Card {
   return c;
 }
 
-export function gradeCard(p: Profile, k: string, g: Grade, t: number): void {
-  applyGrade(cardOf(p, k), g, t);
+/**
+ * Same-day second chance: a sign that has just started (interval 1 day) can be reviewed again
+ * from 4 hours later, the same day. Succeeding then is real spacing (hours, not seconds): it
+ * moves to 2 days (mastery about 53 %) instead of waiting for tomorrow to show any progress.
+ */
+export const SOON_MS = 4 * 36e5;
+
+/** Is this sign reviewable now, through its same-day second chance? */
+export const soonDue = (c: Card | undefined, t: number, now: number) => !!c?.soon && now >= c.soon && (c.due ?? Infinity) > t;
+
+export function gradeCard(p: Profile, k: string, g: Grade, t: number, now: number = Date.now()): void {
+  const c = cardOf(p, k);
+  if (soonDue(c, t, now)) {
+    // The second chance: « Bien » → 2 days; « Bof » keeps tomorrow; « Raté » restarts.
+    if (g === "bien") {
+      c.interval = 2;
+      c.reps = Math.max(c.reps, 1);
+      c.due = t + 2;
+    } else if (g === "rate") applyGrade(c, g, t);
+    delete c.soon;
+    if (g === "rate") c.soon = now + SOON_MS;
+  } else {
+    applyGrade(c, g, t);
+    if (c.interval === 1) c.soon = now + SOON_MS;
+    else delete c.soon;
+  }
   p.log.push({ d: t, k, g });
   checkUnlock(p);
 }
@@ -140,11 +164,11 @@ export function recordMastery(p: Profile, t: number): void {
 }
 
 /** Today's queue: due reviews first (up to the cap), then new signs (up to the quota). */
-export function buildQueue(p: Profile, t: number): QueueItem[] {
+export function buildQueue(p: Profile, t: number, now: number = Date.now()): QueueItem[] {
   const d = dayRec(p, t);
   const open = KANA.filter((k) => lineIndex(k) < p.unlocked);
   const due = open
-    .filter((k) => p.cards[k.k]?.seen && (p.cards[k.k].due ?? Infinity) <= t)
+    .filter((k) => p.cards[k.k]?.seen && ((p.cards[k.k].due ?? Infinity) <= t || soonDue(p.cards[k.k], t, now)))
     .sort((a, b) => (p.cards[a.k].due ?? 0) - (p.cards[b.k].due ?? 0))
     .slice(0, Math.max(0, p.settings.revCap - d.rv))
     .map((k) => ({ k: k.k, isNew: false }));
@@ -153,6 +177,17 @@ export function buildQueue(p: Profile, t: number): QueueItem[] {
     .slice(0, Math.max(0, p.settings.newPerDay + (d.bonus ?? 0) - d.nw))
     .map((k) => ({ k: k.k, isNew: true }));
   return [...due, ...fresh];
+}
+
+/** When the next same-day second chance opens (ms), and for how many signs; null if none today. */
+export function nextSoon(p: Profile, t: number, now: number = Date.now()): { at: number; n: number } | null {
+  const end = (t + 1) * DAY_MS + DAY_START_H * 36e5 + new Date(now).getTimezoneOffset() * 6e4; // next 4 a.m., local
+  const times = Object.values(p.cards)
+    .filter((c) => c.seen && c.soon && c.soon > now && c.soon < end && (c.due ?? Infinity) > t)
+    .map((c) => c.soon!);
+  if (!times.length) return null;
+  const at = Math.min(...times);
+  return { at, n: times.filter((x) => x <= at + 36e5).length };
 }
 
 /** Seen signs due on or before day t (open lines only). */

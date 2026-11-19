@@ -220,3 +220,36 @@ describe("mastery", () => {
     expect(p.histK![T]).toBe(Math.round(1000 / nK) / 10);
   });
 });
+
+import { gradeCard as gradeSign, nextSoon, SOON_MS, buildQueue as queueAt } from "../src/core/scheduler";
+describe("same-day second chance", () => {
+  const H = 36e5;
+  it("a sign learnt today can move to 2 days if recalled 4 hours later", () => {
+    const p = freshProfile(), t = 20776, now = Date.UTC(2026, 10, 19, 1); // 10:00 in Tokyo
+    gradeSign(p, "あ", "bien", t, now);
+    expect(p.cards["あ"]).toMatchObject({ interval: 1, due: t + 1, soon: now + SOON_MS });
+    expect(queueAt(p, t, now + H).map((x) => x.k)).not.toContain("あ"); // too soon
+    expect(queueAt(p, t, now + 4 * H).map((x) => x.k)).toContain("あ"); // second chance open
+    gradeSign(p, "あ", "bien", t, now + 5 * H);
+    expect(p.cards["あ"]).toMatchObject({ interval: 2, due: t + 2 });
+    expect(p.cards["あ"].soon).toBeUndefined();
+    gradeSign(p, "あ", "bien", t + 2, now + 50 * H); // then the usual path
+    expect(p.cards["あ"].interval).toBe(3);
+  });
+  it("« Bof » at the second chance keeps tomorrow; « Raté » restarts", () => {
+    const p = freshProfile(), t = 20776, now = Date.UTC(2026, 10, 19, 1);
+    gradeSign(p, "い", "bien", t, now);
+    gradeSign(p, "い", "bof", t, now + 5 * H);
+    expect(p.cards["い"]).toMatchObject({ interval: 1, due: t + 1 });
+    gradeSign(p, "う", "bien", t, now);
+    gradeSign(p, "う", "rate", t, now + 5 * H);
+    expect(p.cards["う"]).toMatchObject({ interval: 1, due: t + 1, soon: now + 9 * H });
+  });
+  it("tells when the next second chance opens", () => {
+    const p = freshProfile(), t = 20776, now = Date.UTC(2026, 10, 19, 1);
+    gradeSign(p, "あ", "bien", t, now);
+    gradeSign(p, "い", "bien", t, now + 10 * 60e3);
+    expect(nextSoon(p, t, now + H)).toEqual({ at: now + SOON_MS, n: 2 });
+    expect(nextSoon(p, t, now + 5 * H)).toBeNull();
+  });
+});
