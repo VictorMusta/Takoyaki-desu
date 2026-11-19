@@ -14,7 +14,7 @@ import { getLang, isJa, setLang, type Lang } from "../i18n";
 import { clearNotes, notes, notesButtonOn, notesText, sendNotes, setNotesButton } from "../ui/notes";
 import { getStrokeStyle, setStrokeStyle, type StrokeStyle } from "../ui/brush";
 import { buzz, canVibrate, getHaptics, setHaptics } from "../ui/haptics";
-import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup } from "../core/backup";
+import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup, shareError } from "../core/backup";
 
 export function viewSettings(): void {
   const p = profile(), v = view();
@@ -324,7 +324,8 @@ export function viewSettings(): void {
   $("#bksend").onclick = async () => {
     const r = await sendBackup();
     if (r === "shared") msg("Sauvegarde envoyée. Pour la restaurer : « Importer un fichier » avec la pièce jointe.");
-    else if (r === "downloaded") msg("Partage de fichier indisponible ici : le fichier est téléchargé.");
+    else if (r === "shared-text") msg("Ce téléphone refuse les pièces jointes : la sauvegarde est partie en texte. Pour la restaurer : « Par copier-coller ».");
+    else if (r === "downloaded") msg(`Le partage est indisponible sur ce navigateur : le fichier est téléchargé. (${shareError})`);
   };
   $("#bkdl").onclick = () => {
     downloadBackup();

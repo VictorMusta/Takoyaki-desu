@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.17.2",
+    date: "2026-11-19",
+    items: ["Sauvegarde : si le téléphone refuse la pièce jointe, elle part en texte dans le menu de partage plutôt que d'être téléchargée."],
+  },
+  {
     v: "0.17.1",
     date: "2026-11-19",
     items: ["« M'envoyer ma sauvegarde » ouvre enfin le menu de partage (mail, Drive…) au lieu de télécharger le fichier.", "« Écrivez ce mot à la main » vérifie maintenant les traits de chaque signe (une petite note sous chaque signe), et les boutons s'appellent « Raté » et « Juste »."],

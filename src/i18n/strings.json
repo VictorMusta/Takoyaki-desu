@@ -2607,6 +2607,12 @@
   ]
  },
  {
+  "s": "Ce téléphone refuse les pièces jointes : la sauvegarde est partie en texte. Pour la restaurer : « Par copier-coller ».",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Ce texte n'est pas une sauvegarde valide.",
   "files": [
    "src/views/settings.ts",
@@ -2794,6 +2800,12 @@
   ]
  },
  {
+  "s": "Le partage est indisponible sur ce navigateur : le fichier est téléchargé. ({0})",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Les {0} remarques enregistrées sur ce téléphone seront supprimées. Envoyez-les d'abord si ce n'est pas fait.",
   "files": [
    "src/views/settings.ts"
@@ -2873,12 +2885,6 @@
  },
  {
   "s": "Par copier-coller",
-  "files": [
-   "src/views/settings.ts"
-  ]
- },
- {
-  "s": "Partage de fichier indisponible ici : le fichier est téléchargé.",
   "files": [
    "src/views/settings.ts"
   ]

@@ -91,25 +91,41 @@ function download(file: File): void {
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
 
-export type BackupResult = "shared" | "downloaded" | "cancelled";
+export type BackupResult = "shared" | "shared-text" | "downloaded" | "cancelled";
 
 /**
  * « M'envoyer ma sauvegarde »: the share sheet with the file attached, so the learner picks
  * their mail app and sends it to themselves. Without file sharing (most computers), the file is
  * downloaded instead.
  */
+/** Why the last share fell back (error names), shown to help debugging on a given phone. */
+export let shareError = "";
+
 export async function sendBackup(): Promise<BackupResult> {
+  shareError = "share" in navigator ? "" : "no share";
+  const data = exportState();
   // The share sheet (mail, Drive…) only takes a few file types: .json is refused on Android and
-  // iOS, .txt is accepted everywhere. Same content; « Importer un fichier » reads both.
-  const file = new File([exportState()], fileName("txt"), { type: "text/plain" });
+  // iOS, .txt is accepted almost everywhere. Same content; « Importer un fichier » reads both.
+  const file = new File([data], fileName("txt"), { type: "text/plain" });
   const text = "Ma sauvegarde Takoyaki desu. Pour la restaurer : Réglages › Sauvegarde › Importer un fichier.";
-  if (navigator.canShare?.({ files: [file] })) {
+  if ("share" in navigator) {
+    // 1. As an attachment. canShare is only a hint (some browsers answer « no » and share anyway).
     try {
       await navigator.share({ title: "Sauvegarde Takoyaki desu", text, files: [file] });
       markDone();
       return "shared";
     } catch (e) {
       if ((e as Error).name === "AbortError") return "cancelled";
+      shareError = (e as Error).name;
+    }
+    // 2. No attachments here: the data itself as text, for a mail or a note (restore by copy-paste).
+    try {
+      await navigator.share({ title: "Sauvegarde Takoyaki desu", text: data });
+      markDone();
+      return "shared-text";
+    } catch (e) {
+      if ((e as Error).name === "AbortError") return "cancelled";
+      shareError += " / " + (e as Error).name;
     }
   }
   download(file);

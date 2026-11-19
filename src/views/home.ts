@@ -48,7 +48,7 @@ export function viewHome(): void {
     $<HTMLButtonElement>("#bk").onclick = async () => {
       const r = await sendBackup();
       if (r === "cancelled") return;
-      bk.innerHTML = `<p class="small" style="margin:0">${r === "shared" ? "Merci ! Gardez ce mail : prochain rappel dans une semaine." : "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine."}</p>`;
+      bk.innerHTML = `<p class="small" style="margin:0">${r !== "downloaded" ? "Merci ! Gardez ce mail : prochain rappel dans une semaine." : "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine."}</p>`;
     };
     $<HTMLButtonElement>("#bkl").onclick = () => {
       snoozeBackup();

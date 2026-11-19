@@ -601,4 +601,6 @@ export const JA: Record<string, string> = {
   "Vous lisez et écrivez déjà les hiragana ? Ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes.": "ひらがなをもう読み書きできますか？全部まとめて開いて、全文字のテストで確かめましょう。",
   "Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Un signe est maîtrisé quand il tient plusieurs jours : la progression se compte en jours, pas en heures.": "ひらがなを記憶で書き、手本とくらべて覚えます。何日も覚えていられたら習熟です。進み方は時間ではなく日数で数えます。",
   "Traits vérifiés.": "画のチェックOK。",
+  "Ce téléphone refuse les pièces jointes : la sauvegarde est partie en texte. Pour la restaurer : « Par copier-coller ».": "この端末はファイルを送れないので、テキストで送りました。戻すときは「コピー＆ペースト」から。",
+  "Le partage est indisponible sur ce navigateur : le fichier est téléchargé. ({0})": "このブラウザでは共有できないので、ファイルをダウンロードしました。（{0}）",
 };
