@@ -10,6 +10,11 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.15.1",
+    date: "2026-11-19",
+    items: ["Plus jamais deux fois le même jeu sur le même exemple dans une série : s'il n'y a plus d'exemple neuf, l'appli passe à un autre jeu."],
+  },
+  {
     v: "0.15.0",
     date: "2026-11-19",
     items: [

@@ -121,6 +121,35 @@ export function available(p: Profile, type: DrillType): boolean {
   }
 }
 
+/** What makes two exercises « the same »: the same game on the same example. */
+export function drillKey(d: Drill): string {
+  const ex = d.pairs ? d.pairs.map((x) => x[0]).sort().join("") : d.text ?? d.full ?? d.answer ?? d.prompt;
+  return `${d.type}|${ex}`;
+}
+
+/**
+ * A drill not already in `used` (same game, same example), from one of `types`, avoiding the
+ * game just played when another one is possible. Few signs known means few examples: another
+ * game is tried rather than the same one again. Null when nothing new is left.
+ */
+export function freshDrill(p: Profile, types: DrillType[], used: Set<string>, last?: DrillType, k?: string, rnd: Rnd = Math.random): Drill | null {
+  const ok = types.filter((t) => available(p, t));
+  if (!ok.length) return null;
+  const order = shuffle(ok, rnd);
+  if (last && order.length > 1 && order[0] === last) order.push(order.shift()!);
+  for (const t of order) {
+    for (let tries = 0; tries < 8; tries++) {
+      const d = makeDrill(p, t, tries < 2 ? k : undefined, rnd);
+      if (!d) break;
+      const key = drillKey(d);
+      if (used.has(key)) continue;
+      used.add(key);
+      return d;
+    }
+  }
+  return null;
+}
+
 /** Builds one drill of this type around sign k (or a random known sign), or null if impossible. */
 export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Math.random): Drill | null {
   if (!available(p, type)) return null;

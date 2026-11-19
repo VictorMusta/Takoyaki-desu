@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { KANA } from "../src/data/kana";
 import { SENTENCES, signsOf, WORDS } from "../src/data/words";
-import { available, FAMILIES, knownWords, makeDrill, openTexts } from "../src/core/drills";
+import { available, drillKey, FAMILIES, freshDrill, knownWords, makeDrill, openTexts, type DrillType } from "../src/core/drills";
 import { freshProfile, newCard } from "../src/core/scheduler";
 import type { Profile } from "../src/core/types";
 
@@ -61,5 +61,22 @@ import { MNEMO } from "../src/data/mnemonics";
 describe("mnemonics", () => {
   it("every sign has one", () => {
     KANA.forEach((k) => expect(MNEMO[k.k], k.k).toBeTruthy());
+  });
+});
+
+describe("a round never repeats an exercise", () => {
+  it("few signs known: no twin, another game rather than the same example again", () => {
+    const p = knowing("あいうえおかきくけこ");
+    const types: DrillType[] = ["choose", "read", "word", "cloze", "duel"];
+    const used = new Set<string>(), keys: string[] = [];
+    let last: DrillType | undefined;
+    for (let i = 0; i < 30; i++) {
+      const d = freshDrill(p, types, used, last, undefined, rnd);
+      if (!d) break;
+      keys.push(drillKey(d));
+      last = d.type;
+    }
+    expect(new Set(keys).size).toBe(keys.length);
+    expect(keys.length).toBeGreaterThan(5);
   });
 });

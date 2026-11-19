@@ -12,7 +12,7 @@ import { speak } from "../ui/speech";
 import { viewCompare } from "./compare";
 import { navigate } from "../router";
 import { continueBlock } from "./more";
-import { available, LESSON_MIX, makeDrill, type DrillType } from "../core/drills";
+import { available, FAMILIES, freshDrill, LESSON_MIX, type DrillType } from "../core/drills";
 import { viewDrill } from "./drill";
 import { viewWord } from "./word";
 import { buildWordQueue, gradeWord } from "../core/vocab";
@@ -61,12 +61,13 @@ export type SessionKind = "day" | "practice" | "more";
 function mixDrills(q: QueueItem[]): QueueItem[] {
   const p = profile(), types = LESSON_MIX.filter((t) => available(p, t));
   if (!types.length) return q;
-  const out: QueueItem[] = [];
+  const out: QueueItem[] = [], used = new Set<string>();
+  let last: DrillType | undefined;
   q.forEach((it, i) => {
     out.push(it);
     if (i % 3 === 2) {
-      const d = makeDrill(p, types[Math.floor(Math.random() * types.length)], it.isNew ? undefined : it.k);
-      if (d) out.push({ k: d.ks[0] ?? it.k, isNew: false, practice: true, drill: d });
+      const d = freshDrill(p, types, used, last, it.isNew ? undefined : it.k);
+      if (d) { out.push({ k: d.ks[0] ?? it.k, isNew: false, practice: true, drill: d }); last = d.type; }
     }
   });
   return out;
@@ -78,9 +79,14 @@ export function startDrills(types: DrillType | DrillType[]): void {
   const p = profile(), q: QueueItem[] = [];
   const ts = Array.isArray(types) ? types : [types];
   if (!ts.length) return;
+  const used = new Set<string>();
+  let last: DrillType | undefined;
   for (let i = 0; i < 10; i++) {
-    const d = makeDrill(p, ts[Math.floor(Math.random() * ts.length)]);
-    if (d) q.push({ k: d.ks[0] ?? "", isNew: false, practice: true, drill: d });
+    // Every example of these games already in the round: another game rather than a repeat.
+    const d = freshDrill(p, ts, used, last) ?? freshDrill(p, FAMILIES.flatMap((f) => f.types), used, last);
+    if (!d) break;
+    q.push({ k: d.ks[0] ?? "", isNew: false, practice: true, drill: d });
+    last = d.type;
   }
   if (!q.length) return;
   p.session = { day: today(), queue: q, i: 0 };
