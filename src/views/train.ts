@@ -1,3 +1,4 @@
+import { quietNow, setQuietNow, silentAlways } from "../core/sound";
 import { FAMILIES, familyTypes } from "../core/drills";
 import type { DrillType } from "../core/drills";
 import { profile } from "../core/store";
@@ -29,6 +30,7 @@ export function viewTrain(): void {
       <button class="btn tile" id="t-write" ${seen ? "" : "disabled"}><b aria-hidden="true">書</b><span>Écrire</span><small>10 signes fragiles, de mémoire</small></button>
       <button class="btn tile" id="t-play" ${games.length ? "" : "disabled"}><b aria-hidden="true">遊</b><span>Jouer</span><small>10 jeux au hasard</small></button>
     </div>
+    ${silentAlways() ? "" : `<label class="field" for="quiet">Sans son pour l'instant <input type="checkbox" id="quiet" ${quietNow() ? "checked" : ""}></label>`}
     ${seen ? "" : `<p class="small muted" style="margin:0">Apprenez d'abord quelques signes dans la séance du jour.</p>`}
     </section>`),
   );
@@ -38,6 +40,8 @@ export function viewTrain(): void {
     <p class="small muted" style="margin:0">Quelques signes sans aide, pour vérifier que vos notes sont honnêtes. Ne change pas vos révisions.</p>
     <div class="row"><a class="btn" href="#examen">Passer un examen</a></div></section>`),
   );
+  const qt = v.querySelector<HTMLInputElement>("#quiet");
+  if (qt) qt.onchange = () => setQuietNow(qt.checked);
   showWave();
   (v.querySelector("#t-write") as HTMLButtonElement).onclick = () => startSession("practice");
   (v.querySelector("#t-play") as HTMLButtonElement).onclick = () => startDrills(allGames());

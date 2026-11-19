@@ -4,10 +4,11 @@ import { isHira, TEXTS, type Text } from "../data/texts";
 import { knownSigns, type Drill } from "../core/drills";
 import { profile } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
-import { kanaKeyboard } from "../ui/keyboard";
+import { kanaField, kanaKeyboard } from "../ui/keyboard";
 import { modelSVG, userSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
 import { speak } from "../ui/speech";
+import { setQuietNow, soundOff } from "../core/sound";
 
 /** ok: the learner got it; missed: signs to bring back sooner. */
 export type DrillDone = (ok: boolean, missed: string[]) => void;
@@ -29,6 +30,8 @@ const TITLES: Record<Drill["type"], string> = {
 
 /** One exercise screen. `head` is the lesson caption (what, how many left). */
 export function viewDrill(d: Drill, head: string, done: DrillDone): void {
+  // A listening game planned before « Sans son » was chosen: the same signs, read instead.
+  if (d.type === "listen" && soundOff()) d = { ...d, type: "choose" };
   const v = view();
   v.innerHTML = "";
   const card = el(`<section class="card drill"><div class="prompt"><div><h2 style="font-size:21px">${TITLES[d.type]}</h2><div class="small muted">${head}</div></div>${
@@ -65,6 +68,13 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
       if (d.type === "listen") {
         speak(d.say!);
         $("#play", body).onclick = () => speak(d.say!);
+        const mute = el(`<button class="btn sm" type="button">Pas de son ici (dans le train…)</button>`);
+        body.appendChild(mute);
+        mute.onclick = () => {
+          setQuietNow(true);
+          try { speechSynthesis.cancel(); } catch { /* no voice */ }
+          viewDrill(d, head, done);
+        };
       }
       grid.onclick = (e) => {
         const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-o]");
@@ -115,15 +125,19 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
       const chars = [...d.full!];
       const shown = chars.map((c, i) => (i === d.gap ? `<span class="gap" id="gap">？</span>` : c === " " ? " " : c)).join("");
       body.appendChild(el(`<div><p class="drill-big kana-l" style="white-space:pre-wrap">${shown}</p><p class="reading">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
-      const kb = kanaKeyboard(new Set(knownSigns(profile())), (k) => {
+      const answer = (k: string) => {
         if (kb.dataset.done) return;
         kb.dataset.done = "1";
+        field.disabled = true;
         const ok = k === chars[d.gap!];
         const g = $("#gap", body);
         g.textContent = chars[d.gap!];
         g.classList.add(ok ? "right" : "wrong");
         next(ok, ok ? [] : d.ks, ok ? "" : `Vous avez tapé ${k}.`);
-      });
+      };
+      const kb = kanaKeyboard(new Set(knownSigns(profile())), answer, undefined, chars[d.gap!]);
+      const field = kanaField((ks) => ks[0] && answer(ks[0]));
+      body.appendChild(field);
       body.appendChild(kb);
       break;
     }
@@ -135,16 +149,23 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
       body.appendChild(boxes);
       const paint = () => boxes.querySelectorAll(".box").forEach((b, i) => (b.textContent = typed[i] ?? ""));
       const check = el(`<button class="btn primary big" disabled>Vérifier</button>`) as HTMLButtonElement;
-      const kb = kanaKeyboard(new Set(knownSigns(profile())), (k) => {
-        if (typed.length < want.length) typed.push(k);
+      const set = (ks: string[]) => {
+        typed = ks.slice(0, want.length);
         paint();
         check.disabled = typed.length < want.length;
-      }, () => { typed.pop(); paint(); check.disabled = true; });
-      body.appendChild(kb);
+      };
+      const field = kanaField((ks) => set(ks), () => !check.disabled && check.click());
+      const kb = kanaKeyboard(new Set(knownSigns(profile())), (k) => {
+        set([...typed, k]);
+        field.value = typed.join("");
+      }, () => { set(typed.slice(0, -1)); field.value = typed.join(""); }, d.full);
+      body.appendChild(field);
       body.appendChild(check);
+      body.appendChild(kb);
       check.onclick = () => {
         kb.remove();
         check.remove();
+        field.remove();
         const missed: string[] = [];
         boxes.querySelectorAll(".box").forEach((b, i) => {
           const ok = typed[i] === want[i];
@@ -201,7 +222,7 @@ function textDrill(body: HTMLElement, t: Text, done: DrillDone): void {
     <label class="tip-off" style="justify-content:center"><input type="checkbox" id="hl"> Souligner les signes que je connais</label></div>`));
   const look = $(".look", body);
   $<HTMLInputElement>("#hl", body).onchange = (e) => look.classList.toggle("hl", (e.target as HTMLInputElement).checked);
-  const guess = el(`<div style="display:flex;flex-direction:column;gap:8px"><label class="small" for="g">Ce que je comprends (ou dites-le à voix haute)</label><textarea id="g" class="fb" placeholder="Devinez à partir des signes que vous reconnaissez…"></textarea><button class="btn primary big" id="show">Voir la correction</button></div>`);
+  const guess = el(`<div style="display:flex;flex-direction:column;gap:8px"><label class="small" for="g">${soundOff() ? "Ce que je comprends" : "Ce que je comprends (ou dites-le à voix haute)"}</label><textarea id="g" class="fb" placeholder="Devinez à partir des signes que vous reconnaissez…"></textarea><button class="btn primary big" id="show">Voir la correction</button></div>`);
   body.appendChild(guess);
   $("#show", guess).onclick = () => {
     $("#show", guess).remove();

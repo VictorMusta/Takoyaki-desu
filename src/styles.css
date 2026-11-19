@@ -260,10 +260,15 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .mk.kana-m{font-family:var(--hand);font-weight:600;font-size:28px;padding:4px}
 .mk.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .gap{display:inline-block;min-width:1.1em;border-bottom:2px solid var(--beni);color:var(--beni)}
-.kbd{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
-.key{border:var(--hair);background:var(--paper);font-family:var(--hand);font-weight:600;font-size:22px;padding:4px 0;min-height:40px;border-radius:0;color:var(--ink)}
-.key.off{border-color:transparent;background:transparent}
-.key.back{grid-column:span 5;font-family:var(--body);font-size:17px}
+.kbd{display:flex;flex-direction:column;gap:6px}
+.kbd-page{display:flex;flex-direction:column;gap:6px}
+.kbd-grid{display:grid;grid-template-rows:repeat(5,auto);grid-auto-flow:column;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:3px}
+.kbd-tabs{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.kbd-tabs .key.sel{background:var(--ink);color:var(--paper)}
+.kana-in{width:100%;text-align:center;font-family:var(--hand);font-size:18px}
+.key{border:var(--hair);background:var(--paper);font-family:var(--hand);font-weight:600;font-size:20px;padding:2px 0;min-height:38px;min-width:0;border-radius:0;color:var(--ink)}
+.key.off{border:.5px dashed color-mix(in srgb,var(--ink) 18%,transparent);background:transparent}
+.key.back{font-family:var(--body);font-size:17px}
 .key:active{background:var(--ink);color:var(--paper)}
 .boxes{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .box{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:52px;border:var(--hair);border-bottom:1.5px solid var(--ink);font-family:var(--hand);font-weight:600;font-size:30px;line-height:1}
@@ -380,6 +385,8 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 /* Free text people write (notes, comments): the reading font, not the data font */
 .modal-card textarea,textarea.prose,textarea.fb,textarea#g{font:400 16px/1.6 var(--body);min-height:160px}
 body:has(.modal) .note-fab{display:none}
+/* Over a kana keyboard: a thin tab on the edge, out of the keys' way */
+body:has(.kbd) .note-fab{bottom:auto;top:40%;writing-mode:vertical-rl;padding:10px 4px;font-size:12px}
 .soon{border-left:2px solid var(--beni);padding:4px 0 4px 16px}
 .opt.primary-opt{border-color:var(--beni);border-width:1.5px}
 .opt.primary-opt span{color:var(--beni)}

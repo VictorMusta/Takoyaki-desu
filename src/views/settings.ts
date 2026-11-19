@@ -1,3 +1,4 @@
+import { setSilentAlways, silentAlways } from "../core/sound";
 import { KANA, LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, readBackup, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
@@ -183,7 +184,9 @@ export function viewSettings(): void {
     <h3 style="margin-top:8px">Trait</h3>
     <div class="seg" role="group" aria-label="Rendu du trait">${stOpt("brush", "Pinceau")}${stOpt("plain", "Simple")}</div>
     <p class="small muted" style="margin:0">Pinceau : le trait s'affine au départ, à l'arrivée et quand la main va vite. Simple : un trait régulier, le plus lisible.</p>
-    ${canVibrate() ? `<label class="field" for="hap">Vibrations <input type="checkbox" id="hap" ${getHaptics() ? "checked" : ""}></label><p class="small muted" style="margin:0">Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.</p>` : ""}</section>`),
+    ${canVibrate() ? `<label class="field" for="hap">Vibrations <input type="checkbox" id="hap" ${getHaptics() ? "checked" : ""}></label><p class="small muted" style="margin:0">Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.</p>` : ""}
+    <label class="field" for="mute">Jamais de son <input type="checkbox" id="mute" ${silentAlways() ? "checked" : ""}></label>
+    <p class="small muted" style="margin:0">Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.</p></section>`),
   );
   v.querySelectorAll<HTMLButtonElement>("[data-st]").forEach((b) => {
     b.onclick = () => {
@@ -191,6 +194,8 @@ export function viewSettings(): void {
       v.querySelectorAll("[data-st]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     };
   });
+  const mute = v.querySelector<HTMLInputElement>("#mute")!;
+  mute.onchange = () => setSilentAlways(mute.checked);
   const hap = v.querySelector<HTMLInputElement>("#hap");
   if (hap)
     hap.onchange = () => {

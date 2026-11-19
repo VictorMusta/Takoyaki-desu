@@ -535,6 +535,18 @@
   ]
  },
  {
+  "s": "ou le clavier japonais du téléphone",
+  "files": [
+   "src/ui/keyboard.ts"
+  ]
+ },
+ {
+  "s": "Taper avec le clavier japonais du téléphone",
+  "files": [
+   "src/ui/keyboard.ts"
+  ]
+ },
+ {
   "s": "Astuce pour retenir",
   "files": [
    "src/ui/mnemo.ts"
@@ -1085,6 +1097,12 @@
   ]
  },
  {
+  "s": "Ce que je comprends",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
   "s": "Ce que je comprends (ou dites-le à voix haute)",
   "files": [
    "src/views/drill.ts"
@@ -1203,6 +1221,12 @@
  },
  {
   "s": "Pas compris",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Pas de son ici (dans le train…)",
   "files": [
    "src/views/drill.ts"
   ]
@@ -2507,6 +2531,12 @@
   ]
  },
  {
+  "s": "Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
   "s": "Aucune mesure d'audience, aucun cookie, aucune publicité, aucun outil tiers. Les polices sont livrées avec l'appli.",
   "files": [
    "src/views/settings.ts"
@@ -2695,6 +2725,12 @@
  },
  {
   "s": "J'ai menti",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Jamais de son",
   "files": [
    "src/views/settings.ts"
   ]
@@ -3110,6 +3146,12 @@
  },
  {
   "s": "Quelques signes sans aide, pour vérifier que vos notes sont honnêtes. Ne change pas vos révisions.",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Sans son pour l'instant",
   "files": [
    "src/views/train.ts"
   ]

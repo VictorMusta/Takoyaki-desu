@@ -28,7 +28,7 @@ export function viewWord(it: QueueItem, head: string, onStep: () => void, done: 
   $("#say", card).onclick = () => speak(w);
 
   if (it.isNew && !it.step) {
-    speak(w);
+    speak(w, true);
     // Romaji fade out: only for signs that do not hold 3 days yet; all solid → reading hidden behind a tap.
     const p = profile(), t = today(), bare = allSolid(p, w, t);
     body.innerHTML = `<p class="drill-big kana-l" style="font-size:64px;margin:0">${w}</p>
@@ -84,7 +84,7 @@ function readWord(body: HTMLElement, w: string, r: string, fr: string, done: (g:
     const rr = $("#rr", body);
     rr.classList.remove("hidden");
     rr.innerHTML = spelled ? `<span class="good">Juste : ${r}.</span>` : `<span class="bad">On lit « ${r} ».</span>`;
-    speak(w);
+    speak(w, true);
     const wrong = shuffle(WORDS.filter((x) => x[0] !== w && meaningFor(x[0], x[2], isJa()) !== fr), Math.random).slice(0, 3).map((x) => meaningFor(x[0], x[2], isJa()));
     const opts = shuffle([fr, ...wrong], Math.random);
     const m = $("#mean", body);
@@ -148,7 +148,7 @@ function writeWord(body: HTMLElement, w: string, r: string, fr: string, done: (g
         b.innerHTML = `${tiles[typed[i]]}<small>${want[i]}</small>`;
       }
     });
-    speak(w);
+    speak(w, true);
     const g: Grade = wrong === 0 ? "bien" : wrong === 1 && want.length >= 3 ? "bof" : "rate";
     finish(body, g, `${w} · ${r}`, done);
   };

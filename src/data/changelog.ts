@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.15.0",
+    date: "2026-11-19",
+    items: [
+      "Clavier kana plus compact : une colonne par ligne (あいうえお de haut en bas), seulement les lignes déjà vues, et un onglet あ / ア quand il faut les deux.",
+      "« Vérifier » est maintenant au-dessus du clavier, et vous pouvez aussi taper avec le clavier japonais de votre téléphone.",
+      "Sans son : dans le train, cochez « Sans son pour l'instant » (ou touchez « Pas de son ici » pendant un jeu d'écoute). Plus aucun jeu d'écoute ni son automatique. Réglages › « Jamais de son » pour toujours.",
+    ],
+  },
+  {
     v: "0.14.0",
     date: "2026-11-19",
     items: [

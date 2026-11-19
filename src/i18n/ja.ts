@@ -569,4 +569,11 @@ export const JA: Record<string, string> = {
   "ほ a deux barres à droite, et son trait vertical part de la barre du haut sans dépasser au-dessus. は n'a qu'une barre, que le trait vertical traverse.": "「ほ」は右に横画が二本あり、縦画は上の横画から始まって上に出ません。「は」は横画一本で、縦画がそれを貫きます。",
   "る finit par une petite boucle en bas ; ろ s'arrête sans boucle.": "「る」は下に小さな輪があり、「ろ」は輪なしで終わります。",
   "＋ Nouveau profil": "＋ 新しいプロフィール",
+  "ou le clavier japonais du téléphone": "またはスマホの日本語キーボードで入力",
+  "Taper avec le clavier japonais du téléphone": "スマホの日本語キーボードで入力",
+  "Ce que je comprends": "わかったこと",
+  "Pas de son ici (dans le train…)": "今は音を出せない（電車の中など）",
+  "Aucun jeu d'écoute et aucun son joué tout seul. Les boutons « Écouter » restent là si vous en avez besoin. Pour couper le son juste un moment (dans le train), cochez « Sans son pour l'instant » dans S'entraîner.": "聞き取りの問題を出さず、音も自動で流しません。「聞く」ボタンは残ります。電車の中など少しの時間だけ音を消すときは、「練習」の「今は音なし」にチェックを入れてください。",
+  "Jamais de son": "音を使わない",
+  "Sans son pour l'instant": "今は音なし",
 };

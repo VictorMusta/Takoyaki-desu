@@ -1,3 +1,4 @@
+import { soundOff } from "./sound";
 import { byK, isKata, isPlain, KANA } from "../data/kana";
 import { SENTENCES, signsOf, WORDS } from "../data/words";
 import { isHira, TEXTS, textOf } from "../data/texts";
@@ -108,7 +109,8 @@ function distractors(k: string, all: string[], n: number, rnd: Rnd): string[] {
 export function available(p: Profile, type: DrillType): boolean {
   const n = knownPlain(p).length;
   switch (type) {
-    case "choose": case "listen": case "read": return n >= 4;
+    case "listen": return n >= 4 && !soundOff();
+    case "choose": case "read": return n >= 4;
     case "match": return n >= 5;
     case "combo": return combos(p).length >= 4;
     case "duel": return LOOKALIKES.some((g) => g.filter((x) => p.cards[x]?.seen).length >= 2);
