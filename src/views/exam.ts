@@ -81,7 +81,7 @@ export function viewExam(): void {
   const seen = KANA.filter((k) => p.cards[k.k]?.seen).map((k) => k.k);
   v.appendChild(
     el(`<section class="card"><h2>Examen strict</h2>
-    <p class="small muted" style="margin:0">Jusqu'à 20 signes déjà vus, tirés au hasard. Aucune aide, aucun pochoir. « Correct » demande trois « Oui » à la checklist. L'examen ne change pas vos dates de révision : il sert à vérifier vos notes.</p>
+    <p class="small muted" style="margin:0">Jusqu'à 20 signes déjà vus, tirés au hasard. Aucune aide, aucun pochoir. « Correct » n'est possible que si la vérification des traits ne trouve rien. L'examen ne change pas vos dates de révision : il sert à vérifier vos notes.</p>
     ${
       p.fluent
         ? `<p class="small muted" style="margin:0">Niveau « je parle déjà japonais » : un signe raté à l'examen revient dans vos séances dès demain.</p>

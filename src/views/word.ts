@@ -1,3 +1,5 @@
+import { meaningFor } from "../data/gloss-ja";
+import { isJa } from "../i18n";
 import { buzz } from "../ui/haptics";
 import { byK } from "../data/kana";
 import { WORDS } from "../data/words";
@@ -16,7 +18,8 @@ import { speak } from "../ui/speech";
  * rebuild the word from a set of signs). Both parts right → Bien, one → Bof, none → Raté.
  */
 export function viewWord(it: QueueItem, head: string, onStep: () => void, done: (g: Grade) => void): void {
-  const [w, r, fr] = wordOf(it.k)!;
+  const [w, r, frOnly] = wordOf(it.k)!;
+  const fr = meaningFor(w, frOnly, isJa());
   const v = view();
   v.innerHTML = "";
   const card = el(`<section class="card drill"><div class="prompt"><div><h2 style="font-size:21px">${it.isNew && !it.step ? "Nouveau mot" : "Vocabulaire"}</h2><div class="small muted">${head}</div></div><button class="btn sm" id="say">Écouter</button></div><div id="body" style="display:flex;flex-direction:column;gap:16px"></div></section>`);
@@ -82,7 +85,7 @@ function readWord(body: HTMLElement, w: string, r: string, fr: string, done: (g:
     rr.classList.remove("hidden");
     rr.innerHTML = spelled ? `<span class="good">Juste : ${r}.</span>` : `<span class="bad">On lit « ${r} ».</span>`;
     speak(w);
-    const wrong = shuffle(WORDS.filter((x) => x[0] !== w && x[2] !== fr), Math.random).slice(0, 3).map((x) => x[2]);
+    const wrong = shuffle(WORDS.filter((x) => x[0] !== w && meaningFor(x[0], x[2], isJa()) !== fr), Math.random).slice(0, 3).map((x) => meaningFor(x[0], x[2], isJa()));
     const opts = shuffle([fr, ...wrong], Math.random);
     const m = $("#mean", body);
     m.innerHTML = `<p class="small" style="margin:0 0 8px">Et que veut dire ce mot ?</p><div class="opts-grid">${opts.map((o) => `<button class="btn opt-b" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;

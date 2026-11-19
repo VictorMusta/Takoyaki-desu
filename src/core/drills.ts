@@ -3,6 +3,11 @@ import { SENTENCES, signsOf, WORDS } from "../data/words";
 import { isHira, TEXTS, textOf } from "../data/texts";
 import type { Profile } from "./types";
 import { toRomaji } from "./romaji";
+import { meaningFor } from "../data/gloss-ja";
+import { isJa } from "../i18n";
+
+/** A meaning as shown: French, with the Japanese writing beside it in the Japanese interface. */
+const mean = (w: string, fr: string) => meaningFor(w, fr, isJa());
 import { allSolid, today } from "./scheduler";
 
 /**
@@ -155,9 +160,9 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
       // Romaji next to the meanings only while the word's signs are still fresh.
       const bare = allSolid(p, w, today());
-      const opt = (r2: string, f2: string) => (bare ? f2 : `${r2} · ${f2}`);
-      const wrong = shuffle(ws.filter((x) => x[0] !== w && x[2] !== fr), rnd).slice(0, 3).map(([, r2, f2]) => opt(r2, f2));
-      return { type, ks: signsOf(w), prompt: w, options: shuffle([opt(r, fr), ...wrong], rnd), answer: opt(r, fr), say: w };
+      const opt = (w2: string, r2: string, f2: string) => (bare ? mean(w2, f2) : `${r2} · ${mean(w2, f2)}`);
+      const wrong = shuffle(ws.filter((x) => x[0] !== w && x[2] !== fr), rnd).slice(0, 3).map(([w2, r2, f2]) => opt(w2, r2, f2));
+      return { type, ks: signsOf(w), prompt: w, options: shuffle([opt(w, r, fr), ...wrong], rnd), answer: opt(w, r, fr), say: w };
     }
     case "cloze": {
       const pool = [...knownWords(p).map(([w, r, fr]) => ({ w, r, fr })), ...knownSentences(p).map((s) => ({ w: s.w, r: s.r, fr: s.fr }))];
@@ -166,7 +171,7 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       const idxs = [...it.w].map((c, i) => (c === " " ? -1 : i)).filter((i) => i >= 0);
       const at = [...it.w].indexOf(sign);
       const gap = at >= 0 ? at : pick(idxs, rnd);
-      return { type, ks: [[...it.w][gap]], prompt: it.w, full: it.w, gap, meaning: it.fr, reading: it.r, say: it.w.replace(/\s/g, "") };
+      return { type, ks: [[...it.w][gap]], prompt: it.w, full: it.w, gap, meaning: mean(it.w, it.fr), reading: it.r, say: it.w.replace(/\s/g, "") };
     }
     case "dictation":
     case "drawword": {
@@ -174,13 +179,13 @@ export function makeDrill(p: Profile, type: DrillType, k?: string, rnd: Rnd = Ma
       if (!ws.length) return null;
       const withK = ws.filter(([w]) => w.includes(sign));
       const [w, r, fr] = pick(withK.length ? withK : ws, rnd);
-      return { type, ks: signsOf(w), prompt: r, full: w, meaning: fr, reading: r, say: w };
+      return { type, ks: signsOf(w), prompt: r, full: w, meaning: mean(w, fr), reading: r, say: w };
     }
     case "sentence": {
       const ss = knownSentences(p);
       const s = pick(ss, rnd);
-      const wrong = shuffle(SENTENCES.filter((x) => x !== s), rnd).slice(0, 3).map((x) => x.fr);
-      return { type, ks: signsOf(s.w), prompt: s.w, options: shuffle([s.fr, ...wrong], rnd), answer: s.fr, meaning: s.r, say: s.w.replace(/\s/g, "") };
+      const wrong = shuffle(SENTENCES.filter((x) => x !== s), rnd).slice(0, 3).map((x) => mean(x.w, x.fr));
+      return { type, ks: signsOf(s.w), prompt: s.w, options: shuffle([mean(s.w, s.fr), ...wrong], rnd), answer: mean(s.w, s.fr), meaning: s.r, say: s.w.replace(/\s/g, "") };
     }
     case "text": {
       const t = pick(openTexts(p), rnd);

@@ -6,10 +6,11 @@ import { viewProgress } from "./views/progress";
 import { hasSession, viewCard } from "./views/session";
 import { viewSettings } from "./views/settings";
 import { viewWelcome } from "./views/welcome";
+import { viewInvite } from "./views/invite";
 import { maybeApplyUpdate } from "./pwa";
 
-export type Route = "seance" | "progres" | "examen" | "reglages";
-const ROUTES: Route[] = ["seance", "progres", "examen", "reglages"];
+export type Route = "seance" | "progres" | "examen" | "reglages" | "invite";
+const ROUTES: Route[] = ["seance", "progres", "examen", "reglages", "invite"];
 const NEW = "__new__";
 
 function current(): Route {
@@ -68,6 +69,11 @@ export function route(): void {
   renderProfiles();
   window.scrollTo(0, 0);
   enter();
+  // The invitation works without a profile (a tester opening the link on her own phone).
+  if (r === "invite") {
+    $("nav").classList.toggle("hidden", !hasProfile());
+    return viewInvite();
+  }
   if (!hasProfile()) {
     nav.classList.add("hidden");
     return viewWelcome();

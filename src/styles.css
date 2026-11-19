@@ -358,3 +358,11 @@ a.btn{text-decoration:none;display:inline-block;color:var(--ink)}
 .news ul{margin:4px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .modal-card .news + .news{margin-top:12px}
 .modal-card{max-height:85vh;overflow:auto}
+
+/* Testers' « Remarque » button: on the right edge, above the grade bar, never over a control */
+.note-fab{position:fixed;right:0;bottom:calc(132px + env(safe-area-inset-bottom));z-index:5;padding:10px 12px;border:.5px solid var(--wood);border-right:0;background:var(--card);color:var(--ink);font:500 13px/1.2 var(--body);box-shadow:var(--shadow-float);cursor:pointer}
+.note-fab:focus-visible{outline:2px solid var(--beni);outline-offset:2px}
+.invite ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.invite .qr{width:200px;max-width:70%;margin:8px auto;background:#fff;padding:8px}
+.invite .qr svg{display:block;width:100%;height:auto}
+.invite p{margin:0}

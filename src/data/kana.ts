@@ -1,3 +1,4 @@
+import { isJa } from "../i18n";
 import raw from "./kana.json";
 
 /** One kana (hiragana or katakana): the glyph, its romaji, its line of the table and its strokes in writing order. */
@@ -24,8 +25,16 @@ export const LINES = [...H_LINES, ...H_LINES.map((x) => x.toUpperCase())] as rea
 export const KATA_START = H_LINES.length;
 
 const VOICE: Record<string, string> = { ga: " (ten-ten)", za: " (ten-ten)", da: " (ten-ten)", ba: " (ten-ten)", pa: " (maru)" };
-/** How a line is named on screen: « ga (ten-ten) », « petits signes », « ka · katakana ». */
+const KANA_LINE: Record<string, string> = { a: "あ", ka: "か", sa: "さ", ta: "た", na: "な", ha: "は", ma: "ま", ya: "や", ra: "ら", wa: "わ", ga: "が", za: "ざ", da: "だ", ba: "ば", pa: "ぱ" };
+
+/** How a line is named on screen: « ga (ten-ten) », « petits signes », « ka · katakana »; in Japanese « か行 », « ガ行（濁音） ». */
 export function lineLabel(ln: string): string {
+  if (isJa()) {
+    const low = ln.toLowerCase(), kata = ln !== low;
+    if (low === "petits") return kata ? "小さいカタカナと「ー」" : "小さいひらがな";
+    const k = KANA_LINE[low] ?? low, head = kata ? String.fromCodePoint(k.codePointAt(0)! + 0x60) : k;
+    return `${head}行${["ga", "za", "da", "ba"].includes(low) ? "（濁音）" : low === "pa" ? "（半濁音）" : ""}`;
+  }
   const low = ln.toLowerCase(), kata = ln !== low;
   const base = low === "petits" ? (kata ? "petits signes et ー" : "petits signes") : low + (VOICE[low] ?? "");
   return kata ? `${base} · katakana` : base;

@@ -1,3 +1,4 @@
+import { isJa } from "../i18n";
 import type { Profile } from "../core/types";
 
 const WEEKS = 18;
@@ -35,7 +36,7 @@ export function calendarHTML(p: Profile, t: number): string {
       const n = dayCount(p, d);
       if (n) (active++, (total += n));
       const today = d === t ? ' class="cal-t"' : "";
-      cells += `<rect x="${left + w * (S + G)}" y="${top + i * (S + G)}" width="${S}" height="${S}" data-l="${level(n)}"${today}><title>${new Date(d * 864e5).toLocaleDateString("fr-FR", { day: "numeric", month: "long", timeZone: "UTC" })} : ${n ? n + " activité" + (n > 1 ? "s" : "") : "rien"}</title></rect>`;
+      cells += `<rect x="${left + w * (S + G)}" y="${top + i * (S + G)}" width="${S}" height="${S}" data-l="${level(n)}"${today}><title>${new Date(d * 864e5).toLocaleDateString(isJa() ? "ja-JP" : "fr-FR", { day: "numeric", month: "long", timeZone: "UTC" })} : ${n ? n + " activité" + (n > 1 ? "s" : "") : "rien"}</title></rect>`;
     }
   }
   const W = WEEKS * (S + G) - G, H = top + 7 * (S + G) - G;

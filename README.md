@@ -41,6 +41,12 @@ Reconnaître un signe ne suffit pas pour savoir l'écrire. Ici, on **écrit chaq
   - « Quoi de neuf ? » après chaque mise à jour ;
   - mises à jour automatiques, jamais au milieu d'une séance.
 
+## En japonais, pour les testeurs
+
+L'interface existe aussi en japonais (Réglages › Apparence › 日本語). Le français reste la langue par défaut, et on passe de l'une à l'autre au même endroit. Dans « Faire tester en japonais » (Réglages › Un avis ?), un écran en japonais invite une personne japonaise à essayer : sur ce téléphone, dans un profil « テスター » séparé, ou sur le sien grâce à un QR code. Le bouton « Remarque », présent sur chaque écran, enregistre ses retours écrits, puis les envoie tous d'un coup.
+
+Côté code, le français reste la seule source. `scripts/i18n_extract.mjs` liste chaque texte de l'interface dans `src/i18n/strings.json`, `src/i18n/ja.ts` les traduit, et une couche de traduction réécrit l'écran à la volée. Les tests échouent si un texte n'est pas traduit. Le contenu d'apprentissage n'est pas traduit, mais chaque sens de mot affiche son écriture japonaise habituelle à côté du français. Les kanji de l'interface japonaise sont dans des polices à part, téléchargées seulement quand l'appli est en japonais.
+
 ## Confidentialité
 
 L'appli n'a ni compte, ni serveur, ni mesure d'audience, ni cookie, ni outil tiers. Les polices sont livrées avec l'appli. La progression vit uniquement dans le navigateur. Des données ne partent que si l'utilisateur le décide : une sauvegarde qu'il s'envoie, un retour par mail ou un ticket GitHub. Le détail est dans l'appli, sous Réglages › Confidentialité.

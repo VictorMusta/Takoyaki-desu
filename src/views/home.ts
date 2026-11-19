@@ -1,3 +1,4 @@
+import { isJa } from "../i18n";
 import { isKata, KANA, LINES, lineLabel } from "../data/kana";
 import { alphabetMastery, buildQueue, dayRec, kataStarted, recordMastery, streak, today } from "../core/scheduler";
 import { save } from "../core/store";
@@ -70,6 +71,9 @@ export function viewHome(): void {
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`;
 const activity = (r?: DayRec) => {
   if (!r) return "";
+  // A list of counts doesn't go through the translation layer well (one text, many pieces): built here.
+  if (isJa())
+    return [r.nw && `新しい文字${r.nw}`, r.nwW && `新しい単語${r.nwW}`, r.rv && `復習${r.rv}`, r.ex && `問題${r.ex}`].filter(Boolean).join("・");
   const parts = [r.nw && plural(r.nw, "nouveau signe", "nouveaux signes"), r.nwW && plural(r.nwW, "nouveau mot", "nouveaux mots"), r.rv && plural(r.rv, "révision", "révisions"), r.ex && plural(r.ex, "exercice", "exercices")].filter(Boolean);
   return parts.join(", ");
 };

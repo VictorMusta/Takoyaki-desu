@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.10.0",
+    date: "2026-11-19",
+    items: [
+      "L'appli parle aussi japonais : Réglages › Apparence › 日本語, et retour au français au même endroit.",
+      "« Faire tester en japonais » (Réglages › Un avis ?) : un écran d'invitation en japonais, avec un code à scanner pour l'ouvrir sur un autre téléphone.",
+      "Bouton « Remarque » : noter ce qui cloche sur n'importe quel écran, puis tout envoyer d'un coup.",
+    ],
+  },
+  {
     v: "0.9.2",
     date: "2026-11-19",
     items: ["Pinceau plus organique : le trait suit des courbes douces au lieu de segments droits, sans encoches quand la main accélère."],

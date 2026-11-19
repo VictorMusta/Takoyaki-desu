@@ -1,0 +1,2792 @@
+[
+ {
+  "s": "Examen",
+  "files": [
+   "index.html"
+  ]
+ },
+ {
+  "s": "Progrès",
+  "files": [
+   "index.html"
+  ]
+ },
+ {
+  "s": "Réglages",
+  "files": [
+   "index.html"
+  ]
+ },
+ {
+  "s": "Séance",
+  "files": [
+   "index.html"
+  ]
+ },
+ {
+  "s": "Ma sauvegarde Takoyaki desu. Pour la restaurer : Réglages › Sauvegarde › Importer un fichier.",
+  "files": [
+   "src/core/backup.ts"
+  ]
+ },
+ {
+  "s": "Sauvegarde Takoyaki desu",
+  "files": [
+   "src/core/backup.ts"
+  ]
+ },
+ {
+  "s": "Choisir, écouter, relier, sosies, combinaisons",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Dictée au clavier ou à la main",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Écrire des mots",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Le sens d'un mot, le signe qui manque",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Lire des mots",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Phrases et textes",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Proverbes, panneaux, menus, stèles",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "Reconnaître les signes",
+  "files": [
+   "src/core/drills.ts"
+  ]
+ },
+ {
+  "s": "{0} caractères maximum.",
+  "files": [
+   "src/core/profiles.ts"
+  ]
+ },
+ {
+  "s": "Ce prénom existe déjà sur cet appareil.",
+  "files": [
+   "src/core/profiles.ts"
+  ]
+ },
+ {
+  "s": "Entrez un prénom.",
+  "files": [
+   "src/core/profiles.ts"
+  ]
+ },
+ {
+  "s": "Profil introuvable.",
+  "files": [
+   "src/core/profiles.ts"
+  ]
+ },
+ {
+  "s": "{0} trait{1} au lieu de {2}.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "La forme générale s'éloigne du modèle.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "Le trait {0} est tracé à l'envers.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "Le trait {0} n'a pas la bonne forme ou la bonne place.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "Les proportions du signe s'éloignent du modèle.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "Traits dans le désordre : {0}.",
+  "files": [
+   "src/core/strokecheck.ts"
+  ]
+ },
+ {
+  "s": "{0} · katakana",
+  "files": [
+   "src/data/kana.ts"
+  ]
+ },
+ {
+  "s": "allongement",
+  "files": [
+   "src/data/kana.ts"
+  ]
+ },
+ {
+  "s": "petits signes",
+  "files": [
+   "src/data/kana.ts"
+  ]
+ },
+ {
+  "s": "petits signes et ー",
+  "files": [
+   "src/data/kana.ts"
+  ]
+ },
+ {
+  "s": "« Bof », c'est juste mais avec une hésitation ou une petite erreur. Le choisir honnêtement fait revenir le signe plus tôt : c'est fait pour ça.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Comptez les traits du modèle. Deux traits reliés en un seul, ou un trait coupé en deux, changent le signe.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "En général : de haut en bas, puis de gauche à droite. Un signe qui ressemble au modèle mais écrit dans le désordre n'est pas « Bien » : l'ordre donne la bonne forme quand on écrit vite.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "La croix en pointillés coupe la case en quatre. Avant d'écrire, repérez dans quel quart chaque trait commence et dans lequel il finit.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Les traits horizontaux vont de gauche à droite, les verticaux de haut en bas. Un trait bien placé mais tracé à l'envers n'est pas « Bien ».",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Piège d'ordre : dans も, le trait vertical courbé se trace en premier, avant les deux barres.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Regardez comment chaque trait se termine : arrêt net, petit crochet, ou trait qui s'affine. Ce détail distingue souvent deux signes proches.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Si vous devez regarder le modèle, touchez « Voir le signe » : c'est plus juste qu'un « Bof », et le signe reviendra au bon moment.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Touchez « Écouter » et dites le son à voix haute en écrivant : relier le son au geste aide à retenir.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Un signe juste mais tout petit, ou collé dans un coin, n'est pas encore « Bien » : il doit occuper la case autour de la croix, comme le modèle.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "あ et お se ressemblent : お a un petit trait isolé en haut à droite, あ n'en a pas.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "い et り : deux traits séparés, jamais reliés. Dans い, le trait de gauche est le plus long ; dans り, c'est celui de droite.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "き a deux barres horizontales (4 traits), さ n'en a qu'une (3 traits).",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "こ : deux traits séparés. Celui du haut finit par un petit crochet vers le bas, celui du bas est plus long.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "さ et ち sont en miroir : le bas de さ s'ouvre vers la droite, comme un c ; le bas de ち s'ouvre vers la gauche, comme le bas d'un 5.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "し et つ s'écrivent d'un seul trait. し est debout : il descend puis remonte vers la droite, jamais en partant du bas. つ est couché : il va vers la droite puis redescend.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "そ s'écrit ici d'un seul trait : un zigzag en haut, puis une grande courbe vers le bas.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "ぬ finit par une petite boucle en bas à droite ; め s'arrête sans boucle.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "ね, れ et わ commencent pareil, par un trait vertical. Seule la fin change : ね finit par une boucle, れ par un trait qui repart vers le bas à droite, わ par une grande courbe arrondie.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "ふ a 4 traits, dans cet ordre : le petit trait du haut, la courbe du milieu, puis le point de gauche et enfin celui de droite.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "ほ a deux barres à droite, et son trait vertical part de la barre du haut sans dépasser au-dessus. は n'a qu'une barre, que le trait vertical traverse.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "る finit par une petite boucle en bas ; ろ s'arrête sans boucle.",
+  "files": [
+   "src/data/tips.ts"
+  ]
+ },
+ {
+  "s": "Appli mise à jour.",
+  "files": [
+   "src/pwa.ts"
+  ]
+ },
+ {
+  "s": "Nouvelle version prête : elle s'installera au prochain changement d'écran.",
+  "files": [
+   "src/pwa.ts"
+  ]
+ },
+ {
+  "s": "＋ Nouveau profil",
+  "files": [
+   "src/router.ts"
+  ]
+ },
+ {
+  "s": "Profil",
+  "files": [
+   "src/router.ts"
+  ]
+ },
+ {
+  "s": "{0} jour{1} actif{2}",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "activité",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "Activité des 18 dernières semaines : {0} jour{1} actif{2}, {3} exercice{4} en tout.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "août",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "avr.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "déc.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "févr.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "janv.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "juil.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "Moins {0} Plus",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "nov.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "oct.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "sept.",
+  "files": [
+   "src/ui/calendar.ts"
+  ]
+ },
+ {
+  "s": "Signe maîtrisé",
+  "files": [
+   "src/ui/celebrate.ts"
+  ]
+ },
+ {
+  "s": "Abandonner",
+  "files": [
+   "src/ui/dom.ts"
+  ]
+ },
+ {
+  "s": "Retour à l'accueil : ce qui a été fait est gardé",
+  "files": [
+   "src/ui/dom.ts"
+  ]
+ },
+ {
+  "s": "{0} trait{1}{2} · le modèle d'écriture est la forme « manuscrit » (manuels scolaires).",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "Arrondi",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "en hiragana",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "en katakana",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "Gothique",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "imprimé",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "Manuscrit",
+  "files": [
+   "src/ui/fiche.ts"
+  ]
+ },
+ {
+  "s": "Piège",
+  "files": [
+   "src/ui/fiche.ts",
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Pinceau",
+  "files": [
+   "src/ui/fiche.ts",
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Clavier kana",
+  "files": [
+   "src/ui/keyboard.ts"
+  ]
+ },
+ {
+  "s": "Effacer le dernier signe",
+  "files": [
+   "src/ui/keyboard.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Astuce pour retenir",
+  "files": [
+   "src/ui/mnemo.ts"
+  ]
+ },
+ {
+  "s": "L'astuce de l'appli : {0}",
+  "files": [
+   "src/ui/mnemo.ts"
+  ]
+ },
+ {
+  "s": "Mon astuce pour",
+  "files": [
+   "src/ui/mnemo.ts"
+  ]
+ },
+ {
+  "s": "Annuler",
+  "files": [
+   "src/ui/modal.ts",
+   "src/ui/notes.ts",
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "C'est noté",
+  "files": [
+   "src/ui/news.ts"
+  ]
+ },
+ {
+  "s": "Quoi de neuf ?",
+  "files": [
+   "src/ui/news.ts"
+  ]
+ },
+ {
+  "s": "Version {0} · {1}",
+  "files": [
+   "src/ui/news.ts"
+  ]
+ },
+ {
+  "s": "{0} remarque(s) déjà enregistrée(s) sur ce téléphone.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Aucune remarque pour l'instant.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Ce qui est faux, bizarre, difficile à comprendre, une idée… Écrivez dans votre langue.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Continuer à tester",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Écran : {0}",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Enregistrer",
+  "files": [
+   "src/ui/notes.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Envoi impossible ici : copiez les remarques depuis Réglages.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Impossible d'enregistrer la remarque sur cet appareil.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Les remarques restent sur ce téléphone jusqu'à leur envoi.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Merci !",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Remarque",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Remarque enregistrée ({0} en tout).",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Remarques copiées : collez-les dans un message à l'auteur.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Tout envoyer maintenant",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Une remarque",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Votre remarque",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "Vous pouvez en écrire d'autres au fil des écrans, puis tout envoyer d'un coup.",
+  "files": [
+   "src/ui/notes.ts"
+  ]
+ },
+ {
+  "s": "{0} · {1} par jour",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Actuellement : {0} par jour (personnalisé).",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Intensif",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Les 75 hiragana en 3 semaines environ, puis autant pour les katakana. 10 à 15 min par jour.",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Les hiragana en 10 jours environ, 20 à 25 min par jour. Recommandé.",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Les hiragana en une semaine environ, 35 min par jour, puis beaucoup de révisions.",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Nouveaux signes par jour",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Soutenu",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Tranquille",
+  "files": [
+   "src/ui/prefs.ts"
+  ]
+ },
+ {
+  "s": "Lecture audio indisponible sur cet appareil.",
+  "files": [
+   "src/ui/speech.ts"
+  ]
+ },
+ {
+  "s": "« {0} » est débloqué.{1}",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "« Bien » est bloqué : notez « Bof » ou « Raté ».",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "« Correct » est bloqué par la vérification.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "{0} À vous de juger la forme fine.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Astuce",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Astuce utilisée : au mieux « Bof ».",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Bien",
+  "files": [
+   "src/views/compare.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Bof",
+  "files": [
+   "src/views/compare.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Continuer (compte comme Raté)",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Correct",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Côte à côte",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "D'accord, vous avez le dernier mot.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Envoyer ce tracé à l'auteur",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Faux",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Je pense que c'est juste",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "La vérification a trouvé un souci",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Le signe et des exemples",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Modèle",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Moi je le fais pas comme ça",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Ne plus afficher cette astuce",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Nombre, ordre et sens corrects.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "pour qu'il corrige la vérification.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Raté",
+  "files": [
+   "src/views/compare.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Revenir au modèle",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Revoir l'ordre des traits",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Superposer",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Traits vérifiés : rien à redire.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Votre façon d'écrire : seule la forme est comparée.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Votre tracé",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Votre tracé sur le modèle",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "Vous avez regardé le signe : ça compte comme « Raté ». Il reviendra plus tard dans cette séance, puis demain.",
+  "files": [
+   "src/views/compare.ts"
+  ]
+ },
+ {
+  "s": "{0} · signe {1} sur {2} : « {3} »",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "{0} se lit « {1} ».",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Arrière",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/exam.ts",
+   "src/views/feedback.ts",
+   "src/views/progress.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Ce que je comprends (ou dites-le à voix haute)",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Choisissez le signe",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Comment se lit ce signe ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Comment se lit cette combinaison ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Comparer",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/exam.ts",
+   "src/views/progress.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Compris",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Continuer",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Devinez à partir des signes que vous reconnaissez…",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Écouter",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/exam.ts",
+   "src/views/progress.ts",
+   "src/views/session.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Écoutez, puis choisissez",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Écrivez ce mot",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Écrivez ce mot à la main",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "En partie",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Juste",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Juste.",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Lecture : {0}.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Lequel est-ce ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "On écrit {0}.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Pas compris",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Pas tout à fait",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Pas tout à fait.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Que dit ce texte ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Que veut dire ce mot ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Que veut dire cette phrase ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Quel signe manque ?",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Recommencer",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/exam.ts",
+   "src/views/feedback.ts",
+   "src/views/progress.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Réécouter le son",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Reliez chaque signe à sa syllabe",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Signe suivant",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Souligner les signes que je connais",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Vérifier",
+  "files": [
+   "src/views/drill.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Voir la correction",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Vous avez tapé {0}.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "20 signes au hasard",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "À retravailler :",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Apprenez d'abord quelques signes",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Aucune erreur.",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Commencer ({0} signes)",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Examen général : les {0} signes",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Examen strict",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Examen strict · {0} / {1}",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Examen terminé : {0} / {1}",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Jusqu'à 20 signes déjà vus, tirés au hasard. Aucune aide, aucun pochoir. « Correct » n'est possible que si la vérification des traits ne trouve rien. L'examen ne change pas vos dates de révision : il sert à vérifier vos notes.",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Niveau « je parle déjà japonais » : un signe raté à l'examen revient dans vos séances dès demain.",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "Revenir un trait en arrière",
+  "files": [
+   "src/views/exam.ts",
+   "src/views/feedback.ts",
+   "src/views/progress.ts",
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Voir la calibration",
+  "files": [
+   "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "{0} · {1} à votre façon",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Accepter ma façon dans mes séances (nombre et ordre des traits non vérifiés)",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Ce qui change, pourquoi c'est mieux, d'où vient cette façon de l'écrire…",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Commentaire",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Écrivez-le comme vous l'écrivez vraiment, dans votre ordre. Votre tracé sera envoyé à l'auteur de l'appli pour améliorer le modèle.",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Envoyer mon retour",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Envoyer par mail",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Merci ! Votre retour est parti.",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Modèle actuel",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Ou ouvrir un ticket sur GitHub",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Partage indisponible : le texte est copié, collez-le dans un message à l'auteur.",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Partage indisponible : utilisez plutôt le ticket GitHub.",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Partager autrement, avec l'image",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Retour",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Retour sur {0}",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Tracé de {0} ({1})",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Votre appli de mail s'ouvre avec le message prêt : il n'y a plus qu'à l'envoyer.",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "Votre façon",
+  "files": [
+   "src/views/feedback.ts"
+  ]
+ },
+ {
+  "s": "· {0} jours d'affilée",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "{0} {1} découverts sur {2} · maîtrise {3} %{4}{5}",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "{0} Elle ne vit que dans ce téléphone : envoyez-vous le fichier par mail, il suffira de l'importer pour tout retrouver.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "à réviser",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Après quelques signes de plus",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Aucune sauvegarde pour l'instant.",
+  "files": [
+   "src/views/home.ts",
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Aujourd'hui : {0}.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Ce navigateur ne garde pas les données : exportez votre progression (Réglages).",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Chaque nouveau signe passe par 4 étapes : découverte, pochoir, pochoir estompé, puis page blanche. Ensuite, vous l'écrivez toujours de mémoire, vous comparez au modèle et vous vous notez. La ligne suivante s'ouvre quand 80 % de la ligne « {0} » tient au moins 3 jours.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Commencer",
+  "files": [
+   "src/views/home.ts",
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Comment ça marche",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "depuis la veille",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Dernière sauvegarde il y a {0} jours.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Dix exercices variés sur ce que vous avez déjà vu, sans limite et sans repousser vos révisions.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Hier : {0}.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "La séance du jour est faite. Vous pouvez continuer :",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Le fichier est téléchargé. Envoyez-le-vous ou gardez-le en lieu sûr : prochain rappel dans une semaine.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Ligne en cours : {0}.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "M'envoyer ma sauvegarde",
+  "files": [
+   "src/views/home.ts",
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Merci ! Gardez ce mail : prochain rappel dans une semaine.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Mettre votre progression à l'abri",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "nouveau mot",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "nouveau signe",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "nouveaux mots",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "nouveaux signes",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Pas encore d'activité aujourd'hui.",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Plus tard",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "révision",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "révisions",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "S'entraîner autrement",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Séance du jour, {0}",
+  "files": [
+   "src/views/home.ts"
+  ]
+ },
+ {
+  "s": "Écran à montrer à une personne japonaise : elle peut essayer sur ce téléphone, ou scanner le code avec le sien. L'appli passera en japonais pour elle.",
+  "files": [
+   "src/views/invite.ts"
+  ]
+ },
+ {
+  "s": "{0} signe{1} de plus",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "10 signes, les plus fragiles d'abord. Sans limite, et sans changer vos dates de révision.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "D'habitude, elle s'ouvre quand 80 % de la ligne précédente tient 3 jours. Vous pouvez aller plus vite.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "Demain : environ {0} révisions.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "Encore {0} révision(s) prévue(s) aujourd'hui au-delà de votre plafond : faites-les avant d'apprendre de nouveaux signes.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "Ouvrir la ligne « {0} » et continuer",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "Réviser encore",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "Rien d'autre pour l'instant.",
+  "files": [
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "· fermée",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "· katakana",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "« Bien » en séance",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "{0}, ouvrir la fiche",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "à découvrir",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Aide au tracé",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Au-delà de 15 points d'écart, vous vous notez trop généreusement sur cette ligne.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Calque",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre. À partir de 67 %, les romaji du signe ne sont plus affichés dans les mots.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "de maîtrise",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "De mémoire",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Écart",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Écouter {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Écrire ma propre astuce",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "En cours",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Estompé",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Évolution de la maîtrise des {0} sur {1} jours, de {2} à {3} %",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Faites quelques séances et un examen pour voir si vos notes sont fiables.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Fermer",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Hiragana",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "jours d'affilée",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Katakana",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Ligne",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Lire le tableau",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Maîtrisé",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Maîtrise {0} %",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Maîtrise {0} % · {1}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "maîtrise des hiragana",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "maîtrisés / {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Mes mots ({0})",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Modèle · {0} trait{1}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Modifier mon astuce",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Mon astuce pour {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Mots avec {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "mots étudiés",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "mots sus",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "pas d'examen",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Pas encore vu",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Pas encore vu en séance.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Prochaine révision dans {0} jour{1}.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Progrès de {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Réessayer",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Rejouer le tracé",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Réussite à l'examen",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Revenir à l'astuce de l'appli",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Révision prévue aujourd'hui.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "S'entraîner librement",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Sans note et sans effet sur vos révisions : tracez autant que vous voulez.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Touchez un signe pour voir sa fiche.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Un mot compte comme su quand son sens a été retrouvé et tient au moins un jour. De nouveaux mots s'ouvrent à mesure que vous apprenez leurs signes.",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Une image qui relie la forme de {0} au son « {1} »…",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Vocabulaire",
+  "files": [
+   "src/views/progress.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Vos notes sont-elles fiables ?",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Votre tracé · {0} trait{1}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "· de mémoire",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "· recopiez le modèle",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "{0} · {1} restant(s)",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "{0} · {1} restant(s){2}",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "% de réussite",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "à revoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Apprendre",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Astuce utilisée : la note ira au mieux jusqu'à « Bof ».",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Aujourd'hui en tout : {0} signe{1} noté{2}.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Besoin d'aide ?",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Chaque couleur est un trait ; le chiffre marque où il commence, la flèche montre le sens.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Continuer ?",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Entraînement",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Entraînement libre",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Entraînement terminé",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Étape {0} sur 4",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Exercice",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Je trace dans le pochoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "L'astuce",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "L'astuce limite la note à « Bof » ; voir le signe compte comme « Raté ».",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Le pochoir s'efface : seuls restent les points de départ.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Le signe {0} dans les polices courantes",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Nouveau signe · ligne",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Raté (dont {0} « vu »)",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Retour à l'accueil",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Révision",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Revoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Rien de noté cette fois.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Séance terminée",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Suivant",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Tracez dans le pochoir, en suivant les numéros.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Voici le signe {0}. Observez sa forme, puis touchez « Apprendre » pour voir l'ordre des traits.",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Voir le signe",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": ", d'Ulrich Apel, sous licence CC BY-SA 3.0.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": ", licence MIT.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "{0} ({1} signes vus)",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Afficher",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Afficher les numéros des traits",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ajouter",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Apparence",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Aucune mesure d'audience, aucun cookie, aucune publicité, aucun outil tiers. Les polices sont livrées avec l'appli.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Automatique",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Bouton « Remarque » sur chaque écran",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "C'est réversible.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ce qui a été fait depuis (séances, examens) sera effacé.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ce qui reste hors de nos mains : l'hébergeur (GitHub Pages) voit, comme tout site, l'adresse IP qui charge l'appli. Selon le téléphone, la voix de « Écouter » peut être produite en ligne par le système.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ce texte n'est pas une sauvegarde valide.",
+  "files": [
+   "src/views/settings.ts",
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Cette sauvegarde vient d'une version plus récente de l'appli : mettez d'abord l'appli à jour (fermez-la et rouvrez-la).",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Chaque profil a sa propre progression. Rien ne quitte ce téléphone.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Choisir",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Code de l'appli :",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Confidentialité",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Copie bloquée : le texte est sélectionné, copiez-le à la main.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Copier les données",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Crédits",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "date inconnue",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Depuis le {0}, {1} est en mode « je parle déjà japonais » : tout est ouvert et l'examen propose tous les signes.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Dernière sauvegarde : il y a {0} jour(s).",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Des données ne partent que si vous le décidez : une sauvegarde que vous vous envoyez, un retour par mail, un ticket GitHub.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Données copiées.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Données de progression",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Effacer",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Effacer les remarques ?",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Elle remplace toutes les données de ce téléphone.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Faire tester en japonais",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Faire un retour",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Fichier téléchargé.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Français",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Importer le texte collé",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Importer un fichier",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "J'ai menti",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Je parle déjà japonais",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "L'appli est en bêta : un bug, une gêne, une idée, tout aide.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "La progression de {0} redevient exactement celle du {1}, juste avant d'avoir choisi « Je parle déjà japonais ».",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Langue",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Le navigateur peut effacer ces données s'il manque de place : installez l'appli sur l'écran d'accueil pour les protéger.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Les {0} remarques enregistrées sur ce téléphone seront supprimées. Envoyez-les d'abord si ce n'est pas fait.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Les mêmes données en texte. Importer remplace les données actuelles.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Lignes ouvertes : {0} / {1}. Utile si vous connaissez déjà certains signes.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Niveau",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Nouveau prénom",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Nouveautés",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Nouveaux mots par jour",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Nuit",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ou un nombre précis par jour",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Ouvrir la ligne suivante maintenant",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Papier",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Par copier-coller",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Partage de fichier indisponible ici : le fichier est téléchargé.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Pas de compte, pas de serveur à nous : votre progression vit uniquement dans ce navigateur.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Pinceau : le trait s'affine au départ, à l'arrivée et quand la main va vite. Simple : un trait régulier, le plus lisible.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Plafond de révisions par jour",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Zen Maru Gothic et Yuji Syuku (SIL Open Font License), livrées avec l'appli.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Pour noter au fil des écrans ce qui cloche. Toujours affiché en japonais, pour les testeurs.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Prénom du nouveau profil",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Profils : {0}.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Profils sur",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Profils sur ce téléphone",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Réglages de",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Réglages de {0}",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Remarques des testeurs",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Remarques sur ce téléphone ({0})",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Rendu du trait",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Renommer",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Restaurer",
+  "files": [
+   "src/views/settings.ts",
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Restaurer cette sauvegarde ?",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Revenir à ma progression",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Revenir en arrière ?",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Rien ne quitte votre téléphone sans vous.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Rythme",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Sauvegarde",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Sauvegarde du {0}.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Sauvegarde envoyée. Pour la restaurer : « Importer un fichier » avec la pièce jointe.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Si vous lisez et écrivez déjà les hiragana, ouvrez tout d'un coup et vérifiez-vous avec des examens sur tous les signes.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Simple",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Stockage protégé : le navigateur ne l'effacera pas de lui-même.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Supprimer",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Supprimer {0} et toute sa progression ?",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Télécharger le fichier",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Thème",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Tout débloquer",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Tout effacer : supprimez les profils ci-dessus, ou effacez les données du site dans votre navigateur.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Tout envoyer",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Toutes les lignes s'ouvrent et tous les signes sont considérés comme connus. Ils reviendront peu à peu en révision, et l'Examen proposera tous les signes : un signe raté y revient dès le lendemain.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Tracés et ordre des traits :",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Trait",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Un avis",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Un avis ?",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Une petite vibration quand le pinceau touche la feuille, pour une bonne réponse ou une erreur.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Vibrations",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Votre progression (tous les profils) ne vit que dans ce téléphone. Envoyez-vous le fichier par mail de temps en temps : choisissez votre appli de mail dans le menu de partage, et mettez votre propre adresse. Il ne contient que votre progression, rien de personnel.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Votre progression actuelle est mise de côté : le bouton deviendra « J'ai menti » et la rétablira telle qu'elle est aujourd'hui.",
+  "files": [
+   "src/views/settings.ts"
+  ]
+ },
+ {
+  "s": "Apprenez les hiragana en les écrivant de mémoire, puis en comparant votre tracé au modèle. Quelques minutes par jour suffisent. Chaque personne a son propre profil, et vous pouvez en créer plusieurs sur ce téléphone.",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Bienvenue",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Collez le texte copié depuis Réglages → Sauvegarde sur un autre appareil.",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Restaurer une sauvegarde",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Sauvegarde à restaurer",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Votre prénom",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Votre rythme",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "Vous pourrez le changer dans Réglages, et toujours continuer après la séance du jour.",
+  "files": [
+   "src/views/welcome.ts"
+  ]
+ },
+ {
+  "s": "À moitié.",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Comment ça se lit ? (en lettres latines)",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Écrivez ce mot en hiragana ({0} signe{1}).",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Et que veut dire ce mot ?",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Je le retiens, on vérifie",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Juste : {0}.",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Nouveau mot",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "On lit « {0} ».",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "par exemple : sakana",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Pas encore.",
+  "files": [
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Voir la lecture",
+  "files": [
+   "src/views/word.ts"
+  ]
+ }
+]

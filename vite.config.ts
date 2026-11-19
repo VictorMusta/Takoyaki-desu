@@ -29,6 +29,15 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,svg,json,woff2}"],
+        // Kanji fonts of the Japanese interface: cached on first use, not downloaded by everyone.
+        globIgnores: ["**/*-ja.woff2"],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.endsWith("-ja.woff2"),
+            handler: "CacheFirst",
+            options: { cacheName: "fonts-ja", expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 } },
+          },
+        ],
       },
     }),
   ],

@@ -7,15 +7,22 @@ import { route } from "./router";
 import { applyTheme } from "./ui/prefs";
 import { askPersist } from "./core/backup";
 import { showNews } from "./ui/news";
+import { isJa, langFromUrl, startTranslation } from "./i18n";
+import { renderNotesButton } from "./ui/notes";
 
+langFromUrl();
 applyTheme();
+// Japanese: translate everything on screen, now and as it changes (src/i18n).
+startTranslation();
 
 Object.values(state.profiles).forEach(checkUnlock);
 
 window.addEventListener("hashchange", route);
 route();
+renderNotesButton();
 announceUpdate();
-showNews();
+// « Quoi de neuf ? » is written for the French app; testers in Japanese don't need it.
+if (!isJa()) showNews();
 
 // Offline support + automatic updates (checked at launch, applied between sessions).
 setupUpdates();

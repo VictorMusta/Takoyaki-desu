@@ -1,3 +1,5 @@
+import { meaningFor } from "../data/gloss-ja";
+import { isJa } from "../i18n";
 import { byK, isKata, KANA, KATA_START, LINES, lineCards, lineLabel, SLOTS, sound } from "../data/kana";
 import { alphabetMastery, calibration, kataStarted, mastery, recordMastery, status, streak, today } from "../core/scheduler";
 import { profile, save, state } from "../core/store";
@@ -126,7 +128,7 @@ export function viewProgress(): void {
         ? `<details><summary>Mes mots (${studied.length})</summary><div class="wlist">${studied
             .map(([w, r, fr]) => {
               const m = Math.round(wordMastery(p, w, t) * 100);
-              return `<div class="wrow"><span class="kana-s">${w}</span><span class="small">${r} · ${esc(fr)}</span><span class="mbar" role="img" aria-label="Maîtrise ${m} %"><i style="width:${m}%"></i></span></div>`;
+              return `<div class="wrow"><span class="kana-s">${w}</span><span class="small">${r} · ${esc(meaningFor(w, fr, isJa()))}</span><span class="mbar" role="img" aria-label="Maîtrise ${m} %"><i style="width:${m}%"></i></span></div>`;
             })
             .join("")}</div></details>`
         : ""
@@ -178,7 +180,7 @@ function wordsHTML(k: string): string {
   const ws = WORDS.filter(([w]) => w.includes(k) && !shown.has(w)).slice(0, 8);
   if (!ws.length) return "";
   const mark = (w: string) => [...w].map((c) => (c === k ? `<mark>${c}</mark>` : c)).join("");
-  return `<h3>Mots avec ${k}</h3><dl class="ex words">${ws.map(([w, r, fr]) => `<dt><button class="wbtn" data-say="${w}" aria-label="Écouter ${r}">${mark(w)}</button></dt><dd class="rj">${r}</dd><dd>${fr}</dd>`).join("")}</dl>`;
+  return `<h3>Mots avec ${k}</h3><dl class="ex words">${ws.map(([w, r, fr]) => `<dt><button class="wbtn" data-say="${w}" aria-label="Écouter ${r}">${mark(w)}</button></dt><dd class="rj">${r}</dd><dd>${esc(meaningFor(w, fr, isJa()))}</dd>`).join("")}</dl>`;
 }
 
 /** The alphabet mastery over the last 30 days, as a thin line (days without a value carry the last one). */

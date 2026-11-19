@@ -8,6 +8,8 @@ import { today } from "../core/scheduler";
 import { mailTo } from "../config";
 import { route } from "../router";
 import { newsHTML } from "../ui/news";
+import { getLang, isJa, setLang, type Lang } from "../i18n";
+import { clearNotes, notes, notesButtonOn, notesText, sendNotes, setNotesButton } from "../ui/notes";
 import { getStrokeStyle, setStrokeStyle, type StrokeStyle } from "../ui/brush";
 import { buzz, canVibrate, getHaptics, setHaptics } from "../ui/haptics";
 import { daysSinceBackup, downloadBackup, everBackedUp, persisted, sendBackup } from "../core/backup";
@@ -174,6 +176,7 @@ export function viewSettings(): void {
   const stOpt = (s: StrokeStyle, label: string) => `<button class="btn" data-st="${s}" aria-pressed="${getStrokeStyle() === s}">${label}</button>`;
   v.appendChild(
     el(`<section class="card"><h3>Apparence</h3>
+    <div class="seg" role="group" aria-label="Langue" data-noi18n><button class="btn" data-lang="fr" aria-pressed="${getLang() === "fr"}" lang="fr">Français</button><button class="btn" data-lang="ja" aria-pressed="${getLang() === "ja"}" lang="ja">日本語</button></div>
     <div class="seg" role="group" aria-label="Thème">${thOpt("auto", "Automatique")}${thOpt("light", "Papier")}${thOpt("dark", "Nuit")}</div>
     <p class="small muted" style="margin:0">Automatique suit le réglage du téléphone. Vaut pour tous les profils de cet appareil.</p>
     <h3 style="margin-top:8px">Trait</h3>
@@ -193,6 +196,13 @@ export function viewSettings(): void {
       setHaptics(hap.checked);
       if (hap.checked) buzz("ok");
     };
+  v.querySelectorAll<HTMLButtonElement>("[data-lang]").forEach((b) => {
+    b.onclick = () => {
+      if (b.dataset.lang === getLang()) return;
+      setLang(b.dataset.lang as Lang);
+      location.reload();
+    };
+  });
   v.querySelectorAll<HTMLButtonElement>("[data-th]").forEach((b) => {
     b.onclick = () => {
       setTheme(b.dataset.th as Theme);
@@ -205,17 +215,43 @@ export function viewSettings(): void {
     "Takoyaki desu : mon retour",
     `Bonjour,\n\n(Ce qui vous plaît, ce qui gêne, une idée, un bug…)\n\n\n---\nAppareil : ${navigator.userAgent}`,
   );
-  if (fb)
-    v.appendChild(
-      el(`<section class="card"><h3>Un avis ?</h3>
-      <p class="small muted" style="margin:0">L'appli est en bêta : un bug, une gêne, une idée, tout aide. Votre appli de mail s'ouvre avec le message prêt.</p>
-      <div class="row"><a class="btn" href="${fb}">Faire un retour</a></div></section>`),
-    );
+  const nn = notes().length;
+  const fbBox = el(`<section class="card"><h3>Un avis ?</h3>
+      <p class="small muted" style="margin:0">L'appli est en bêta : un bug, une gêne, une idée, tout aide.</p>
+      <div class="row">${fb ? `<a class="btn" href="${fb}">Faire un retour</a>` : ""}<a class="btn" href="#invite">Faire tester en japonais</a></div>
+      <label class="field" for="nfab">Bouton « Remarque » sur chaque écran <input type="checkbox" id="nfab" ${notesButtonOn() ? "checked" : ""} ${isJa() ? "disabled" : ""}></label>
+      <p class="small muted" style="margin:0">Pour noter au fil des écrans ce qui cloche. Toujours affiché en japonais, pour les testeurs.</p>
+      ${
+        nn
+          ? `<h3 style="margin-top:8px">Remarques sur ce téléphone (${nn})</h3>
+      <div class="row"><button class="btn primary" id="nsend">Tout envoyer</button><button class="btn" id="nshow">Afficher</button><button class="btn" id="nclear">Effacer</button></div>
+      <textarea id="ntext" class="hidden" readonly aria-label="Remarques des testeurs" data-noi18n></textarea>`
+          : ""
+      }</section>`);
+  v.appendChild(fbBox);
+  const nfab = fbBox.querySelector<HTMLInputElement>("#nfab")!;
+  nfab.onchange = () => setNotesButton(nfab.checked);
+  if (nn) {
+    $<HTMLButtonElement>("#nsend", fbBox).onclick = () => void sendNotes();
+    $<HTMLButtonElement>("#nshow", fbBox).onclick = () => {
+      const ta = $<HTMLTextAreaElement>("#ntext", fbBox);
+      ta.value = notesText();
+      ta.classList.remove("hidden");
+      ta.select();
+    };
+    $<HTMLButtonElement>("#nclear", fbBox).onclick = async () => {
+      if (await confirmModal({ title: "Effacer les remarques ?", body: `<p style="margin:0">Les ${nn} remarques enregistrées sur ce téléphone seront supprimées. Envoyez-les d'abord si ce n'est pas fait.</p>`, ok: "Effacer" })) {
+        clearNotes();
+        refresh();
+      }
+    };
+  }
 
   /* ---- credits ---- */
-  v.appendChild(
-    el(`<section class="card"><details><summary>Nouveautés</summary>${newsHTML()}</details></section>`),
-  );
+  if (!isJa())
+    v.appendChild(
+      el(`<section class="card"><details><summary>Nouveautés</summary>${newsHTML()}</details></section>`),
+    );
   v.appendChild(
     el(`<section class="card"><details><summary>Confidentialité</summary><div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       <p style="margin:0"><b>Rien ne quitte votre téléphone sans vous.</b> Pas de compte, pas de serveur à nous : votre progression vit uniquement dans ce navigateur.</p>
@@ -229,7 +265,7 @@ export function viewSettings(): void {
     el(`<section class="card"><details><summary>Crédits</summary>
     <div class="small" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       <p style="margin:0">Tracés et ordre des traits : <a href="http://kanjivg.tagaini.net">KanjiVG</a>, d'Ulrich Apel, sous licence CC BY-SA 3.0.</p>
-      <p style="margin:0">Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Zen Maru Gothic et Yuji Syuku, via Google Fonts (SIL Open Font License).</p>
+      <p style="margin:0">Polices : Shippori Mincho B1, Zen Kaku Gothic New, Klee One, Shippori Mincho, Zen Maru Gothic et Yuji Syuku (SIL Open Font License), livrées avec l'appli.</p>
       <p style="margin:0">Code de l'appli : <a href="https://github.com/VictorMusta/Takoyaki-desu">github.com/VictorMusta/Takoyaki-desu</a>, licence MIT.</p>
     </div></details></section>`),
   );
