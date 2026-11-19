@@ -12,7 +12,7 @@ export const CHANGELOG: Release[] = [
   {
     v: "0.18.0",
     date: "2026-11-19",
-    items: ["Nouveau « Reliez » : signes en haut, syllabes en bas, un signe toujours sélectionné. Touchez sa syllabe pour tracer le lien ; on peut corriger ou effacer, et la vérification se fait à la fin."],
+    items: ["Nouveau « Reliez » : signes en haut, syllabes en bas, un signe toujours sélectionné. Touchez sa syllabe pour tracer le lien ; on peut corriger, « Effacer » retire le dernier lien, et la vérification se fait à la fin."],
   },
   {
     v: "0.17.2",

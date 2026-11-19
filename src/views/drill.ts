@@ -103,12 +103,12 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
         <svg class="mlinks" aria-hidden="true"></svg>
         <div class="mrow">${right.map((r, j) => `<button class="btn mk" data-j="${j}">${r}</button>`).join("")}</div>
       </div>`);
-      const tools = el(`<div class="opts-grid"><button class="btn" id="m-clr">Effacer</button><button class="btn primary" id="m-chk" disabled>Vérifier</button></div>`);
+      const tools = el(`<div class="opts-grid"><button class="btn" id="m-clr" disabled>Effacer</button><button class="btn primary" id="m-chk" disabled>Vérifier</button></div>`);
       body.appendChild(box);
       body.appendChild(tools);
       const tops = [...box.querySelectorAll<HTMLButtonElement>("[data-i]")], bots = [...box.querySelectorAll<HTMLButtonElement>("[data-j]")];
       const svg = box.querySelector<SVGSVGElement>(".mlinks")!;
-      const link = new Map<number, number>();
+      const link = new Map<number, number>(), order: number[] = []; // order: signs, last linked last
       let sel: number | null = 0, result: boolean[] | null = null;
       const nextFree = (from: number) => {
         for (let s2 = 1; s2 <= n; s2++) if (!link.has((from + s2) % n)) return (from + s2) % n;
@@ -127,6 +127,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
         tops.forEach((b, i) => { b.classList.toggle("sel", i === sel && !result); b.classList.toggle("linked", link.has(i)); });
         bots.forEach((b, j) => b.classList.toggle("linked", used.has(j)));
         $<HTMLButtonElement>("#m-chk", tools).disabled = link.size < n || !!result;
+        $<HTMLButtonElement>("#m-clr", tools).disabled = link.size === 0;
       };
       requestAnimationFrame(paint);
       const ro = new ResizeObserver(() => (box.isConnected ? paint() : ro.disconnect()));
@@ -140,14 +141,19 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
           const j = +b.dataset.j;
           link.forEach((jj, i) => jj === j && link.delete(i)); // a sound belongs to one sign
           link.set(sel, j);
+          order.splice(0, order.length, ...order.filter((i) => link.has(i) && i !== sel), sel);
           buzz("tick");
           sel = nextFree(sel);
         }
         paint();
       };
+      // « Effacer »: takes back the last link only, and selects its sign again.
       $<HTMLButtonElement>("#m-clr", tools).onclick = () => {
-        link.clear();
-        sel = 0;
+        const i = order.filter((x) => link.has(x)).pop();
+        if (i === undefined) return;
+        link.delete(i);
+        order.splice(order.lastIndexOf(i), 1);
+        sel = i;
         paint();
       };
       $<HTMLButtonElement>("#m-chk", tools).onclick = () => {
