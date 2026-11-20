@@ -9,10 +9,11 @@ import { viewWelcome } from "./views/welcome";
 import { viewInvite } from "./views/invite";
 import { viewTrain } from "./views/train";
 import { viewDuel } from "./views/duel";
+import { viewRules } from "./views/rules";
 import { maybeApplyUpdate } from "./pwa";
 
-export type Route = "seance" | "entrainement" | "progres" | "examen" | "reglages" | "invite" | "duel";
-const ROUTES: Route[] = ["seance", "entrainement", "progres", "examen", "reglages", "invite", "duel"];
+export type Route = "seance" | "entrainement" | "progres" | "examen" | "reglages" | "invite" | "duel" | "lecture";
+const ROUTES: Route[] = ["seance", "entrainement", "progres", "examen", "reglages", "invite", "duel", "lecture"];
 const NEW = "__new__";
 
 function current(): Route {
@@ -87,9 +88,10 @@ export function route(): void {
   }
   nav.classList.remove("hidden");
   // The exam lives in « S'entraîner »: that tab stays lit during it.
-  const tab = r === "examen" ? "entrainement" : r;
+  const tab = r === "examen" ? "entrainement" : r === "lecture" ? "progres" : r;
   nav.querySelectorAll("a").forEach((a) => a.setAttribute("aria-current", a.getAttribute("href") === "#" + tab ? "page" : "false"));
   if (r === "progres") return viewProgress();
+  if (r === "lecture") return viewRules();
   if (r === "examen") return viewExam();
   if (r === "entrainement") return viewTrain();
   if (r === "reglages") return viewSettings();

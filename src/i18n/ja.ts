@@ -628,4 +628,8 @@ export const JA: Record<string, string> = {
   "Nouvelle phrase": "新しい文",
   "Phrase utile": "使える文",
   "Remettez les blocs dans l'ordre.": "ブロックを正しい順に並べてください。",
+  "Comment ça se lit ?": "読み方は？",
+  "Toutes les règles": "読み方のきまり",
+  "Un petit signe (ゃ, ゅ, ょ, っ) se colle au signe d'avant et change sa lecture. Après votre réponse, « Comment ça se lit ? » montre le détail.": "小さい字（ゃ・ゅ・ょ・っ）は前の字とくっついて読み方が変わります。答えたあと「読み方は？」で確認できます。",
+  "Règles de lecture : petits signes, ten-ten…": "読み方のきまり：小さい字、濁点など",
 };

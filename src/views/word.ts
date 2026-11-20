@@ -5,6 +5,7 @@ import { byK } from "../data/kana";
 import { WORDS } from "../data/words";
 import { isPhrase, phraseOf, readingsOf, shown, spoken, tilesOf } from "../data/phrases";
 import { markOrder, mixed, orderBoard } from "../ui/order";
+import { readable, readButton } from "../ui/readhelp";
 import { LOOKALIKES, shuffle } from "../core/drills";
 import { profile } from "../core/store";
 import { romajiOk, wordOf } from "../core/vocab";
@@ -34,7 +35,7 @@ export function viewWord(it: QueueItem, head: string, onStep: () => void, done: 
     speak(w, true);
     // Romaji fade out: only for signs that do not hold 3 days yet; all solid → reading hidden behind a tap.
     const p = profile(), t = today(), bare = allSolid(p, w, t);
-    body.innerHTML = `<p class="drill-big kana-l" style="font-size:64px;margin:0">${w}</p>
+    body.innerHTML = `<p class="drill-big kana-l" style="font-size:64px;margin:0"${readable(w) ? ` data-read="${w}"` : ""}>${w}</p>
       ${bare ? `<button class="btn sm" id="showr" style="align-self:center">Voir la lecture</button><p class="reading hidden" id="rd">${r}</p>` : `<p class="reading">${r}</p>`}<p class="drill-big" style="font-family:var(--display);margin:0">${esc(fr)}</p>
       <div class="chips">${[...w].map((c) => `<span class="chip"><b>${c}</b>${solid(p, c, t) ? "" : byK[c]?.r ?? ""}</span>`).join("")}</div>
       <button class="btn primary big" id="ok">Je le retiens, on vérifie</button>`;
@@ -181,7 +182,8 @@ function viewPhrase(it: QueueItem, head: string, onStep: () => void, done: (g: G
   if (it.isNew && !it.step) {
     speak(spoken(ph.w), true);
     body.innerHTML = `<p class="drill-big" style="font-family:var(--display);margin:0">${esc(ph.fr)}</p>
-      <div class="order-bank">${tiles.map((x, i) => `<span class="otile btn"><span class="kana-l">${x}</span><small>${rs[i]}</small></span>`).join("")}</div>
+      <div class="order-bank" data-read="${ph.w}" title="Comment ça se lit ?">${tiles.map((x, i) => `<span class="otile btn"><span class="kana-l">${x}</span><small>${rs[i]}</small></span>`).join("")}</div>
+      ${readButton(ph.w)}
       <p class="reading">${shown(ph.r)}</p>
       <button class="btn primary big" id="ok">Je la retiens, on vérifie</button>`;
     $("#ok", body).onclick = () => {

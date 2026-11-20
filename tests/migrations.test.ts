@@ -54,3 +54,13 @@ describe("backups", () => {
     expect(readBackup('{"a":1}')).toBeNull();
   });
 });
+
+describe("2 → 3: small signs right after ya", () => {
+  it("every line open stays open (the small signs open with ra and beyond)", () => {
+    const mk = (u: number) => ({ cards: {}, unlocked: u, settings: { newPerDay: 5, revCap: 60, showNums: true }, days: {}, log: [], exams: [] });
+    const s = { v: 2, active: "a", profiles: { a: mk(5), b: mk(8), c: mk(9), d: mk(16), e: mk(20) } } as unknown as AppState;
+    migrate(s, 100);
+    const u = Object.fromEntries(Object.entries(s.profiles).map(([k, p]) => [k, p.unlocked]));
+    expect(u).toEqual({ a: 5, b: 8, c: 10, d: 16, e: 20 });
+  });
+});

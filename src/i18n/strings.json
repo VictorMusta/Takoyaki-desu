@@ -794,6 +794,27 @@
   ]
  },
  {
+  "s": "Comment ça se lit ?",
+  "files": [
+   "src/ui/readhelp.ts",
+   "src/views/word.ts"
+  ]
+ },
+ {
+  "s": "Fermer",
+  "files": [
+   "src/ui/readhelp.ts",
+   "src/ui/story.ts",
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Toutes les règles",
+  "files": [
+   "src/ui/readhelp.ts"
+  ]
+ },
+ {
   "s": "Lecture audio indisponible sur cet appareil.",
   "files": [
    "src/ui/speech.ts"
@@ -821,13 +842,6 @@
   "s": "découverts",
   "files": [
    "src/ui/story.ts"
-  ]
- },
- {
-  "s": "Fermer",
-  "files": [
-   "src/ui/story.ts",
-   "src/views/progress.ts"
   ]
  },
  {
@@ -1369,6 +1383,12 @@
  },
  {
   "s": "Traits vérifiés.",
+  "files": [
+   "src/views/drill.ts"
+  ]
+ },
+ {
+  "s": "Un petit signe (ゃ, ゅ, ょ, っ) se colle au signe d'avant et change sa lecture. Après votre réponse, « Comment ça se lit ? » montre le détail.",
   "files": [
    "src/views/drill.ts"
   ]
@@ -2286,6 +2306,12 @@
  },
  {
   "s": "Progrès de {0}",
+  "files": [
+   "src/views/progress.ts"
+  ]
+ },
+ {
+  "s": "Règles de lecture : petits signes, ten-ten…",
   "files": [
    "src/views/progress.ts"
   ]

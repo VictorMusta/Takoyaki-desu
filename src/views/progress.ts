@@ -70,6 +70,7 @@ export function viewProgress(): void {
     <details><summary class="small">Lire le tableau</summary><p class="small muted" style="margin:8px 0 0">Chaque case se remplit avec la maîtrise du signe : environ 33 % quand il tient un jour, 67 % à trois jours, et la case devient dorée (極) quand il tient une semaine. Une erreur la fait redescendre. À partir de 67 %, les romaji du signe ne sont plus affichés dans les mots.</p>
     <div class="legend"><span><i class="cell" aria-hidden="true">あ</i>Pas encore vu</span><span><i class="cell learn" style="--m:50%" aria-hidden="true">あ</i>En cours</span><span><i class="cell done" aria-hidden="true">あ</i>Maîtrisé</span></div>
     </details>
+    <a class="btn sm" href="#lecture" style="align-self:flex-start">Règles de lecture : petits signes, ten-ten…</a>
     <p class="small muted" style="margin:0">Touchez un signe pour voir sa fiche.</p>
     <div class="grid">${grid}</div></section>`),
   );

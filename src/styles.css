@@ -460,3 +460,24 @@ details.fine > summary{color:var(--wood)}
 .typo-row .key small{font-size:14px;color:var(--take)}
 .typo-row .key.wrong{border:1.5px solid var(--beni);color:var(--beni)}
 .typo-row .key.picked{background:var(--card);border-color:var(--ink)}
+/* « Comment ça se lit ? » */
+[data-read]:not(.btn){cursor:pointer;text-decoration:underline dotted color-mix(in srgb,var(--ink) 35%,transparent);text-underline-offset:6px}
+.read-btn{align-self:center}
+.read-table{width:100%;border-collapse:collapse;margin:8px 0}
+.read-table td{padding:6px 4px;border-bottom:var(--hair);vertical-align:middle}
+.read-table td.kana-l{font-family:var(--hand);font-weight:600;font-size:26px;white-space:nowrap}
+.read-table td.rd-r{font-size:18px;font-weight:600;white-space:nowrap}
+.read-card .rd-all{font-size:20px;letter-spacing:.02em}
+.read-table tr.rule td{background:color-mix(in srgb,var(--kin) 10%,transparent)}
+.read-table tr.sep td{border:0;padding:2px}
+.read-card h2.kana-l{font-family:var(--hand);font-size:30px;margin:0}
+/* Règles de lecture */
+.rules h3{margin:22px 0 6px}
+.rules p{line-height:1.7;margin:6px 0}
+.rules .kana-l{font-family:var(--hand);font-weight:600;font-size:20px}
+.rule-pairs{list-style:none;padding:0;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.rule-pairs li{border:var(--hair);padding:4px 10px;background:var(--card)}
+.rule-ex{list-style:none;padding:0;margin:8px 0;display:flex;flex-direction:column;gap:6px}
+.rule-ex li{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.rules .romaji{font-family:var(--body);font-size:16px;font-weight:600;letter-spacing:0}
+.rules .rule-ex .kana-l{font-size:24px}

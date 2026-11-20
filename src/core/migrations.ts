@@ -1,11 +1,12 @@
 import type { AppState } from "./types";
+import { LINES, OLD_H_LINES } from "../data/kana";
 
 /**
  * Saved data carries a format number `v`. Each change of format adds one step here, applied
  * in order to anything older: data stored on the phone at launch, and imported backups.
  * Steps never lose information, are covered by tests, and data from a newer app is left alone.
  */
-export const DATA_VERSION = 2;
+export const DATA_VERSION = 3;
 
 /** One step per version: step[n] turns version n into n + 1. */
 const STEPS: Record<number, (s: AppState, today: number) => void> = {
@@ -30,6 +31,17 @@ const STEPS: Record<number, (s: AppState, today: number) => void> = {
     }
   },
 };
+
+/** 2 → 3: the small signs line moved from last to right after ya. Every line open stays open. */
+function reorderLines(s: AppState): void {
+  const old = [...OLD_H_LINES, ...OLD_H_LINES.map((x) => x.toUpperCase())];
+  for (const p of Object.values(s.profiles)) {
+    if (!p.unlocked) continue;
+    const open = old.slice(0, p.unlocked).map((ln) => LINES.indexOf(ln));
+    p.unlocked = Math.max(...open) + 1;
+  }
+}
+STEPS[2] = reorderLines;
 
 export interface Migrated {
   state: AppState;

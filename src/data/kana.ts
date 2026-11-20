@@ -15,11 +15,14 @@ export interface Kana {
 export const KANA = raw as Kana[];
 
 /**
- * Lines of the tables, in teaching order. Hiragana first: the 46 base signs, then the voiced ones
- * (dakuten ゛ and handakuten ゜), then the small signs used for combinations (きゃ) and doubling (っ).
- * Then katakana, same order (ids in capitals), ending with the small signs and the long-vowel bar ー.
+ * Lines of the tables, in teaching order. Hiragana first: the base signs up to ya, then the small
+ * signs (combinations きゃ, doubling っ: met everywhere, and they need ya yu yo and the « i » signs),
+ * then ra, wa and the voiced ones (dakuten ゛, handakuten ゜). Then katakana, same order (ids in
+ * capitals; its small signs come with the long-vowel bar ー).
  */
-const H_LINES = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "ga", "za", "da", "ba", "pa", "petits"] as const;
+const H_LINES = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "petits", "ra", "wa", "ga", "za", "da", "ba", "pa"] as const;
+/** The order before 0.20 (small signs last), for the data migration. */
+export const OLD_H_LINES = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "ga", "za", "da", "ba", "pa", "petits"] as const;
 export const LINES = [...H_LINES, ...H_LINES.map((x) => x.toUpperCase())] as readonly string[];
 /** Index of the first katakana line. */
 export const KATA_START = H_LINES.length;

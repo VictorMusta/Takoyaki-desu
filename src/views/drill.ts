@@ -6,6 +6,8 @@ import { profile } from "../core/store";
 import { $, el, esc, view } from "../ui/dom";
 import { kanaField, kanaKeyboard } from "../ui/keyboard";
 import { markOrder, mixed, orderBoard } from "../ui/order";
+import { readable, readButton } from "../ui/readhelp";
+import { coachAt } from "../ui/coach";
 import { tileHints } from "./word";
 import { modelSVG, userSVG, type Stroke } from "../ui/model";
 import { makePad } from "../ui/pad";
@@ -48,13 +50,17 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
   const body = $("#body", card);
   const sayBtn = card.querySelector<HTMLButtonElement>("#say");
   if (sayBtn) sayBtn.onclick = () => speak(d.say!);
+  // The word or sentence of the exercise, for « Comment ça se lit ? » once answered.
+  const said = (d.full ?? (d.type === "word" || d.type === "sentence" || d.type === "pickword" || d.type === "combo" ? d.answer ?? d.prompt : "") ?? "").replace(/\|/g, " ");
   const next = (ok: boolean, missed: string[], note = "") => {
     buzz(ok ? "ok" : "ko");
-    const end = el(`<div class="drill-end"><p class="${ok ? "good" : "bad"}">${ok ? "Juste." : "Pas tout à fait."}${note ? " " + note : ""}</p><button class="btn primary big" id="cont">Continuer</button></div>`);
+    const end = el(`<div class="drill-end"><p class="${ok ? "good" : "bad"}">${ok ? "Juste." : "Pas tout à fait."}${note ? " " + note : ""}</p>${said ? readButton(said) : ""}<button class="btn primary big" id="cont">Continuer</button></div>`);
     body.appendChild(end);
     $<HTMLButtonElement>("#cont", end).onclick = () => done(ok, missed);
     $<HTMLButtonElement>("#cont", end).focus();
   };
+
+  if (said && /[ゃゅょっャュョッァィゥェォ]/.test(said)) coachAt("small-signs", "Un petit signe (ゃ, ゅ, ょ, っ) se colle au signe d'avant et change sa lecture. Après votre réponse, « Comment ça se lit ? » montre le détail.", body);
 
   switch (d.type) {
     case "choose":
@@ -220,7 +226,7 @@ export function viewDrill(d: Drill, head: string, done: DrillDone): void {
     case "cloze": {
       const chars = [...d.full!];
       const shown = chars.map((c, i) => (i === d.gap ? `<span class="gap" id="gap">？</span>` : c === " " ? " " : c)).join("");
-      body.appendChild(el(`<div><p class="drill-big kana-l" style="white-space:pre-wrap">${shown}</p><p class="reading">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
+      body.appendChild(el(`<div><p class="drill-big kana-l" style="white-space:pre-wrap"${readable(d.full ?? "") ? ` data-read="${esc(d.full!)}"` : ""}>${shown}</p><p class="reading">${d.reading}</p><p class="small muted" style="margin:0;text-align:center">${esc(d.meaning!)}</p></div>`));
       const answer = (k: string) => {
         if (kb.dataset.done) return;
         kb.dataset.done = "1";
@@ -334,7 +340,7 @@ function textDrill(body: HTMLElement, t: Text, done: DrillDone): void {
   body.appendChild(guess);
   $("#show", guess).onclick = () => {
     $("#show", guess).remove();
-    const rows = t.parts.filter((x) => x.r).map((x) => `<tr><td class="kana-s">${x.t}</td><td>${x.r}</td><td>${esc(x.fr)}</td></tr>`).join("");
+    const rows = t.parts.filter((x) => x.r).map((x) => `<tr><td class="kana-s"${readable(x.t) ? ` data-read="${esc(x.t)}"` : ""}>${x.t}</td><td>${x.r}</td><td>${esc(x.fr)}</td></tr>`).join("");
     body.appendChild(el(`<div class="corr"><p style="margin:0"><b>${esc(t.fr)}</b></p><table>${rows}</table></div>`));
     const g = el(`<div class="opts-grid three"><button class="btn" data-g="0">Pas compris</button><button class="btn" data-g="1">En partie</button><button class="btn g-bien" data-g="2">Compris</button></div>`);
     body.appendChild(g);

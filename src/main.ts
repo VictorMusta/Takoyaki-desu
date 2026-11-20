@@ -11,6 +11,7 @@ import { isJa, langFromUrl, startTranslation } from "./i18n";
 import { renderNotesButton } from "./ui/notes";
 import { trackActivity } from "./ui/activity";
 import { setupSwipe } from "./ui/swipe";
+import { setupReadHelp } from "./ui/readhelp";
 
 langFromUrl();
 applyTheme();
@@ -23,6 +24,7 @@ window.addEventListener("hashchange", route);
 route();
 renderNotesButton();
 trackActivity();
+setupReadHelp();
 setupSwipe();
 announceUpdate();
 // « Quoi de neuf ? » is written for the French app; testers in Japanese don't need it.

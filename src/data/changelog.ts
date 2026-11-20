@@ -10,6 +10,15 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.20.0",
+    date: "2026-11-20",
+    items: [
+      "Nouvelle page « Règles de lecture » (Progrès) : ten-ten, petits ya yu yo, petit tsu, voyelles longues, particules, expliqués avec des exemples.",
+      "« Comment ça se lit ? » : après chaque exercice, et en touchant un mot souligné, le mot est découpé son par son (い i · ら ra · っしゃ ssha…), avec la règle qui joue.",
+      "Les petits signes (ゃ ゅ ょ っ) arrivent maintenant juste après la ligne ya, au lieu de tout à la fin. Les lignes déjà ouvertes le restent.",
+    ],
+  },
+  {
     v: "0.19.0",
     date: "2026-11-19",
     items: [
