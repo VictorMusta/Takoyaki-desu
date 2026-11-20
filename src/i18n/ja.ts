@@ -669,4 +669,6 @@ export const JA: Record<string, string> = {
   "Pas encore d'adversaire.": "まだ相手がいません。",
   "Jouer sur le téléphone de quelqu'un d'autre": "相手のスマホで対戦する",
   "Envoyez-lui votre lien : en l'ouvrant sur son téléphone, votre nom apparaît dans sa liste d'adversaires, ici même. Pour jouer sur le vôtre, demandez-lui le sien. Le lien emporte les signes et les mots que vous connaissez, pas vos révisions.": "自分のリンクを送ってください。相手がスマホで開くと、相手のこの画面にあなたの名前が出ます。自分のスマホで対戦するには、相手のリンクをもらってください。リンクで送られるのは知っている文字と言葉だけで、復習の記録は含まれません。",
+  "C'est votre propre lien": "自分のリンクです",
+  "Il est fait pour être envoyé : la personne qui l'ouvre sur son téléphone pourra se comparer à vous, ou jouer contre vous en duel face à face. Pour vous comparer à elle, demandez-lui le sien.": "このリンクは相手に送るためのものです。相手がスマホで開くと、あなたとくらべたり、向かい合って対戦したりできます。相手とくらべるには、相手のリンクをもらってください。",
 };

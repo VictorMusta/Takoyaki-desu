@@ -81,8 +81,16 @@ export function viewDuel(code: string): void {
     v.appendChild(el(`<section class="card"><h2>Lien illisible</h2><p style="margin:0">Ce lien de comparaison est incomplet ou abîmé. Demandez-en un nouveau.</p></section>`));
     return;
   }
+  // Your own link, opened on your own phone (to check it): nothing to compare, keep nothing.
+  const self = hasProfile() ? state.active : "";
+  if (self) forgetRival(self);
+  if (them && them.n === self) {
+    v.appendChild(el(`<section class="card"><h2>C'est votre propre lien</h2><p style="margin:0">Il est fait pour être envoyé : la personne qui l'ouvre sur son téléphone pourra se comparer à vous, ou jouer contre vous en duel face à face. Pour vous comparer à elle, demandez-lui le sien.</p><div class="row"><button class="btn primary" id="send">Envoyer mon lien</button></div></section>`));
+    v.querySelector<HTMLButtonElement>("#send")!.onclick = () => void shareMyLink();
+    return;
+  }
   if (them) keepRival(them);
-  const list = Object.values(rivals()).sort((a, b) => a.n.localeCompare(b.n));
+  const list = Object.values(rivals()).filter((s) => s.n !== self).sort((a, b) => a.n.localeCompare(b.n));
   const other = them ?? list[0];
   if (!other) {
     v.appendChild(el(`<section class="card"><h2>Se comparer</h2><p style="margin:0">Envoyez votre lien à quelqu'un qui utilise l'appli, et demandez-lui le sien : en l'ouvrant, vous verrez vos progressions côte à côte.</p><div class="row"><button class="btn primary" id="send">Envoyer mon lien</button></div></section>`));

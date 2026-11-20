@@ -1448,6 +1448,12 @@
   ]
  },
  {
+  "s": "C'est votre propre lien",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
   "s": "Ce lien de comparaison est incomplet ou abîmé. Demandez-en un nouveau.",
   "files": [
    "src/views/duel.ts"
@@ -1494,6 +1500,12 @@
  },
  {
   "s": "Hiragana maîtrisés",
+  "files": [
+   "src/views/duel.ts"
+  ]
+ },
+ {
+  "s": "Il est fait pour être envoyé : la personne qui l'ouvre sur son téléphone pourra se comparer à vous, ou jouer contre vous en duel face à face. Pour vous comparer à elle, demandez-lui le sien.",
   "files": [
    "src/views/duel.ts"
   ]
