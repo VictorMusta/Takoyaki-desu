@@ -16,7 +16,11 @@ export function viewRules(): void {
     <p>Un kana se lit presque toujours tout seul : か, c'est « ka », partout. Seules cinq règles changent la lecture. Ce n'est pas de la grammaire, plutôt de l'orthographe, comme nos accents. Touchez un exemple pour le voir son par son.</p>
 
     <h3>1. Ten-ten et maru : la consonne change</h3>
-    <p>Deux petits traits (<b>゛</b>, « ten-ten », en japonais <i>dakuten</i>) ou un petit rond (<b>゜</b>, « maru », <i>handakuten</i>) en haut à droite d'un signe changent sa consonne. La voyelle ne bouge pas.</p>
+    <p>Deux petits traits en haut à droite d'un signe changent sa consonne. On les appelle le <b>ten-ten</b> (en japonais <i>dakuten</i>). Un petit rond à la même place, le <b>maru</b> (<i>handakuten</i>), fait la même chose, seulement sur la ligne ha. La voyelle, elle, ne bouge pas.</p>
+    <div class="marks">
+      <div class="mark"><span class="kana-xl">か</span><span class="plus">+</span><span class="kana-xl beni">゛</span><span class="plus">=</span><span class="kana-xl">が</span><small>ka → ga · le ten-ten</small></div>
+      <div class="mark"><span class="kana-xl">は</span><span class="plus">+</span><span class="kana-xl beni">゜</span><span class="plus">=</span><span class="kana-xl">ぱ</span><small>ha → pa · le maru</small></div>
+    </div>
     <ul class="rule-pairs"><li>か ka → が <b>g</b>a</li><li>さ sa → ざ <b>z</b>a</li><li>た ta → だ <b>d</b>a</li><li>は ha → ば <b>b</b>a</li><li>は ha → ぱ <b>p</b>a (avec le rond)</li></ul>
     <ul class="rule-ex">${ex("かぎ", "kagi", "clé")}${ex("ぱん", "pan", "pain")}</ul>
 
