@@ -125,7 +125,7 @@ export function viewDuel(code: string): void {
     <svg viewBox="0 0 318 116" role="img" aria-label="Minutes de pratique par jour sur 14 jours, ${me ? esc(me.n) + " et " : ""}${esc(other.n)}">${bars}<line x1="0" y1="110.5" x2="318" y2="110.5" class="axis"/></svg>
     <p class="small muted legend2"><span class="k-me"></span>${me ? esc(me.n) : "Vous"} <span class="k-them"></span>${esc(other.n)}</p>
     <p class="small muted" style="margin:0">Progression de ${esc(other.n)} au ${fmtDate(other.at)}. Pour la mettre à jour, demandez-lui un nouveau lien.</p>
-    <div class="row">${me ? `<button class="btn primary" id="send">Envoyer mon lien</button>` : `<a class="btn primary" href="#seance">Commencer à apprendre</a>`}${list.length > 1 ? list.filter((s) => s.n !== other.n).map((s) => `<button class="btn" data-r="${esc(s.n)}">Avec ${esc(s.n)}</button>`).join("") : ""}</div>
+    <div class="row">${me && other.ks ? `<a class="btn primary" href="#face">Duel face à face</a>` : ""}${me ? `<button class="btn${other.ks ? "" : " primary"}" id="send">Envoyer mon lien</button>` : `<a class="btn primary" href="#seance">Commencer à apprendre</a>`}${list.length > 1 ? list.filter((s) => s.n !== other.n).map((s) => `<button class="btn" data-r="${esc(s.n)}">Avec ${esc(s.n)}</button>`).join("") : ""}</div>
     </section>`),
   );
   v.querySelector<HTMLButtonElement>("#send")?.addEventListener("click", () => void shareMyLink());

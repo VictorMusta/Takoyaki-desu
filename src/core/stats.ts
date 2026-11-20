@@ -1,4 +1,5 @@
 import { isKata, KANA } from "../data/kana";
+import { signsOf, WORDS } from "../data/words";
 import { alphabetMastery, kataStarted, status, streak } from "./scheduler";
 import type { Profile } from "./types";
 import { knownWordCount } from "./vocab";
@@ -66,6 +67,9 @@ export interface Snapshot {
   s: number;
   /** The last 28 days with activity: [day, new signs, reviews, exercises, active minutes, misses]. */
   d: [number, number, number, number, number, number][];
+  /** Signs seen and words known, as bit sets in KANA / WORDS order (for the face-to-face duel). */
+  ks?: string;
+  ws?: string;
 }
 
 export function snapshot(p: Profile, name: string, t: number): Snapshot {
@@ -76,13 +80,38 @@ export function snapshot(p: Profile, name: string, t: number): Snapshot {
   const d = history(p)
     .filter((l) => l.d > t - 28)
     .map((l) => [l.d, l.nw, l.rv, l.ex, l.min, l.ko] as [number, number, number, number, number, number]);
-  return { v: 1, n: name.slice(0, 30), at: t, h: script(false), ...(kataStarted(p) ? { k: script(true) } : {}), w: knownWordCount(p), s: streak(p, t), d };
+  return {
+    v: 1, n: name.slice(0, 30), at: t, h: script(false), ...(kataStarted(p) ? { k: script(true) } : {}), w: knownWordCount(p), s: streak(p, t), d,
+    ks: toBits(KANA.map((k) => !!p.cards[k.k]?.seen)),
+    ws: toBits(WORDS.map(([w]) => wordKnown(p, w))),
+  };
 }
+
+/** A word counts as known if it was learnt, or if all its signs were seen. */
+export const wordKnown = (p: Profile, w: string) => !!p.words?.[w]?.seen || signsOf(w).every((c) => p.cards[c]?.seen);
+
+export const toBits = (flags: boolean[]) => {
+  const b = new Uint8Array(Math.ceil(flags.length / 8));
+  flags.forEach((f, i) => f && (b[i >> 3] |= 1 << (i & 7)));
+  return b64url(b);
+};
+export const fromBits = (s: string, n: number): boolean[] => {
+  try {
+    const b = unb64url(s);
+    return Array.from({ length: n }, (_, i) => !!((b[i >> 3] ?? 0) & (1 << (i & 7))));
+  } catch {
+    return Array(n).fill(false);
+  }
+};
 
 /* ---------- in a link ---------- */
 
-const b64url = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-const unb64url = (s: string) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+function b64url(bytes: Uint8Array): string {
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function unb64url(s: string): Uint8Array {
+  return Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+}
 
 export const encodeSnapshot = (s: Snapshot) => b64url(new TextEncoder().encode(JSON.stringify(s)));
 
@@ -94,6 +123,7 @@ export function decodeSnapshot(code: string): Snapshot | null {
     if (o?.v !== 1 || typeof o.n !== "string" || !Number.isFinite(o.at) || !trio(o.h) || (o.k && !trio(o.k))) return null;
     if (!Number.isFinite(o.w) || !Number.isFinite(o.s) || !Array.isArray(o.d)) return null;
     if (!o.d.every((r) => Array.isArray(r) && r.length === 6 && r.every((n) => Number.isFinite(n)))) return null;
+    if ((o.ks && typeof o.ks !== "string") || (o.ws && typeof o.ws !== "string")) return null;
     return { ...o, n: o.n.slice(0, 30) };
   } catch {
     return null;

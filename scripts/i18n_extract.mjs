@@ -12,7 +12,7 @@ const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirect
 // The reading rules (page and breakdown) teach Japanese to French speakers: not for the Japanese interface.
 const SKIP = /\/(data\/(words|phrases|examples|mnemonics|texts|font-chars|changelog|gloss-ja)|i18n\/|core\/reading|views\/rules)|\.d\.ts$/;
 // Code that happens to look like words: selectors, CSS, API names, locales.
-const IGNORE = new Set(["AbortError", "NFD", "UTC", "fr-FR", "ja-JP", "Escape", "Enter", "kyōkasho", "KanjiVG", "OK", "btn sm quit", "verdict ok", "no share", "primary big", "bold 20px system-ui", "var(--beni)", "github.com/VictorMusta/Takoyaki-desu", "Missing element {0}", "class=\"cal-t\"", "Takoyaki desu", "Mincho", "KA", "2-digit", "nav a"]);
+const IGNORE = new Set(["AbortError", "NFD", "UTC", "fr-FR", "ja-JP", "Escape", "Enter", "kyōkasho", "KanjiVG", "OK", "btn sm quit", "verdict ok", "no share", "primary big", "bold 20px system-ui", "var(--beni)", "github.com/VictorMusta/Takoyaki-desu", "Missing element {0}", "class=\"cal-t\"", "Takoyaki desu", "Mincho", "KA", "2-digit", "nav a", "f2f-half", "f2f-half end", "f2f-half end top", "f2f-half top"]);
 // Mail subjects and bodies sent to the author: they stay in French, he reads them.
 const AUTHOR_ONLY = /^Takoyaki desu [:·] |^Bonjour, \(Ce qui vous plaît/;
 const files = [...walk(join(ROOT, "src"))].filter((f) => f.endsWith(".ts") && !SKIP.test(f));

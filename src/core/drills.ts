@@ -69,7 +69,7 @@ export const LOOKALIKES: string[][] = [
   ["マ", "ム", "ア"], ["チ", "テ"], ["セ", "ヤ"], ["ヒ", "ビ"], ["ナ", "メ"], ["ル", "レ"], ["ノ", "メ"], ["エ", "ユ"],
 ];
 
-type Rnd = () => number;
+export type Rnd = () => number;
 const pick = <T>(a: T[], rnd: Rnd): T => a[Math.floor(rnd() * a.length)];
 export function shuffle<T>(a: T[], rnd: Rnd): T[] {
   const b = a.slice();

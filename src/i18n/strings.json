@@ -97,6 +97,36 @@
   ]
  },
  {
+  "s": "À l'oreille",
+  "files": [
+   "src/core/f2f.ts"
+  ]
+ },
+ {
+  "s": "Le bon mot",
+  "files": [
+   "src/core/f2f.ts"
+  ]
+ },
+ {
+  "s": "Le plus rapide",
+  "files": [
+   "src/core/f2f.ts"
+  ]
+ },
+ {
+  "s": "Lecture",
+  "files": [
+   "src/core/f2f.ts"
+  ]
+ },
+ {
+  "s": "Les sosies",
+  "files": [
+   "src/core/f2f.ts"
+  ]
+ },
+ {
   "s": "{0} caractères maximum.",
   "files": [
    "src/core/profiles.ts"
@@ -1436,6 +1466,14 @@
   ]
  },
  {
+  "s": "Duel face à face",
+  "files": [
+   "src/views/duel.ts",
+   "src/views/face.ts",
+   "src/views/train.ts"
+  ]
+ },
+ {
   "s": "Envoyer mon lien",
   "files": [
    "src/views/duel.ts"
@@ -1613,6 +1651,170 @@
   "s": "Voir la calibration",
   "files": [
    "src/views/exam.ts"
+  ]
+ },
+ {
+  "s": "{0} · {1} signes et {2} mots en commun",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "{0} et {1} · {2} partie{3}",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "{0} manches · {1}",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "{0}, c'est votre moitié.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Aucune partie pour l'instant.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "D'après son lien",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Dernières parties",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Écouter à nouveau",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Égalité",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Égalités : {0}",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Fin de la partie",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Gagné !",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Historique des duels",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Jouer",
+  "files": [
+   "src/views/face.ts",
+   "src/views/more.ts",
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Parties gagnées",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Pas assez de signes en commun",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Pas encore d'adversaire. Créez son profil sur ce téléphone (Réglages › Profils), ou ouvrez le lien « Se comparer » qu'elle ou il vous envoie, depuis une version récente de l'appli.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Perdu",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Personne : trop tard.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Point pour {0}.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Point pour vous !",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Posez le téléphone à plat entre vous deux : chacun a sa moitié d'écran, à l'endroit. Même question pour les deux, le premier qui touche la bonne réponse marque le point. Une erreur bloque une seconde. Seulement les signes et les mots que vous connaissez tous les deux.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Prêts ?",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Profil sur ce téléphone",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Quitter",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Revanche",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
+  "s": "Terminer",
+  "files": [
+   "src/views/face.ts"
   ]
  },
  {
@@ -1982,13 +2184,6 @@
   "s": "Encore {0} révision(s) prévue(s) aujourd'hui au-delà de votre plafond : faites-les avant d'apprendre de nouveaux signes.",
   "files": [
    "src/views/more.ts"
-  ]
- },
- {
-  "s": "Jouer",
-  "files": [
-   "src/views/more.ts",
-   "src/views/train.ts"
   ]
  },
  {
@@ -3268,6 +3463,12 @@
   ]
  },
  {
+  "s": "À deux",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
   "s": "Apprendre {0} mots",
   "files": [
    "src/views/train.ts"
@@ -3341,6 +3542,12 @@
  },
  {
   "s": "Un jeu précis",
+  "files": [
+   "src/views/train.ts"
+  ]
+ },
+ {
+  "s": "Un téléphone entre vous deux, le plus rapide gagne",
   "files": [
    "src/views/train.ts"
   ]

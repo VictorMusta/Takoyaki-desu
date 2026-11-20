@@ -10,6 +10,16 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.21.0",
+    date: "2026-11-20",
+    items: [
+      "Duel face à face (S'entraîner › À deux) : un téléphone posé entre vous deux, chacun sa moitié d'écran à l'endroit, 10 manches sur les signes et les mots que vous connaissez tous les deux. Le premier qui touche la bonne réponse marque le point.",
+      "5 mini-jeux : le plus rapide, lecture, le bon mot, à l'oreille, les sosies.",
+      "Historique des duels : parties gagnées et classement par mini-jeu entre deux personnes. Il n'apparaît que là, jamais à la fin d'une partie.",
+      "Le lien « Se comparer » contient maintenant vos signes et vos mots, pour jouer contre quelqu'un qui n'a pas de profil sur votre téléphone.",
+    ],
+  },
+  {
     v: "0.20.0",
     date: "2026-11-20",
     items: [

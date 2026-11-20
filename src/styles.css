@@ -487,3 +487,32 @@ details.fine > summary{color:var(--wood)}
 .mark .kana-xl{font-family:var(--hand);font-weight:600;font-size:44px;line-height:1.1;min-width:44px;text-align:center}
 .mark .kana-xl.beni{color:var(--beni);font-size:52px}
 .mark .plus{font-size:22px;color:var(--wood)}
+/* Duel face à face: the top half turned round */
+.f2f{position:fixed;inset:0;z-index:30;display:grid;grid-template-rows:1fr auto 1fr;background:var(--paper);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.f2f-half{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px 16px calc(14px + env(safe-area-inset-bottom));min-height:0;transition:opacity .15s}
+.f2f-half.top{transform:rotate(180deg);padding-bottom:14px;padding-top:calc(14px + env(safe-area-inset-top))}
+.f2f-half.locked{opacity:.45}
+.f2f-head{display:flex;justify-content:space-between;align-items:baseline}
+.f2f-score{font-family:var(--display);font-size:28px}
+.f2f-q{text-align:center;line-height:1.1}
+.f2f-q.kana{font-family:var(--hand);font-weight:600;font-size:64px}
+.f2f-q.romaji{font-family:var(--display);font-size:44px}
+.f2f-q.meaning{font-family:var(--display);font-size:24px}
+.f2f-say{align-self:center}
+.f2f-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.f2f-o{min-height:62px;font-size:24px}
+.f2f-o.kana{font-family:var(--hand);font-weight:600;font-size:32px}
+.f2f-o.right{background:var(--take);border-color:var(--take);color:var(--on-take)}
+.f2f-o.wrong{border:1.5px solid var(--beni);color:var(--beni)}
+.f2f-msg{margin:0;min-height:1.4em;text-align:center;font-size:14px}
+.f2f-mid{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 16px;border-block:1.5px solid var(--ink);background:var(--card);font-size:13px}
+.f2f-res{font-family:var(--display);font-size:34px;text-align:center}
+.f2f-final{font-family:var(--display);font-size:56px;text-align:center}
+body:has(.f2f) .note-fab{display:none}
+.face-op{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:var(--hair)}
+.face-board{width:100%;border-collapse:collapse;margin-top:8px}
+.face-board th,.face-board td{padding:6px 4px;border-bottom:var(--hair);text-align:center}
+.face-board th[scope=row]{text-align:left;font-weight:400}
+.face-board td.win{color:var(--take);font-weight:600}
+.face-board tr.tot th,.face-board tr.tot td{font-weight:600}
+.face-last{margin:0;padding-left:18px;font-size:14px}

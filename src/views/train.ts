@@ -45,6 +45,9 @@ export function viewTrain(): void {
       <button class="btn tile" id="w-review" ${learned ? "" : "disabled"}><b aria-hidden="true">復</b><span>Réviser mes mots</span><small>${learned ? (due ? `${due} à revoir aujourd'hui, puis des jeux` : `${learned} appris, en jeux`) : "Après vos premiers mots"}</small></button>
     </div></section>`),
   );
+  v.appendChild(
+    el(`<section class="card"><h3>À deux</h3><div class="train-main"><a class="btn tile" href="#face"><b aria-hidden="true">対</b><span>Duel face à face</span><small>Un téléphone entre vous deux, le plus rapide gagne</small></a></div></section>`),
+  );
   v.appendChild(el(`<section class="card"><h3>Un jeu précis</h3><div class="modes">${fam}</div></section>`));
   v.appendChild(
     el(`<section class="card"><h3>Examen strict</h3>

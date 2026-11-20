@@ -7,7 +7,7 @@ const MIN_DX = 40; // px: a short flick is enough (asked for, even at the cost o
 const MAX_MS = 800;
 
 function blocked(t: EventTarget | null): boolean {
-  if (document.querySelector("#prof .quit, .modal") || document.querySelector("nav")?.classList.contains("hidden")) return true;
+  if (document.querySelector("#prof .quit, .modal, .f2f") || document.querySelector("nav")?.classList.contains("hidden")) return true;
   for (let n = t instanceof Element ? t : null; n && n !== document.body; n = n.parentElement) {
     if (n.matches(".stage, .kbd, input, textarea, select, [contenteditable], .seg")) return true;
     if (n.scrollWidth > n.clientWidth + 2 && getComputedStyle(n).overflowX.match(/auto|scroll/)) return true;
