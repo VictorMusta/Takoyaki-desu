@@ -1476,7 +1476,8 @@
  {
   "s": "Envoyer mon lien",
   "files": [
-   "src/views/duel.ts"
+   "src/views/duel.ts",
+   "src/views/face.ts"
   ]
  },
  {
@@ -1714,6 +1715,12 @@
   ]
  },
  {
+  "s": "Envoyez-lui votre lien : en l'ouvrant sur son téléphone, votre nom apparaît dans sa liste d'adversaires, ici même. Pour jouer sur le vôtre, demandez-lui le sien. Le lien emporte les signes et les mots que vous connaissez, pas vos révisions.",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
   "s": "Fin de la partie",
   "files": [
    "src/views/face.ts"
@@ -1740,6 +1747,12 @@
   ]
  },
  {
+  "s": "Jouer sur le téléphone de quelqu'un d'autre",
+  "files": [
+   "src/views/face.ts"
+  ]
+ },
+ {
   "s": "Parties gagnées",
   "files": [
    "src/views/face.ts"
@@ -1752,7 +1765,7 @@
   ]
  },
  {
-  "s": "Pas encore d'adversaire. Créez son profil sur ce téléphone (Réglages › Profils), ou ouvrez le lien « Se comparer » qu'elle ou il vous envoie, depuis une version récente de l'appli.",
+  "s": "Pas encore d'adversaire.",
   "files": [
    "src/views/face.ts"
   ]

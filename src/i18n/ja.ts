@@ -666,4 +666,7 @@ export const JA: Record<string, string> = {
   "Terminer": "終わる",
   "À deux": "二人で",
   "Un téléphone entre vous deux, le plus rapide gagne": "一台のスマホで、早い者勝ち",
+  "Pas encore d'adversaire.": "まだ相手がいません。",
+  "Jouer sur le téléphone de quelqu'un d'autre": "相手のスマホで対戦する",
+  "Envoyez-lui votre lien : en l'ouvrant sur son téléphone, votre nom apparaît dans sa liste d'adversaires, ici même. Pour jouer sur le vôtre, demandez-lui le sien. Le lien emporte les signes et les mots que vous connaissez, pas vos révisions.": "自分のリンクを送ってください。相手がスマホで開くと、相手のこの画面にあなたの名前が出ます。自分のスマホで対戦するには、相手のリンクをもらってください。リンクで送られるのは知っている文字と言葉だけで、復習の記録は含まれません。",
 };

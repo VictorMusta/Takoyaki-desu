@@ -6,7 +6,7 @@ import { isJa } from "../i18n";
 import { el, esc, view } from "../ui/dom";
 import { buzz } from "../ui/haptics";
 import { speak } from "../ui/speech";
-import { rivals } from "./duel";
+import { rivals, shareMyLink } from "./duel";
 
 /**
  * « Duel face à face » : one phone flat between two players, the top half turned round. Same
@@ -49,9 +49,13 @@ export function viewFace(): void {
   v.appendChild(
     el(`<section class="card"><h2>Duel face à face</h2>
     <p style="margin:0">Posez le téléphone à plat entre vous deux : chacun a sa moitié d'écran, à l'endroit. Même question pour les deux, le premier qui touche la bonne réponse marque le point. Une erreur bloque une seconde. Seulement les signes et les mots que vous connaissez tous les deux.</p>
-    ${rows || `<p class="small muted" style="margin:0">Pas encore d'adversaire. Créez son profil sur ce téléphone (Réglages › Profils), ou ouvrez le lien « Se comparer » qu'elle ou il vous envoie, depuis une version récente de l'appli.</p>`}
+    ${rows || `<p class="small muted" style="margin:0">Pas encore d'adversaire.</p>`}
+    <h3>Jouer sur le téléphone de quelqu'un d'autre</h3>
+    <p class="small" style="margin:0">Envoyez-lui votre lien : en l'ouvrant sur son téléphone, votre nom apparaît dans sa liste d'adversaires, ici même. Pour jouer sur le vôtre, demandez-lui le sien. Le lien emporte les signes et les mots que vous connaissez, pas vos révisions.</p>
+    <div class="row"><button class="btn" id="face-send" type="button">Envoyer mon lien</button></div>
     </section>`),
   );
+  v.querySelector<HTMLButtonElement>("#face-send")!.onclick = () => void shareMyLink();
   v.querySelectorAll<HTMLButtonElement>("[data-op]").forEach((b) => (b.onclick = () => play(me, ops[+b.dataset.op!].k)));
   v.appendChild(historyCard());
 }
