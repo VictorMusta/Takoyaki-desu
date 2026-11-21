@@ -311,20 +311,26 @@ function next(k: string, g: Grade | "peek"): void {
   viewRetry(k);
 }
 
-function viewRetry(k: string): void {
+/** stencil: the same second try, traced inside the stencil to see where it goes wrong; it never adds practice. */
+function viewRetry(k: string, stencil = false): void {
   const K = byK[k];
   const show = profile().settings.showNums;
   const v = view();
   v.innerHTML = "";
   v.appendChild(
     el(`<section class="card">
-    <div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">Deuxième essai · de mémoire</div></div><div class="row"><button class="btn sm" id="say">Écouter</button></div></div>
-    <p class="small muted" style="margin:0">Corrigez tout de suite, pendant que la correction est fraîche. Votre note ne change pas ; une réussite fait un peu progresser le signe.</p>
+    <div class="prompt"><div><div class="romaji">${sound(K.k)}</div><div class="small muted">Deuxième essai · ${stencil ? "au pochoir" : "de mémoire"}</div></div><div class="row"><button class="btn sm" id="say">Écouter</button></div></div>
+    <p class="small muted" style="margin:0">${
+      stencil
+        ? "Tracez dans le pochoir, en suivant les numéros : le geste juste, pour voir ce qui coinçait. Votre note ne change pas."
+        : "Corrigez tout de suite, pendant que la correction est fraîche. Votre note ne change pas ; une réussite fait un peu progresser le signe."
+    }</p>
     <div class="stage" id="st"></div>
     <div class="tools"><button class="btn" id="undo" aria-label="Revenir un trait en arrière">Arrière</button><button class="btn" id="clr">Recommencer</button><button class="btn primary" id="cmp2" disabled>Comparer</button></div>
-    <div class="row"><button class="btn" id="skip">Passer à la suite</button></div></section>`),
+    <div class="row"><button class="btn" id="sten">${stencil ? "De mémoire" : "Au pochoir"}</button><button class="btn" id="skip">Passer à la suite</button></div></section>`),
   );
-  const pad = makePad($("#st"), modelSVG(k, "blank", show));
+  const pad = makePad($("#st"), modelSVG(k, stencil ? "stencil" : "blank", show));
+  $("#sten").onclick = () => viewRetry(k, !stencil);
   const cmp = $<HTMLButtonElement>("#cmp2");
   pad.onchange = () => (cmp.disabled = pad.strokes.length === 0);
   $("#undo").onclick = () => pad.undo();
@@ -334,11 +340,12 @@ function viewRetry(k: string): void {
   cmp.onclick = () =>
     viewCompare(k, pad.strokes.slice() as Drawing, false, (a) => {
       if (a === "fixed") {
-        practiceGain(profile(), k, today(), 0.5);
+        // au pochoir, le signe était sous les yeux : rien à gagner, seulement comprendre
+        if (!stencil) practiceGain(profile(), k, today(), 0.5);
         save();
         return viewCard();
       }
-      if (a === "again") return viewRetry(k);
+      if (a === "again") return viewRetry(k, stencil);
       viewCard();
     }, false, false, true);
 }

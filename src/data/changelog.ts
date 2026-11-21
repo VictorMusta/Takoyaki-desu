@@ -10,6 +10,13 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.21.2",
+    date: "2026-11-21",
+    items: [
+      "Après un signe raté, le deuxième essai peut se faire « Au pochoir » : on retrace le signe dans le pochoir, numéros compris, pour voir ce qui coinçait. Sans effet sur la note.",
+    ],
+  },
+  {
     v: "0.21.1",
     date: "2026-11-21",
     items: [

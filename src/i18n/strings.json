@@ -2354,7 +2354,8 @@
  {
   "s": "De mémoire",
   "files": [
-   "src/views/progress.ts"
+   "src/views/progress.ts",
+   "src/views/session.ts"
   ]
  },
  {
@@ -2713,6 +2714,18 @@
   ]
  },
  {
+  "s": "au pochoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Au pochoir",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "Aujourd'hui en tout : {0} signe{1} noté{2}.",
   "files": [
    "src/views/session.ts"
@@ -2743,13 +2756,19 @@
   ]
  },
  {
+  "s": "de mémoire",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
   "s": "De mémoire, sans modèle. Raté, ce n'est pas grave : c'est en cherchant qu'on retient.",
   "files": [
    "src/views/session.ts"
   ]
  },
  {
-  "s": "Deuxième essai · de mémoire",
+  "s": "Deuxième essai · {0}",
   "files": [
    "src/views/session.ts"
   ]
@@ -2846,6 +2865,12 @@
  },
  {
   "s": "Suivant",
+  "files": [
+   "src/views/session.ts"
+  ]
+ },
+ {
+  "s": "Tracez dans le pochoir, en suivant les numéros : le geste juste, pour voir ce qui coinçait. Votre note ne change pas.",
   "files": [
    "src/views/session.ts"
   ]
