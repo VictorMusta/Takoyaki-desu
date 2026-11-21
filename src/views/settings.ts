@@ -4,6 +4,7 @@ import { KANA, LINES } from "../data/kana";
 import { addProfile, deleteProfile, exportState, importState, profile, profileNames, readBackup, renameProfile, save, setActive, state } from "../core/store";
 import { $, el, esc, toast, view } from "../ui/dom";
 import { getTheme, paceHTML, setPace, setTheme, type Theme } from "../ui/prefs";
+import { confirmNextLine } from "../ui/openline";
 import { confirmModal } from "../ui/modal";
 import { enableFluent, revertFluent } from "../core/fluent";
 import { today } from "../core/scheduler";
@@ -147,7 +148,8 @@ export function viewSettings(): void {
     p.settings.showNums = (e.target as HTMLInputElement).checked;
     save();
   };
-  $("#unl").onclick = () => {
+  $("#unl").onclick = async () => {
+    if (!(await confirmNextLine(p))) return;
     p.unlocked = Math.min(LINES.length, p.unlocked + 1);
     save();
     viewSettings();

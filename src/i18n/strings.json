@@ -744,6 +744,55 @@
   ]
  },
  {
+  "s": "C'est définitif : une ligne ouverte ne se referme pas.",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "D'habitude, elle s'ouvre seule quand 80 % de la ligne précédente tient 3 jours : c'est le bon moment pour la plupart des gens.",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "Demain : environ {0} révisions.",
+  "files": [
+   "src/ui/openline.ts",
+   "src/views/more.ts"
+  ]
+ },
+ {
+  "s": "L'entraînement devient plus difficile : plus de signes à retenir à la fois, et les anciens reviennent moins souvent.",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "Ouvrir la ligne",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "Ouvrir la ligne « {0} » ?",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "Pas encore",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
+  "s": "Ses {0} signes entrent tout de suite dans votre apprentissage : vous commencez à en apprendre 5 maintenant, et ils reviendront dans vos révisions des jours suivants.",
+  "files": [
+   "src/ui/openline.ts"
+  ]
+ },
+ {
   "s": "Touchez les blocs dans l'ordre.",
   "files": [
    "src/ui/order.ts"
@@ -2189,12 +2238,6 @@
  },
  {
   "s": "D'habitude, elle s'ouvre quand 80 % de la ligne précédente tient 3 jours. Vous pouvez aller plus vite.",
-  "files": [
-   "src/views/more.ts"
-  ]
- },
- {
-  "s": "Demain : environ {0} révisions.",
   "files": [
    "src/views/more.ts"
   ]

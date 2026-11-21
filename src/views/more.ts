@@ -2,6 +2,7 @@ import { LINES, lineLabel } from "../data/kana";
 import { dueCount, unseenOpen, today } from "../core/scheduler";
 import { profile, save } from "../core/store";
 import { el } from "../ui/dom";
+import { confirmNextLine } from "../ui/openline";
 import { startDrills, type SessionKind } from "./session";
 import { allGames } from "./train";
 
@@ -46,7 +47,8 @@ export function continueBlock(box: HTMLElement, start: (k: SessionKind) => void)
   on("m-prac", () => start("practice"));
   on("m-play", () => startDrills(allGames()));
   on("m-more", () => start("more"));
-  on("m-line", () => {
+  on("m-line", async () => {
+    if (!(await confirmNextLine(p))) return;
     p.unlocked++;
     save();
     start("more");

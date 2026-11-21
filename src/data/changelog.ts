@@ -10,6 +10,13 @@ export interface Release {
 
 export const CHANGELOG: Release[] = [
   {
+    v: "0.21.1",
+    date: "2026-11-21",
+    items: [
+      "Ouvrir une nouvelle ligne avant l'heure demande maintenant confirmation : la fenêtre montre ses signes, les révisions de demain, et rappelle qu'une ligne ouverte ne se referme pas.",
+    ],
+  },
+  {
     v: "0.21.0",
     date: "2026-11-20",
     items: [
